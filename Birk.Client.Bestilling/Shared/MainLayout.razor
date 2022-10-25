@@ -1,0 +1,79 @@
+﻿@using Birk.Client.Bestilling.Common
+@inherits LayoutComponentBase
+
+<MudThemeProvider Theme="_themeManager.Theme" />
+<MudDialogProvider/>
+<MudSnackbarProvider/>
+
+<MudLayout>
+
+    <MudThemeManagerButton OnClick="@((e) => OpenThemeManager(true))" />
+    <MudThemeManager Open="_themeManagerOpen" OpenChanged="OpenThemeManager" Theme="_themeManager" ThemeChanged="UpdateTheme" />
+    
+    <MudAppBar Elevation="_themeManager.AppBarElevation">
+
+
+             <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())"/>
+             <MudSpacer />
+
+             <!--MudIconButton Icon="@Icons.Custom.Brands.MudBlazor" Color="Color.Inherit" Link="https://mudblazor.com/" Target="_blank"/-->
+             <!--MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="https://github.com/MudBlazor/MudBlazor/" Target="_blank"/-->
+                 
+            <MudSpacer/>
+            <MudSpacer/>
+            <MudText Align="Align.Right" Typo="Typo.h6">BiRKID: @BirkID</MudText>
+            <MudSpacer/>
+            <MudText Align="Align.Right" Format="yyyy-MM-dd" Typo="Typo.h6" >Født: @Barn.Født </MudText>
+            <MudSpacer/>
+            <MudText Align="Align.Right" Typo="Typo.h6">Alder: @Alder</MudText>
+            <MudSpacer/>
+            <MudText Align="Align.Right" Typo="Typo.h6">Kjønn: @Kjonn</MudText>
+            <MudSpacer/>
+
+    </MudAppBar>
+
+
+    <MudDrawer @bind-Open="_drawerOpen" ClipMode="_themeManager.DrawerClipMode" Elevation="_themeManager.DrawerElevation">
+        <MudDrawerHeader>
+            <MudText Typo="Typo.h6">Registrer bestilling</MudText>
+        </MudDrawerHeader>
+        <NavMenu/>
+    </MudDrawer>
+    <MudMainContent>
+        <MudContainer MaxWidth="MaxWidth.Large" Class="my-16 pt-16">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    bool _drawerOpen = true;
+    private ThemeManagerTheme _themeManager = new ThemeManagerTheme();
+    public bool _themeManagerOpen = false;
+    public string BirkID { get; set; } = "B022-1234";
+    public string Alder { get; set; } = "5";
+    public string Kjonn { get; set; } = "Jente";  
+    
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+       
+
+    void OpenThemeManager(bool value)
+    {
+        _themeManagerOpen = value;
+    }
+
+    void UpdateTheme(ThemeManagerTheme value)
+    {
+        _themeManager = value;
+        StateHasChanged();
+    }
+
+    protected override void OnInitialized()
+    {
+        StateHasChanged();
+    }
+
+}

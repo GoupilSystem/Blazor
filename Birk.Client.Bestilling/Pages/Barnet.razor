@@ -1,0 +1,47 @@
+﻿@page "/barnet"
+@using Birk.Client.Bestilling.Common
+
+<PageTitle>Barnet</PageTitle>
+
+<MudGrid>
+    <MudItem xs="12">
+        <MudText Typo="Typo.h6" GutterBottom="true">Søk eksisterende barn</MudText>
+    </MudItem>
+    <MudItem xs="7">
+        <MudTextField @bind-Value="TextValue" FullWidth=false Label="Navn, BiRKID eller fødselsdato" Variant="Variant.Outlined"></MudTextField>
+    </MudItem>
+    <MudItem xs="7">
+        <MudButton Color="Color.Primary" Variant="Variant.Filled" @onclick="Search">Søk</MudButton>
+    </MudItem>
+    <MudItem xs="12">
+        <MudSpacer/>
+        <MudSpacer/>
+    </MudItem>
+    <MudItem xs="12">
+        <MudText Typo="Typo.h6" GutterBottom="true">Personopplysninger</MudText>
+    </MudItem>
+    <MudItem xs="7">
+        <MudTextField T="DateTime?" Format="yyyy-MM-dd" Label="Fødselsdato" Value="Barn.Født" InputType="InputType.Date"/>
+    </MudItem>
+    <MudItem xs="7">
+        <MudTextField T="string" Label="Fornavn" Value="Barn.Fornavn"  InputType="InputType.Text"/>
+    </MudItem>
+    <MudItem xs="7">
+        <MudTextField T="string" Label="Etternavn" Value="Barn.Etternavn"  InputType="InputType.Text"/>
+    </MudItem>
+</MudGrid>
+
+@code {
+    
+    private void Search()
+    {
+        Barn.Født = new DateTime(2018, 2, 3);
+        Barn.Fornavn = "Mikkel";
+        Barn.Etternavn = TextValue;
+
+    }
+ 
+    public string TextValue { get; set; }
+
+
+}
