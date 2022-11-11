@@ -1,6 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Birk.Client.Bestilling", "Birk.Client.Bestilling\Birk.Client.Bestilling.csproj", "{AFA8C7DC-6A79-4851-8C97-F4873E8B8353}"
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32616.157
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Birk.Client.Bestilling", "Birk.Client.Bestilling\Birk.Client.Bestilling.csproj", "{AFA8C7DC-6A79-4851-8C97-F4873E8B8353}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{1B67A3C5-BE54-4DC3-9FBB-89F9FBB62CEF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Birk.Bestillingsveiviser.E2ETests", "Birk.Bestillingsveiviser.E2ETests\Birk.Bestillingsveiviser.E2ETests.csproj", "{2BD57E29-418C-47EF-A844-8FBB6145027B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +19,18 @@ Global
 		{AFA8C7DC-6A79-4851-8C97-F4873E8B8353}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFA8C7DC-6A79-4851-8C97-F4873E8B8353}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFA8C7DC-6A79-4851-8C97-F4873E8B8353}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2BD57E29-418C-47EF-A844-8FBB6145027B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2BD57E29-418C-47EF-A844-8FBB6145027B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2BD57E29-418C-47EF-A844-8FBB6145027B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2BD57E29-418C-47EF-A844-8FBB6145027B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2BD57E29-418C-47EF-A844-8FBB6145027B} = {1B67A3C5-BE54-4DC3-9FBB-89F9FBB62CEF}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {42CA2EB0-F980-4F3A-B093-1BE2010D8B05}
 	EndGlobalSection
 EndGlobal
