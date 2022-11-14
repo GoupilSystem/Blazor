@@ -1,0 +1,24 @@
+﻿.bestilling-card {
+    background: var(--bestilling-card-background);
+    border-color: var(--bestilling-card-border);
+    border-width: 0.1rem !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    width: 80%;
+    height: 20rem;
+}
+
+    .bestilling-card.selected {
+        background: var(--bestilling-card-background-selected);
+        border-color: var(--bestilling-card-border-selected);
+    }
+
+.bestilling-card-title {
+    color: var(--font-dark);
+    font-size: 2.2rem !important;
+    font-weight: bold;
+}
+
+.bestilling-card-content {
+    padding: 0rem 1.5rem;
+}

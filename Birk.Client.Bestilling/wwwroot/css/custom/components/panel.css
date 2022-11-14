@@ -1,0 +1,28 @@
+﻿.panel-paper {
+    margin-top: 6rem;
+    padding: 5rem 4rem 4rem 20rem;
+    font-weight: 500;
+}
+
+    .panel-paper .question {
+        font-size: 3rem;
+    }
+
+    .panel-paper .description {
+        padding-top: 2rem;
+    }
+
+    .panel-paper .label {
+        padding-top: 4rem;
+    }
+
+    .panel-paper .dropdown {
+    }
+
+    .panel-paper .radiogroup {
+    }
+
+    .panel-paper .textbox {
+        max-width: 60%;
+    }
+

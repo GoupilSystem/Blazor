@@ -1,0 +1,71 @@
+﻿@using Birk.Client.Bestilling.Utils.Constants
+
+<MudPaper Class="question-paper">
+    <MudItem Class="question">@_question</MudItem>
+
+    @if (_choiceDescriptions != null)
+    {
+        var choiceNr = 0;
+        foreach (var choice in _choiceDescriptions)
+        {
+            <MudItem Class="choice-description">@_choiceDescriptions[choiceNr]</MudItem>
+            <MudItem Class="choice-title">@_choiceTitles[choiceNr]</MudItem>
+            <MudItem Class="choice-dropdown">
+                <MudAutocomplete Class="bestilling-dropdown" T="string"
+                         @bind-Value="_selectedChoiceItem" SearchFunc="@Search1"
+                             ResetValueOnEmptyText="@_resetValueOnEmptyText"
+                             CoerceText="@_coerceText" CoerceValue="@_coerceValue" />
+            </MudItem>
+        }
+    }
+    
+</MudPaper>
+
+@code {
+    [Parameter]
+    public string Name { get; set; }
+
+    [Parameter]
+    public int Choices { get; set; }
+
+    private string _question;
+    private List<string> _choiceDescriptions;
+    private List<string> _choiceTitles;
+    private string[] _choiceItemLists;
+
+    private string _selectedChoiceItem;
+    private bool _resetValueOnEmptyText;
+    private bool _coerceText;
+    private bool _coerceValue;
+
+    protected override void OnInitialized()
+    {
+        InitializeQuestion();
+        base.OnInitialized();
+    }
+
+    private void InitializeQuestion()
+    {
+        _question = @Language.Eng[$"{Name}Question"];
+
+        if (_choiceDescriptions != null) _choiceDescriptions.Clear();
+        _choiceDescriptions = Language.Eng[$"{Name}ChoiceDescriptions"].Split('|').ToList();
+
+        if (_choiceTitles != null) _choiceTitles.Clear();
+        _choiceTitles = Language.Eng[$"{Name}ChoiceTitles"].Split('|').ToList();
+        
+        _choiceItemLists = Language.Eng[$"{Name}ChoiceItemLists"].Split('|');
+    }
+
+    private async Task<IEnumerable<string>> Search1(string value)
+    {
+        // In real life use an asynchronous function for fetching data from an api.
+        await Task.Delay(5);
+
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value))
+            return _choiceItemLists;
+        return _choiceItemLists.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+}
