@@ -1,0 +1,40 @@
+﻿html {
+    /*trick for font conversion 1 rem = 10 px*/
+    font-size: 62.5%;
+    height: 100%;
+}
+
+/*html, body, p, h1, h2, h3, h4, h5 {
+    font-family: 'Montserrat', "proxima-nova", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}*/
+
+body {
+    background: var(--body-background);
+    color: var(--font-dark);
+    font-size: 1.5rem;
+    /*line-height: 1.5rem;
+    min-height: 100vh;*/
+    height: 100%;
+}
+
+#app, .page {
+    height: 100%;
+}
+
+.mud-container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.mud-paper {
+    border-radius: 0 !important;
+    box-shadow: 0.5em 0.25rem 0.5rem 0.25em var(--shadow) !important;
+}
+
+.mud-divider {
+    background: var(--bestilling-lines);
+}
+
+.color-icon {
+    filter: invert(23%) sepia(88%) saturate(584%) hue-rotate(128deg) brightness(102%) contrast(102%);
+}

@@ -1,0 +1,88 @@
+﻿/************* Regular button ***************/
+
+.mud-button {
+    text-transform: none;
+    font-size: 1.5rem;
+    font-weight: 400;
+}
+
+.bestilling-button {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 1rem 1rem 1rem 3rem;
+    min-width: 24rem;
+    justify-content: space-between;
+}
+
+    .bestilling-button.filled {
+        background: var(--bestilling-button-green);
+        color: white;
+    }
+
+    .bestilling-button.outlined {
+        background: white;
+        color: var(--bestilling-button-green);
+        border-color: var(--bestilling-button-green);
+        border-width: 0.3rem;
+    }
+
+/*.button:focus {
+    border: none;
+    outline: none;
+}
+
+.button {
+    align-items: center;
+    color: var(--bufdir-font);
+    background: var(--button-dark-background);
+    border: none;
+    padding: 10px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 1.6rem;
+    cursor: pointer;
+    gap: 0.5rem;
+    margin: 4px 2px;
+    border-radius: 2px;
+}
+
+    .button img {
+        margin-right: 1rem;
+        margin-left: 0;
+    }
+
+    .button:hover {
+        background: var(--bufdir-black-3);
+        color: #F6F6F6;
+        border: none;
+    }
+
+.button-small {
+    font-size: 1.25rem;
+    padding: 0.25rem 1.6rem;
+    height: 2.55rem;
+}
+
+.button.selected {
+    color: var(--selected-button-color);
+    background: var(--selected-button-background);
+    font-weight: 500;
+}
+
+    .button.selected:hover {
+        background: var(--selected-button-hover-background);
+        color: var(--selected-button-color);
+    }*/
+
+/*************** Icon Button *******************/
+/*.button.icon-button {
+    padding: 1rem;
+    width: 4rem;
+    height: 3.6rem;
+}
+
+    .button.icon-button img {
+        margin: 0px;
+    }*/

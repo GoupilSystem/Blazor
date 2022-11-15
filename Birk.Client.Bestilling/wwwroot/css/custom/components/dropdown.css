@@ -1,0 +1,26 @@
+﻿.mud-input {
+    margin-top: 0 !important;
+    padding: 1rem;
+    border-color: var(--bestilling-lines);
+    border-width: 0.2rem;
+    border-radius: 0;
+    font-size: 1.5rem;
+}
+
+.mud-typography {
+    font-size: 1.5rem;
+}
+
+.bestilling-dropdown {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    /*padding: 1rem 1rem 1rem 3rem;*/
+    min-width: 40rem;
+    font-size: 1.5rem;
+    font-weight: 400;
+    background: white;
+    color: var(--bestilling-button-green);
+    border-color: var(--bestilling-button-green);
+    border-width: 0.1rem;
+    width: 40rem;
+}

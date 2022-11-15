@@ -1,0 +1,82 @@
+﻿@page "/"
+
+@using Birk.Client.Bestilling.Components
+@using Birk.Client.Bestilling.Enums
+@using Birk.Client.Bestilling.Utils.Constants
+
+@inject IDialogService DialogService
+
+<MudContainer MaxWidth="MaxWidth.False">
+    @if (_workflow == Workflow.Henvisning)
+    {
+        <Henvising Name=@_cardNames[0] OnBackToMain="BackToMain" />
+    }
+    else
+    {
+        <MudPaper Class="main-cards-paper">
+            <MudItem Class="main-cards-paper-title" xs="12">
+                <div><h2>@Language.Eng["BestillingsChoice"]</h2></div>
+                <div>@Language.Eng["BestillingsExplanation"]</div>
+            </MudItem>
+            <MudGrid Justify="Justify.SpaceAround">
+                @{
+                    var incr = 0;
+                    foreach (var name in _cardNames)
+                    {
+                        <MudItem xs="6" Class="@($"main-card-item{(_selectedCardIndex == incr ? " filter" : "")}{(incr % 2 == 0 ? " left" : " right")}")">
+                            <BestillingCard Name=@name
+                                OnSelect="@(args => SetSelectedCard(args))" />
+                        </MudItem>
+                        incr++;
+                    }
+                }
+            </MudGrid>
+        </MudPaper>
+        <MudItem Class="main-button-item">
+            <MudButton Class="bestilling-button filled" id="bestilling-next" Variant="Variant.Filled" EndIcon="@Icons.Material.Filled.Send" @onclick="OpenBestilling">
+                @Language.Eng["Next"]
+            </MudButton>
+        </MudItem>
+    }
+
+</MudContainer>
+
+@code {
+    private Workflow _workflow = Workflow.Main;
+
+    private List<string> _cardNames;
+    private int _selectedCardIndex = 0;
+
+    protected override void OnInitialized()
+    {
+        InitializeCardNames();
+        base.OnInitialized();
+    }
+
+    private void InitializeCardNames()
+    {
+
+        _cardNames = Language.Eng["CardNames"].Split("|").ToList();
+    }
+
+    private void SetSelectedCard(string name)
+    {
+        _selectedCardIndex = _cardNames.IndexOf(name);
+    }
+
+    private void OpenBestilling()
+    {
+        if (_selectedCardIndex != 0)
+        {
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            DialogService.Show<Dialog>(Language.Eng["CardNotImplemented"], options);
+            return;
+        }
+        _workflow = Workflow.Henvisning;
+    }
+
+    private void BackToMain()
+    {
+        _workflow = Workflow.Main;
+    }
+}
