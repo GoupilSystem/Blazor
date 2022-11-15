@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Birk.Client.Bestilling", "B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{1B67A3C5-BE54-4DC3-9FBB-89F9FBB62CEF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Birk.Bestillingsveiviser.E2ETests", "Birk.Bestillingsveiviser.E2ETests\Birk.Bestillingsveiviser.E2ETests.csproj", "{2BD57E29-418C-47EF-A844-8FBB6145027B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Birk.Bestillingsveiviser.E2ETests", "Birk.Bestillingsveiviser.E2ETests\Birk.Bestillingsveiviser.E2ETests.csproj", "{2BD57E29-418C-47EF-A844-8FBB6145027B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

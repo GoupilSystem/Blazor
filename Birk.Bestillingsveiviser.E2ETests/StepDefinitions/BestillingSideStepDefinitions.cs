@@ -1,6 +1,8 @@
+using Birk.Bestillingsveiviser.E2ETests.Configuration;
 using Birk.Bestillingsveiviser.E2ETests.Pages;
 using SpecFlowProject.Drivers;
 using System;
+using System.Configuration;
 using TechTalk.SpecFlow;
 
 namespace Birk.Bestillingsveiviser.E2ETests.StepDefinitions
@@ -10,19 +12,21 @@ namespace Birk.Bestillingsveiviser.E2ETests.StepDefinitions
     {
         private readonly Driver _driver;
         private readonly BestillingSide _mainPage;
-       
+        private readonly TestConfiguration _testConfiguration;
 
         public BestillingSideStepDefinitions(Driver driver)
         {
             _driver = driver;
             _mainPage = new BestillingSide(_driver.Page);
+            _testConfiguration = new TestConfiguration();
 
         }
 
         [Given(@"en bruker åpner applikasjonen")]
         public void GivenEnBrukerApnerApplikasjonen()
         {
-            _driver.Page.GotoAsync("http://localhost:88/");
+
+            _driver.Page.GotoAsync(_testConfiguration.GetUrl());
         }
 
         [When(@"brukeren klikker på Bestilling link")]
