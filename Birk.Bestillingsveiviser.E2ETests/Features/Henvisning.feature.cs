@@ -19,7 +19,7 @@ namespace Birk.Bestillingsveiviser.E2ETests.Features
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "3.9.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    public partial class BarnetSideFeature : object, Xunit.IClassFixture<BarnetSideFeature.FixtureData>, System.IDisposable
+    public partial class HenvisningSideFeature : object, Xunit.IClassFixture<HenvisningSideFeature.FixtureData>, System.IDisposable
     {
         
         private static TechTalk.SpecFlow.ITestRunner testRunner;
@@ -28,10 +28,10 @@ namespace Birk.Bestillingsveiviser.E2ETests.Features
         
         private Xunit.Abstractions.ITestOutputHelper _testOutputHelper;
         
-#line 1 "Barnet.feature"
+#line 1 "Henvisning.feature"
 #line hidden
         
-        public BarnetSideFeature(BarnetSideFeature.FixtureData fixtureData, Birk_Bestillingsveiviser_E2ETests_XUnitAssemblyFixture assemblyFixture, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
+        public HenvisningSideFeature(HenvisningSideFeature.FixtureData fixtureData, Birk_Bestillingsveiviser_E2ETests_XUnitAssemblyFixture assemblyFixture, Xunit.Abstractions.ITestOutputHelper testOutputHelper)
         {
             this._testOutputHelper = testOutputHelper;
             this.TestInitialize();
@@ -40,7 +40,7 @@ namespace Birk.Bestillingsveiviser.E2ETests.Features
         public static void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("no-NO"), "Features", "Barnet side", null, ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("no-NO"), "Features", "Henvisning side", null, ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -80,16 +80,16 @@ namespace Birk.Bestillingsveiviser.E2ETests.Features
             this.TestTearDown();
         }
         
-        [Xunit.SkippableFactAttribute(DisplayName="Bruker kan åpne Barnet side")]
-        [Xunit.TraitAttribute("FeatureTitle", "Barnet side")]
-        [Xunit.TraitAttribute("Description", "Bruker kan åpne Barnet side")]
+        [Xunit.SkippableFactAttribute(DisplayName="Bruker kan åpne Henvisning side og registrere bestilling")]
+        [Xunit.TraitAttribute("FeatureTitle", "Henvisning side")]
+        [Xunit.TraitAttribute("Description", "Bruker kan åpne Henvisning side og registrere bestilling")]
         [Xunit.TraitAttribute("Category", "smoketest")]
-        public virtual void BrukerKanApneBarnetSide()
+        public virtual void BrukerKanApneHenvisningSideOgRegistrereBestilling()
         {
             string[] tagsOfScenario = new string[] {
                     "smoketest"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Bruker kan åpne Barnet side", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Bruker kan åpne Henvisning side og registrere bestilling", null, tagsOfScenario, argumentsOfScenario, this._featureTags);
 #line 6
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
@@ -111,13 +111,25 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 7
- testRunner.Given("applikasjonen er oppe", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Gitt ");
+ testRunner.Given("en bruker åpner Bestillingsveiviser", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Gitt ");
 #line hidden
 #line 8
- testRunner.When("brukeren klikker på Barnet link", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Når ");
+ testRunner.When("brukeren velger Henvisning flis", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Når ");
 #line hidden
 #line 9
- testRunner.Then("lander applikasjonen på Barnet side", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Så ");
+ testRunner.And("klikker på Neste steg knapp", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Og ");
+#line hidden
+#line 10
+ testRunner.Then("lander applikasjonen på Henvisning side", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Så ");
+#line hidden
+#line 12
+ testRunner.When("brukeren velger kommune og bydel", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Når ");
+#line hidden
+#line 13
+ testRunner.And("klikker på Fullfør registrering", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Og ");
+#line hidden
+#line 14
+ testRunner.Then("får brukeren antall bestillinger", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Så ");
 #line hidden
             }
             this.ScenarioCleanup();
@@ -130,12 +142,12 @@ this.ScenarioInitialize(scenarioInfo);
             
             public FixtureData()
             {
-                BarnetSideFeature.FeatureSetup();
+                HenvisningSideFeature.FeatureSetup();
             }
             
             void System.IDisposable.Dispose()
             {
-                BarnetSideFeature.FeatureTearDown();
+                HenvisningSideFeature.FeatureTearDown();
             }
         }
     }

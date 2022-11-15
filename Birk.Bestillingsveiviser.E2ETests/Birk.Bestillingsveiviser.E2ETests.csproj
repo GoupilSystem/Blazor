@@ -29,8 +29,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Features\Barnet.feature.cs">
-      <DependentUpon>Barnet.feature</DependentUpon>
+    <Compile Update="Features\Henvisning.feature.cs">
+      <DependentUpon>Henvisning.feature</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -41,7 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <SpecFlowFeatureFiles Update="Features\Barnet.feature">
+    <SpecFlowFeatureFiles Update="Features\Henvisning.feature">
       <Visible>$(UsingMicrosoftNETSdk)</Visible>
       <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
     </SpecFlowFeatureFiles>

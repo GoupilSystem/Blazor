@@ -38,6 +38,7 @@ namespace SpecFlowProject.Drivers
         private async Task<IPage> InitializePlaywrite()
         {         
             var playwright = await Playwright.CreateAsync();
+            /*
             _browser = await playwright.Chromium.LaunchAsync();
             
             _browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
@@ -45,7 +46,15 @@ namespace SpecFlowProject.Drivers
                 Headless = headlessValue,
                 SlowMo = slowMoValue
             });
-            
+            */
+            _browser = await playwright.Firefox.LaunchAsync();
+
+            _browser = await playwright.Firefox.LaunchAsync(new BrowserTypeLaunchOptions
+            {
+                Headless = headlessValue,
+                SlowMo = slowMoValue
+            });
+
             return await _browser.NewPageAsync();
 
         }
