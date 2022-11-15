@@ -43,7 +43,7 @@
             // Henvisning page
 
             // Logg panel
-            { "Logget", "Du er logget inn som Ole Kristian Sjøbakken, og er i ferd med å registre ny henvisning for Gregus Carlsson på 8 år (Gutt)" },
+            { "Logget", "Du er logget inn som Kari Nordmann, og er i ferd med å registre ny henvisning for Ola Nordmann på 8 år (Gutt)" },
             { "Systemstatus", "Systemstatus:" },
             { "IngenFeilStatus", " Ingen kjente feil pr {0}" },
             { "MainTopPanelTitle", "Title of Main" },
@@ -58,11 +58,11 @@
             
             { "KommuneDescription1", "For at meldingen skal komme til riktig inntaksenhet må du velge hvilken kommune barnet bor i\r\neller kommune hvorfra meldingen er sendt." },
             { "KommuneLabel1", "Velg ansvarlig kommune" },
-            { "KommuneDropdown1", "Item1-0|Item1-1|Item1-2|Item1-3" },
+            { "KommuneDropdown1", "Oslo|Tønsberg|Lofoten|Drammen" },
             
             { "KommuneDescription2", "For at meldingen skal komme til riktig inntaksenhet må du velge hvilken kommune barnet bor i\r\neller kommune hvorfra meldingen er sendt." },
             { "KommuneLabel2", "Velg bydel" },
-            { "KommuneDropdown2", "Item2-0|Item2-1|Item2-2|Item2-3" },
+            { "KommuneDropdown2", "Gamle Oslo|Grønland|Tøyen|Sagene" },
 
             // Panel: Inneholder henvisningen også et gyldig vedtak? 
             { "HenvisningVedtakStructure", "Question::0|RadioGroup::0|Label::1|Label::2|Dropdown::2|Label::3|Dropdown::3|Label::4|TextBox::4" },
@@ -73,10 +73,10 @@
             { "VedtakLabel1", "Vedtaksdato" },
             
             { "VedtakLabel2", "Vedtaket er fattet av" },
-            { "VedtakDropdown2", "Item2-0|Item2-1|Item2-2|Item2-3" },
+            { "VedtakDropdown2", "Fosterhjemsplassering|Fylkesnemnd|Kommune|Domstol" },
 
             { "VedtakLabel3", "Vedtakshjemmel" },
-            { "VedtakDropdown3", "Item3-0|Item3-1|Item3-2|Item3-3" },
+            { "VedtakDropdown3", "§ 1-3 Opprettholdelse|§ 3-5 Varetekt og straffgjennomføring|§ 4-3 Undersøkelse|§ 4-4,5 Hjelpetiltak omsorg" },
 
             { "VedtakLabel4", "Skriv inn et kort resymé av vedtaket" },
             
