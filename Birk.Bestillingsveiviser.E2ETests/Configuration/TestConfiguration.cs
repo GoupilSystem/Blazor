@@ -36,6 +36,11 @@ namespace Birk.Bestillingsveiviser.E2ETests.Configuration
         {
             string slowMo = _configuration.GetSection("slowMo").Value;
             return int.Parse(slowMo);
+        }
+        public string GetBrowserType()
+        {
+            string browserType = _configuration.GetSection("browserType").Value;
+            return browserType;
 
         }
     }

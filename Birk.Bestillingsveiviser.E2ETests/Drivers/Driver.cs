@@ -19,11 +19,13 @@ namespace SpecFlowProject.Drivers
         private readonly TestConfiguration _testConfiguration;
         private readonly bool headlessValue;
         private readonly int slowMoValue;
+        private readonly string browserTypeValue;
         public Driver()
         {
             _testConfiguration = new TestConfiguration();
             headlessValue = _testConfiguration.GetHeadlessValue();
             slowMoValue = _testConfiguration.GetSlowMoValue();
+            browserTypeValue = _testConfiguration.GetBrowserType();
             _page = InitializePlaywrite();
 
         }
@@ -38,6 +40,30 @@ namespace SpecFlowProject.Drivers
         private async Task<IPage> InitializePlaywrite()
         {         
             var playwright = await Playwright.CreateAsync();
+            if (browserTypeValue == "firefox")
+            {
+                _browser = await playwright.Firefox.LaunchAsync();
+
+                _browser = await playwright.Firefox.LaunchAsync(new BrowserTypeLaunchOptions
+                {
+                    Headless = headlessValue,
+                    SlowMo = slowMoValue
+                });
+
+            }
+            else if (browserTypeValue == "chromium")
+            {
+                _browser = await playwright.Chromium.LaunchAsync();
+
+                _browser = await playwright.Chromium.LaunchAsync(new BrowserTypeLaunchOptions
+                {
+                    Headless = headlessValue,
+                    SlowMo = slowMoValue
+                });
+
+            }
+           
+
             /*
             _browser = await playwright.Chromium.LaunchAsync();
             
@@ -47,13 +73,7 @@ namespace SpecFlowProject.Drivers
                 SlowMo = slowMoValue
             });
             */
-            _browser = await playwright.Firefox.LaunchAsync();
 
-            _browser = await playwright.Firefox.LaunchAsync(new BrowserTypeLaunchOptions
-            {
-                Headless = headlessValue,
-                SlowMo = slowMoValue
-            });
 
             return await _browser.NewPageAsync();
 
