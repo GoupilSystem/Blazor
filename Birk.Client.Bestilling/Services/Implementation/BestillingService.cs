@@ -1,8 +1,10 @@
 ﻿using Birk.Client.Bestilling.Enums;
 using Birk.Client.Bestilling.Models;
+using Birk.Client.Bestilling.Models.Dtos;
 using Birk.Client.Bestilling.Models.Requests;
 using Birk.Client.Bestilling.Models.Responses;
 using Birk.Client.Bestilling.Services.Interfaces;
+using Birk.Client.Bestilling.Utils.Constants;
 using Birk.Client.Bestilling.Utils.Mapper;
 
 namespace Birk.Client.Bestilling.Services.Implementation
@@ -21,17 +23,19 @@ namespace Birk.Client.Bestilling.Services.Implementation
         public async Task<BestillingItem> Create(CreateBestillingItemRequest createBestillingItemRequest)
         {
             var response = await _httpService.HttpPost<CreateBestillingItemResponse>("catalog-items", createBestillingItemRequest);
-            return response?.BestillingItem;
+            return response.Data?.BestillingItem;
         }
 
         public async Task<BestillingItem> Edit(BestillingItem bestillingItem)
         {
-            return (await _httpService.HttpPut<EditBestillingItemResponse>("catalog-items", bestillingItem)).BestillingItem;
+            var response = await _httpService.HttpPut<EditBestillingItemResponse>("catalog-items", bestillingItem);
+            return response.Data?.BestillingItem;
         }
 
         public async Task<DeleteStatus> Delete(int bestillingItemId)
         {
-            return (await _httpService.HttpDelete<DeleteBestillingItemResponse>("catalog-items", bestillingItemId)).Status;
+            var response = await _httpService.HttpDelete<DeleteBestillingItemResponse>("catalog-items", bestillingItemId);
+            return response.Data.Status;
         }
 
         public async Task<BestillingItem> GetById(int id)
@@ -42,7 +46,7 @@ namespace Birk.Client.Bestilling.Services.Implementation
             // Then we need WhenAll
             await Task.WhenAll(itemGetTask);
             //var brands = brandListTask.Result;
-            var bestillingItem = itemGetTask.Result.BestillingItem;
+            var bestillingItem = itemGetTask.Result.Data.BestillingItem;
             //bestillingItem.CatalogBrand = brands.FirstOrDefault(b => b.Id == bestillingItem.CatalogBrandId)?.Name;
             return bestillingItem;
         }
@@ -54,12 +58,24 @@ namespace Birk.Client.Bestilling.Services.Implementation
             List<BestillingItem> bestillingItemList = new();
 
             var response = await _httpService.HttpGet<BestillingListResponse>("Bestillings");
-            var bestillings = response.Bestillings;
+            var bestillings = response.Data.Bestillings;
             foreach (var bestilling in bestillings)
             {
                 bestillingItemList.Add(BestillingMapper.ToItem(bestilling));
             }
             return bestillingItemList;
+        }
+
+        public async Task<string[]> GetTypes()
+        {
+            _logger.LogInformation("Fetching bestillingtypes from Birk Kodeverk Api");
+
+            var response = await _httpService.HttpGet<List<BestillingTypeDto>>("bestillingtypes");
+            if (response.IsSuccess)
+            {
+                return response.Data.Select(bt => bt.Verdi).ToArray();
+            }
+            return new string[] { Language.NO["NoData"] };
         }
     }
 }

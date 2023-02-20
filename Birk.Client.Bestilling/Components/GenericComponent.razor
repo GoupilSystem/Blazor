@@ -1,0 +1,46 @@
+﻿@inherits BaseComponent;
+
+@DynamicFragment
+
+@code {
+
+    [Parameter]
+    public string Placeholder { get; set; }
+
+    private RenderFragment DynamicFragment;
+
+    private RenderFragment CreateComponent() => builder =>
+    {
+        if (GuiType == Enums.GuiType.Title || GuiType == Enums.GuiType.Label)
+        {
+            builder.OpenElement(1, "div");
+            builder.AddAttribute(2, "class", CssClass);
+            builder.AddContent(3, Items[0]);
+        }
+        else if (GuiType == Enums.GuiType.Input)
+        {
+            builder.OpenElement(1, "input");
+            builder.AddMultipleAttributes(2, new Dictionary<string, object>
+                {
+                    { "class", CssClass },
+                    { "placeholder", Placeholder }
+                });
+        }
+        else if (GuiType == Enums.GuiType.Dropdown)
+        {
+            builder.OpenElement(1, "MudAutocomplete");
+            builder.AddMultipleAttributes(2, new Dictionary<string, object>
+                    {
+                    { "class", CssClass },
+                    { "placeholder", Placeholder }
+                    });
+        }
+
+        builder.CloseElement();
+    };
+
+    protected override void OnInitialized()
+    {
+        DynamicFragment = CreateComponent();
+    }
+}

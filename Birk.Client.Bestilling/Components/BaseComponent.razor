@@ -1,0 +1,16 @@
+﻿@using Birk.Client.Bestilling.Components.Enums
+
+@code {
+    [Parameter]
+    public GuiType GuiType { get; set; }
+
+    [Parameter]
+    public string[] Items { get; set; }
+
+    public string CssClass => $"buf-{GuiType.ToString().ToLower()}";
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
+}

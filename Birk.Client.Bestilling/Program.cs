@@ -15,7 +15,7 @@ var baseUrlConfig = configSection.Get<BaseUrlConfiguration>();
 
 builder.Services.AddScoped(sp => new HttpClient
 {
-    BaseAddress = new Uri(baseUrlConfig.ApiBase)
+    BaseAddress = new Uri(baseUrlConfig.KodeverkApiBase)
 });
 
 builder.Services.AddScoped<HttpService>();

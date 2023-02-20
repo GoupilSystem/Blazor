@@ -11,5 +11,6 @@ namespace Birk.Client.Bestilling.Services.Interfaces
         Task<DeleteStatus> Delete(int bestillingItemId);
         Task<BestillingItem> GetById(int id);
         Task<List<BestillingItem>> List();
+        Task<string[]> GetTypes();
     }
 }

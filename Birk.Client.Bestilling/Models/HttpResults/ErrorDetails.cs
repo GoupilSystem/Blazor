@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace Birk.Client.Bestilling.Models
+namespace Birk.Client.Bestilling.Models.HttpResults
 {
     public class ErrorDetails
     {

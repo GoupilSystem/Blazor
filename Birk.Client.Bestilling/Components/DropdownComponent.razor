@@ -1,24 +1,25 @@
-﻿<MudAutocomplete Class="bestilling-dropdown" T="string"
-    @bind-Value="_selectedChoiceItem" SearchFunc="@Search1"
+﻿@inherits BaseComponent;
+
+<MudAutocomplete Class=@CssClass T="string"
+    @bind-Value="_selectedChoiceItem" SearchFunc="@Search"
     ResetValueOnEmptyText="@_resetValueOnEmptyText"
     CoerceText="@_coerceText" CoerceValue="@_coerceValue" />
 
 @code {
-    [Parameter]
-    public string[] Items { get; set; }
 
     private string _selectedChoiceItem;
     private bool _resetValueOnEmptyText;
     private bool _coerceText;
     private bool _coerceValue;
 
-    private async Task<IEnumerable<string>> Search1(string value)
+    private async Task<IEnumerable<string>> Search(string value)
     {
-        // In real life use an asynchronous function for fetching data from an api.
-        await Task.Delay(2);
         // if text is null or empty, show complete list
         if (string.IsNullOrEmpty(value))
+        {
             return Items;
+        }
+
         return Items.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
     }
 }

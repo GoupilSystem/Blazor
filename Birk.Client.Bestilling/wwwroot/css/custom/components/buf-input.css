@@ -1,0 +1,14 @@
+﻿.buf-input {
+    background: #FFFFFF;
+    border: 1px solid var(--buf-green);
+    border-radius: 5px;
+    outline: none;
+    padding-left: 1.3rem;
+    height: 4rem;
+    width: 25.6rem;
+    font-family: var(--font-family);
+    font-style: normal;
+    font-weight: 400;
+    font-size: var(--font-size-12px);
+    line-height: 1.6rem;
+}
