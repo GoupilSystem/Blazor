@@ -1,8 +1,9 @@
 ﻿@page "/"
 @page "/bestilling"
 
-@using Birk.Client.Bestilling.Components.Enums;
 @using Birk.Client.Bestilling.Components;
+@using Birk.Client.Bestilling.Components.Enums;
+@using Birk.Client.Bestilling.Components.Reusable;
 @using Birk.Client.Bestilling.Enums;
 @using Birk.Client.Bestilling.Models.Requests
 @using Birk.Client.Bestilling.Services.Implementation
@@ -35,27 +36,10 @@
             <GenericComponent GuiType=@GuiType.Label Items=@(new string[] { Language.NO["VelgBarnevernLabel"] }) />
             <DropdownComponent GuiType=@GuiType.Dropdown Items=_barneverns />
 
-            <div class="buf-row">
-                <div>
-                    <GenericComponent GuiType=@GuiType.Label Items=@(new string[] { Language.NO["KontaktpersonLabel"] }) />
-                    <GenericComponent GuiType=@GuiType.Input Placeholder=@(StringHelper.BuildPlaceholder(Language.NO["KontaktpersonPlaceholder"])) />
-                </div>
-                <div>
-                    <GenericComponent GuiType=@GuiType.Label Items=@(new string[] { Language.NO["TelefonLabel"] }) />
-                    <GenericComponent GuiType=@GuiType.Input Placeholder=@(StringHelper.BuildPlaceholder(Language.NO["TelefonPlaceholder"])) />
-                </div>
-            </div>
-            
-            <div class="buf-row">
-                <div>
-                    <GenericComponent GuiType=@GuiType.Label Items=@(new string[] { Language.NO["KontaktlederLabel"] }) />
-                    <GenericComponent GuiType=@GuiType.Input Placeholder=@(StringHelper.BuildPlaceholder(Language.NO["KontaktlederPlaceholder"])) />
-                </div>
-                <div>
-                    <GenericComponent GuiType=@GuiType.Label Items=@(new string[] { Language.NO["TelefonLabel"] }) />
-                    <GenericComponent GuiType=@GuiType.Input Placeholder=@(StringHelper.BuildPlaceholder(Language.NO["TelefonPlaceholder"])) />
-                </div>
-            </div>
+            @for (int i = 0; i < 2; i++)
+            {
+                <ContactRow ContactType=@(i == 0 ? ContactType.Person : ContactType.Leder) />
+            }
 
         </div>
         <div class="footer" />
