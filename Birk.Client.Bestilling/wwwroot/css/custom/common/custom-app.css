@@ -1,0 +1,20 @@
+﻿:root {
+    --font-family: Arial, sans-serif;
+    --font-size-12px: 1.2rem;
+    --font-size-15px: 1.5rem;
+    --font-size-16px: 1.6rem;
+    --font-size-18px: 1.8rem;
+}
+
+html {
+    /*trick for font conversion 1 rem = 10 px*/
+    font-size: 62.5%;
+    height: 100%;
+}
+
+body {
+    background: var(--body-background);
+    color: var(--font-dark);
+    font-family: var(--font-family);
+    font-size: var(--font-size-15px);
+}

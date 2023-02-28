@@ -2,77 +2,109 @@
 using Microsoft.Extensions.Options;
 using System.Text.Json;
 using System.Text;
-using Birk.Client.Bestilling.Models;
+using Birk.Client.Bestilling.Models.HttpResults;
+using Birk.Client.Bestilling.Utils.Constants;
+using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using Birk.Client.Bestilling.Enums;
 
 namespace Birk.Client.Bestilling.Services
 {
     public class HttpService
     {
         private readonly HttpClient _httpClient;
-        private readonly string _apiUrl;
-
 
         public HttpService(HttpClient httpClient, IOptions<BaseUrlConfiguration> baseUrlConfiguration)
         {
             _httpClient = httpClient;
-            _apiUrl = baseUrlConfiguration.Value.ApiBase;
         }
 
-        public async Task<T> HttpGet<T>(string uri)
+        public async Task<HttpResult<T>> HttpGet<T>(string uri)
             where T : class
         {
-            var result = await _httpClient.GetAsync($"{_apiUrl}{uri}");
-            if (!result.IsSuccessStatusCode)
+            try
             {
-                return null;
-            }
+                var result = await _httpClient.GetAsync(uri);
 
-            return await FromHttpResponseMessage<T>(result);
-        }
-
-        public async Task<T> HttpDelete<T>(string uri, int id)
-            where T : class
-        {
-            var result = await _httpClient.DeleteAsync($"{_apiUrl}{uri}/{id}");
-            if (!result.IsSuccessStatusCode)
-            {
-                return null;
-            }
-
-            return await FromHttpResponseMessage<T>(result);
-        }
-
-        public async Task<T> HttpPost<T>(string uri, object dataToSend)
-            where T : class
-        {
-            var content = ToJson(dataToSend);
-
-            var result = await _httpClient.PostAsync($"{_apiUrl}{uri}", content);
-            if (!result.IsSuccessStatusCode)
-            {
-                var exception = JsonSerializer.Deserialize<ErrorDetails>(await result.Content.ReadAsStringAsync(), new JsonSerializerOptions
+                if (!result.IsSuccessStatusCode)
                 {
-                    PropertyNameCaseInsensitive = true
-                });
+                    return new HttpResult<T>(false, null, await GetProblemDetailsAsync(result, HttpProblemType.HttpGetNoSuccess));
+                }
 
-                return null;
+                var data = await FromHttpResponseMessage<T>(result);
+                return new HttpResult<T>(true, data);
             }
-
-            return await FromHttpResponseMessage<T>(result);
+            catch (HttpRequestException ex)
+            {
+                return new HttpResult<T>(false, null, await GetProblemDetailsAsync(null, HttpProblemType.HttpGetError, ex.Message));
+            }
         }
 
-        public async Task<T> HttpPut<T>(string uri, object dataToSend)
+        public async Task<HttpResult<T>> HttpDelete<T>(string uri, int id)
             where T : class
         {
-            var content = ToJson(dataToSend);
-
-            var result = await _httpClient.PutAsync($"{_apiUrl}{uri}", content);
-            if (!result.IsSuccessStatusCode)
+            try
             {
-                return null;
-            }
+                var result = await _httpClient.DeleteAsync($"{uri}/{id}");
+                if (!result.IsSuccessStatusCode)
+                {
+                    return new HttpResult<T>(false, null, await GetProblemDetailsAsync(result, HttpProblemType.HttpDeleteNoSuccess));
+                }
 
-            return await FromHttpResponseMessage<T>(result);
+                var data = await FromHttpResponseMessage<T>(result);
+                return new HttpResult<T>(true, data);
+            }
+            catch (HttpRequestException ex)
+            {
+                return new HttpResult<T>(false, null, await GetProblemDetailsAsync(null, HttpProblemType.HttpDeleteError, ex.Message));
+            }
+            
+        }
+
+        public async Task<HttpResult<T>> HttpPost<T>(string uri, object dataToSend)
+            where T : class
+        {
+            try
+            {
+                var content = ToJson(dataToSend);
+
+                var result = await _httpClient.PostAsync(uri, content);
+
+                if (!result.IsSuccessStatusCode)
+                {
+                    return new HttpResult<T>(false, null, await GetProblemDetailsAsync(result, HttpProblemType.HttpPostNoSuccess));
+                }
+
+                var data = await FromHttpResponseMessage<T>(result);
+                return new HttpResult<T>(true, data);
+            }
+            catch (HttpRequestException ex)
+            {
+                return new HttpResult<T>(false, null, await GetProblemDetailsAsync(null, HttpProblemType.HttpPostError, ex.Message));
+            }
+        }
+
+        public async Task<HttpResult<T>> HttpPut<T>(string uri, object dataToSend)
+            where T : class
+        {
+            try
+            {
+                var content = ToJson(dataToSend);
+
+                var result = await _httpClient.PutAsync(uri, content);
+
+                if (!result.IsSuccessStatusCode)
+                {
+                    return new HttpResult<T>(false, null, await GetProblemDetailsAsync(result, HttpProblemType.HttpPutNoSuccess));
+                }
+
+                var data = await FromHttpResponseMessage<T>(result);
+                return new HttpResult<T>(true, data);
+            }
+            catch (HttpRequestException ex)
+            {
+                return new HttpResult<T>(false, null, await GetProblemDetailsAsync(null, HttpProblemType.HttpPuttError, ex.Message));
+            }
         }
 
         private StringContent ToJson(object obj)
@@ -86,6 +118,31 @@ namespace Birk.Client.Bestilling.Services
             {
                 PropertyNameCaseInsensitive = true
             });
+        }
+
+        private async Task<ProblemDetails> GetProblemDetailsAsync(HttpResponseMessage? result, 
+            HttpProblemType httpErrorType, string detail = "")
+        {
+            var pDetail = "";
+
+            if (detail != "") { pDetail = detail; }
+            else if (result != null &&
+                (httpErrorType == HttpProblemType.HttpGetNoSuccess || httpErrorType == HttpProblemType.HttpPostNoSuccess))
+            {
+                JsonSerializer.Deserialize<ErrorDetails>(await result.Content.ReadAsStringAsync(), new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+            }
+
+            var problemDetails = new ProblemDetails
+            {
+                Title = string.Format(Language.NO["HttpProblemTitle"], "bestilling"),
+                Detail = string.Format(Language.NO[$"HttpProblemDetail"], httpErrorType, pDetail),
+                Status = result != null ? (int)result.StatusCode : (int)HttpStatusCode.InternalServerError
+            };
+
+            return problemDetails;
         }
     }
 }

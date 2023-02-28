@@ -1,0 +1,55 @@
+﻿.buf-page {
+    /*Bakgrunn 1 i US #30594*/
+    background: var(--buf-background-1);
+    /*up right down left*/
+    padding: 1.2rem 1.1rem 1.2rem 1.4rem;
+    height: 100vh;
+}
+
+.top-panel {
+    width: 100%;
+    height: 6.4rem;
+    display: flex;
+    flex-direction: column;
+    background: var(--buf-background-2);
+    margin-bottom: 1.1rem;
+}
+
+.top-row {
+    width: 100%;
+    height: 6.4rem;
+    display: flex;
+    flex-direction: row;
+    /*vertical*/
+    align-items: center;
+    /*horizontal*/
+    justify-content: flex-end;
+    background: var(--buf-background-2);
+}
+
+    .top-row > div {
+        font-weight: 600;
+        width: 25%;
+    }
+
+.main-panel {
+    width: 100%;
+    background: var(--buf-background-2);
+    padding-top: 5.3rem;
+    overflow: auto;
+    height: calc(100% - 6.4rem);
+}
+    .main-panel .active {
+        padding-left: 8rem;
+    }
+    
+    .main-panel .bullet-list {
+        list-style-type: disc;
+        padding-left: 1.3rem;
+    }
+
+    .main-panel .footer {
+        margin-top: 1.2rem;
+        height: 1.2rem;
+        background: var(--buf-background-1);
+    }

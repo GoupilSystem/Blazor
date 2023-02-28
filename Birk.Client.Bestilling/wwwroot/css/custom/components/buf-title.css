@@ -1,0 +1,8 @@
+﻿.buf-title {
+    margin-top: 4rem;
+    font-family: var(--font-family);
+    font-style: normal;
+    font-weight: 700;
+    font-size: var(--font-size-18px);
+    line-height: 2.1rem;
+}

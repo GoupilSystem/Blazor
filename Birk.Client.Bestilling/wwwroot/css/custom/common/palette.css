@@ -1,22 +1,14 @@
 ﻿:root {
-    --white-1: #F2F7F6;
-    --grey-1: #A4A4A4;
-    --grey-2: #556C72;
-    --grey-3: #BABCBC;
-    --grey-4: #404040;
-    --green-1: #005E53;
-    --black-1: #101D22;
-    --font-dark: var(--black-1);
-    --font-grey: var(--grey-2);
-    --body-background: var(--white-1);
-    --bestilling-card-background: var(--white-1);
-    --bestilling-card-border: var(--green-1);
-    --bestilling-button-green: var(--green-1);
-    --bestilling-lines: var(--green-1);
-    --shadow: var(--grey-1);
-    --bestilling-card-background-selected: var(--grey-3);
-    --bestilling-card-border-selected: var(--grey-4);
-
-    /*color for focused text and underline in dropdown item list*/
-    --mud-palette-primary: var(--green-1) !important;
+    /*Budir*/
+    --buf-green: #00796B;
+    /*Bakgrunn 1 i US #30594*/
+    --buf-cream-grey: #EDEDED;
+    --buf-background-1: var(--buf-cream-grey);
+    /*Bakgrunn 2 i US #30594*/
+    --buf-cream: #FFFCF3;
+    --buf-background-2: var(--buf-cream);
+    --buf-font-grey: #6C7072;
+    /*background option*/
+    --buf-pale-grey: #F2F2F2;
+    --buf-background-over: var(--buf-cream);
 }

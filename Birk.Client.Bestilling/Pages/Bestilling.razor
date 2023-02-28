@@ -1,0 +1,71 @@
+﻿@page "/"
+@page "/bestilling"
+
+@using Birk.Client.Bestilling.Components;
+@using Birk.Client.Bestilling.Components.Enums;
+@using Birk.Client.Bestilling.Components.Reusable;
+@using Birk.Client.Bestilling.Enums;
+@using Birk.Client.Bestilling.Models.Requests
+@using Birk.Client.Bestilling.Services.Implementation
+@using Birk.Client.Bestilling.Services.Interfaces
+@using Birk.Client.Bestilling.Utils.Constants
+@using System.ComponentModel.DataAnnotations
+@using Birk.Client.Bestilling.Utils.Helpers;
+@inject BestillingService BestillingService
+@inject IDialogService DialogService
+
+<div class="buf-page">
+    <div class="top-panel">
+        <div class="top-row">
+            <div>BIRK-ID:</div>
+            <div>Kjønn:</div>
+        </div>
+        <div class="top-row">
+            <div>Fødselsdato:</div>
+            <div>Alder:</div>
+        </div>
+    </div>
+
+    <div class="main-panel">
+        <div class="active">
+            <DropdownComponent GuiType=@GuiType.Dropdown Items=_bestillingTypes />
+
+            <GenericComponent GuiType=@GuiType.Title Items=@(new string[] { Language.NO["KommuneTitle"] }) />
+            <GenericComponent GuiType=@GuiType.Label Items=@(new string[] { @Language.NO["VelgKommuneLabel"] }) />
+            <DropdownComponent GuiType=@GuiType.Dropdown Items=_kommunes />
+            <GenericComponent GuiType=@GuiType.Label Items=@(new string[] { Language.NO["VelgBarnevernLabel"] }) />
+            <DropdownComponent GuiType=@GuiType.Dropdown Items=_barneverns />
+
+            @for (int i = 0; i < 2; i++)
+            {
+                <ContactRow ContactType=@(i == 0 ? ContactType.Person : ContactType.Leder) />
+            }
+
+        </div>
+        <div class="footer" />
+    </div>
+    
+</div>
+
+
+@code {
+
+    string[] _bestillingTypes;
+    string[] _kommunes;
+    string[] _barneverns;
+
+    protected override void OnInitialized()
+    {
+        InitializeGUI();
+        base.OnInitialized();
+    }
+
+    private async Task InitializeGUI()
+    {
+        _bestillingTypes = await BestillingService.GetTypes();
+        _kommunes = new string[] { "kommune1", "kommune2", "kommune3" };
+        _barneverns = new string[] { "barnvern1", "barnvern2", "barnvern3" };
+
+        StateHasChanged();
+    }
+}
