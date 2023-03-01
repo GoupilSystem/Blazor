@@ -4,6 +4,9 @@
     {
         public static readonly Dictionary<string, string> NO = new()
         {
+            //Panel: Vel bestillingstype
+            { "BestillingstypeTitle", "Velg bestillingstype" },
+            
             //Panel: Hvilken kommune er ansvarlig for bestillingen?
             { "KommuneTitle", "Hvilken kommune er ansvarlig for bestillingen?" },
             { "VelgKommuneLabel", "Velg ansvarlig kommune" },

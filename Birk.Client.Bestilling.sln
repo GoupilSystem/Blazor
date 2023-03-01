@@ -11,9 +11,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{8F365FA7
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Birk.BestillingWeb.UnitTests", "Birk.BestillingWeb.UnitTests\Birk.BestillingWeb.UnitTests.csproj", "{83F59A16-9845-42FE-A09A-8ED25C2C4ABC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Birk.BestillingWeb.IntegrationTests", "Birk.BestillingWeb.IntegrationTests\Birk.BestillingWeb.IntegrationTests.csproj", "{77DFE193-5567-40ED-A6B4-DDCCAFF5BC21}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Birk.BestillingWeb.IntegrationTests", "Birk.BestillingWeb.IntegrationTests\Birk.BestillingWeb.IntegrationTests.csproj", "{77DFE193-5567-40ED-A6B4-DDCCAFF5BC21}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Birk.BestillingWeb.FunctionalTests", "Brik.BestillingWeb.FunctionalTests\Birk.BestillingWeb.FunctionalTests.csproj", "{F2473C4F-E508-4B1A-8C85-86E4E97DC1A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Birk.BestillingWeb.FunctionalTests", "Brik.BestillingWeb.FunctionalTests\Birk.BestillingWeb.FunctionalTests.csproj", "{F2473C4F-E508-4B1A-8C85-86E4E97DC1A7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "md", "md", "{22ED5C4E-1558-4D24-AA4D-601FCB6360BD}"
+	ProjectSection(SolutionItems) = preProject
+		.md = .md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

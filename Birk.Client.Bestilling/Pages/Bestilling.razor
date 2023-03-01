@@ -23,6 +23,7 @@
 
     <div class="main-panel">
         <div class="active">
+            <GenericComponent GuiType=@GuiType.Title Items=@(new string[] { Language.NO["BestillingstypeTitle"] }) />
             <DropdownComponent GuiType=@GuiType.Dropdown Items=_bestillingTypes OnSelectionChanged=@OnBestillingDropdownSelectionChanged />
 
             @if (_isHenvisningSelected)
