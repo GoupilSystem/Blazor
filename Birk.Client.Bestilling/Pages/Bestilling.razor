@@ -22,7 +22,7 @@
     </div>
 
     <div class="main-panel">
-        <div class="active">
+        <div class="active @(_isHenvisningSelected ? "" : "minimized" )">
             <GenericComponent GuiType=@GuiType.Title Items=@(new string[] { Language.NO["BestillingstypeTitle"] }) />
             <DropdownComponent GuiType=@GuiType.Dropdown Items=_bestillingTypes OnSelectionChanged=@OnBestillingDropdownSelectionChanged />
 

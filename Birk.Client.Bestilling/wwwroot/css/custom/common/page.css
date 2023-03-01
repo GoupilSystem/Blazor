@@ -41,7 +41,11 @@
     .main-panel .active {
         background: var(--buf-background-2);
         /*up right down left*/
-        padding: 5.3rem 1.1rem 1.2rem 8rem;
+        padding: 1.3rem 1.1rem 1.2rem 8rem;
+    }
+
+    .main-panel .active.minimized {
+        padding-bottom: 5.3rem;
     }
     
     .main-panel .bullet-list {
