@@ -5,9 +5,12 @@
     public GuiType GuiType { get; set; }
 
     [Parameter]
+    public string CssExtra { get; set; } = "";
+
+    [Parameter]
     public string[] Items { get; set; }
 
-    public string CssClass => $"buf-{GuiType.ToString().ToLower()}";
+    public string CssClass => $"buf-{GuiType.ToString().ToLower()} {CssExtra}";
 
     protected override void OnInitialized()
     {
