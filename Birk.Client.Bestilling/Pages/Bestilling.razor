@@ -1,18 +1,13 @@
 ﻿@page "/"
 @page "/bestilling"
-
-@using Birk.Client.Bestilling.Components;
+@using Birk.Client.Bestilling.Components
 @using Birk.Client.Bestilling.Components.Enums;
-@using Birk.Client.Bestilling.Components.Reusable;
-@using Birk.Client.Bestilling.Enums;
-@using Birk.Client.Bestilling.Models.Requests
-@using Birk.Client.Bestilling.Services.Implementation
-@using Birk.Client.Bestilling.Services.Interfaces
-@using Birk.Client.Bestilling.Utils.Constants
-@using System.ComponentModel.DataAnnotations
-@using Birk.Client.Bestilling.Utils.Helpers;
-@inject BestillingService BestillingService
-@inject IDialogService DialogService
+@using Birk.Client.Bestilling.Components.Reusable
+@using Birk.Client.Bestilling.Services.Implementation;
+@using Birk.Client.Bestilling.Services.Interfaces;
+@using Birk.Client.Bestilling.Utils.Constants;
+@inject IBestillingService BestillingService
+@inject ILogger<Bestilling> Logger
 
 <div class="buf-page">
     <div class="top-panel">
@@ -28,43 +23,84 @@
 
     <div class="main-panel">
         <div class="active">
-            <DropdownComponent GuiType=@GuiType.Dropdown Items=_bestillingTypes />
+            <DropdownComponent GuiType=@GuiType.Dropdown Items=_bestillingTypes OnSelectionChanged=@OnBestillingDropdownSelectionChanged />
 
-            <GenericComponent GuiType=@GuiType.Title Items=@(new string[] { Language.NO["KommuneTitle"] }) />
-            <GenericComponent GuiType=@GuiType.Label Items=@(new string[] { @Language.NO["VelgKommuneLabel"] }) />
-            <DropdownComponent GuiType=@GuiType.Dropdown Items=_kommunes />
-            <GenericComponent GuiType=@GuiType.Label Items=@(new string[] { Language.NO["VelgBarnevernLabel"] }) />
-            <DropdownComponent GuiType=@GuiType.Dropdown Items=_barneverns />
-
-            @for (int i = 0; i < 2; i++)
+            @if (_isHenvisningSelected)
             {
-                <ContactRow ContactType=@(i == 0 ? ContactType.Person : ContactType.Leder) />
-            }
+                <GenericComponent GuiType=@GuiType.Title Items=@(new string[] { Language.NO["KommuneTitle"] }) />
+                <GenericComponent GuiType=@GuiType.Label Items=@(new string[] { @Language.NO["VelgKommuneLabel"] }) />
+                <DropdownComponent GuiType=@GuiType.Dropdown Items=_kommunes OnSelectionChanged=@OnKommuneDropdownSelectionChanged />
+                <GenericComponent GuiType=@GuiType.Label Items=@(new string[] { Language.NO["VelgBarnevernLabel"] }) />
+                <DropdownComponent GuiType=@GuiType.Dropdown Items=_barneverntjenestes />
 
+                @for (int i = 0; i < 2; i++)
+                {
+                    <ContactRow ContactType=@(i == 0 ? ContactType.Person : ContactType.Leder) />
+                }
+
+                <GenericComponent GuiType=@GuiType.Title Items=@(new string[] { Language.NO["HvemGjelderTitle"] }) />
+                <GenericComponent GuiType=@GuiType.Label Items=@(new string[] { Language.NO["HvemGjelderLabel"] }) />
+            }
         </div>
         <div class="footer" />
     </div>
     
 </div>
 
-
 @code {
 
-    string[] _bestillingTypes;
-    string[] _kommunes;
-    string[] _barneverns;
+    public string[] _bestillingTypes;
+    public string[] _kommunes;
+    public string[] _barneverntjenestes;
 
-    protected override void OnInitialized()
+    private string _selectedBestilling = null;
+    private string _selectedKommune = null;
+
+    private bool _isHenvisningSelected;
+    private bool _isKommunesAndBarneverntjenestesSet = false;
+
+    protected async override Task OnInitializedAsync()
     {
-        InitializeGUI();
+        await InitializeGUI();
         base.OnInitialized();
     }
 
-    private async Task InitializeGUI()
+    public async Task InitializeGUI()
     {
-        _bestillingTypes = await BestillingService.GetTypes();
-        _kommunes = new string[] { "kommune1", "kommune2", "kommune3" };
-        _barneverns = new string[] { "barnvern1", "barnvern2", "barnvern3" };
+        Logger.LogInformation("Entering {Method}", nameof(InitializeGUI));
+
+        _bestillingTypes = await BestillingService.GetTypes();        
+
+        Logger.LogInformation("Exiting {Method}", nameof(InitializeGUI));
+    }
+
+    private async Task OnBestillingDropdownSelectionChanged(string selectedBestilling)
+    {
+        _selectedBestilling  = selectedBestilling;
+        _isHenvisningSelected = _bestillingTypes.FirstOrDefault() == _selectedBestilling ;
+
+        if (_isHenvisningSelected)
+        {
+            if (!_isKommunesAndBarneverntjenestesSet)
+            {
+                await BestillingService.GetKommunesAndBarneverntjenestes();
+                _isKommunesAndBarneverntjenestesSet = true;
+            }
+            _kommunes = BestillingService.GetKommunes();
+        }
+        else
+        {
+            _kommunes = null;
+            _barneverntjenestes = null;
+        }
+
+        StateHasChanged();
+    }
+
+    private async Task OnKommuneDropdownSelectionChanged(string selectedKommune)
+    {
+        _selectedKommune = selectedKommune;
+        _barneverntjenestes = BestillingService.GetBarneverntjenestesByKommunenavn(_selectedKommune);
 
         StateHasChanged();
     }

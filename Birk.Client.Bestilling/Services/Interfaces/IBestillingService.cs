@@ -12,5 +12,8 @@ namespace Birk.Client.Bestilling.Services.Interfaces
         Task<BestillingItem> GetById(int id);
         Task<List<BestillingItem>> List();
         Task<string[]> GetTypes();
+        Task GetKommunesAndBarneverntjenestes();
+        string[] GetKommunes();
+        string[] GetBarneverntjenestesByKommunenavn(string kommunenavn);
     }
 }

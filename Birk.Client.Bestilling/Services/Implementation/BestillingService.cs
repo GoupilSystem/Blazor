@@ -11,10 +11,13 @@ namespace Birk.Client.Bestilling.Services.Implementation
 {
     public class BestillingService : IBestillingService
     {
-        private readonly HttpService _httpService;
+        private readonly IHttpService _httpService;
         private readonly ILogger<BestillingService> _logger;
 
-        public BestillingService(HttpService httpService, ILogger<BestillingService> logger)
+        private SimplifiedKommuneDto[] _kommunes;
+        private SimplifiedBarneverntjenesteDto[] _barneverntjenestes;
+
+        public BestillingService(IHttpService httpService, ILogger<BestillingService> logger)
         {
             _httpService = httpService;
             _logger = logger;
@@ -68,7 +71,7 @@ namespace Birk.Client.Bestilling.Services.Implementation
 
         public async Task<string[]> GetTypes()
         {
-            _logger.LogInformation("Fetching bestillingtypes from Birk Kodeverk Api");
+            _logger.LogInformation("Entering {Method}", nameof(GetTypes));
 
             var response = await _httpService.HttpGet<List<BestillingTypeDto>>("bestillingtypes");
             if (response.IsSuccess)
@@ -77,5 +80,32 @@ namespace Birk.Client.Bestilling.Services.Implementation
             }
             return new string[] { Language.NO["NoData"] };
         }
+
+        public async Task GetKommunesAndBarneverntjenestes()
+        {   
+            _logger.LogInformation("Entering {Method}", nameof(GetKommunes));
+
+            var kommuneResponse = await _httpService.HttpGet<List<SimplifiedKommuneDto>>("kommunes");
+            if (kommuneResponse.IsSuccess)
+            {
+                _kommunes = kommuneResponse.Data.ToArray();
+
+                var barneverntjenesteResponse = await _httpService.HttpGet<List<SimplifiedBarneverntjenesteDto>>("barneverntjenestes");
+                if (barneverntjenesteResponse.IsSuccess)
+                {
+                    _barneverntjenestes = barneverntjenesteResponse.Data.ToArray();
+                }
+            }
+        }
+
+        public string[] GetKommunes() => _kommunes.Select(k => k.Navn).ToArray() ?? new string[] { Language.NO["NoData"] };
+
+        public string[] GetBarneverntjenestesByKommunenavn(string kommunenavn) => 
+            _barneverntjenestes != null
+                ? _barneverntjenestes
+                    .Where(k => k.Kommunenavn == kommunenavn)
+                    .Select(k => k.EnhetsnavnOgBydelsnavn)
+                    .ToArray()
+                : new string[] { Language.NO["NoData"] };
     }
 }

@@ -1,9 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.2.32616.157
+VisualStudioVersion = 17.4.33403.182
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Birk.Client.Bestilling", "Birk.Client.Bestilling\Birk.Client.Bestilling.csproj", "{AFA8C7DC-6A79-4851-8C97-F4873E8B8353}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Birk.Client.Bestilling", "Birk.Client.Bestilling\Birk.Client.Bestilling.csproj", "{1736EDAF-CC63-4D43-9A96-19D15BC59614}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{205230BA-329B-4E12-B8EE-C05790982B8E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{8F365FA7-465A-47BB-BACA-214BFF9A9324}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Birk.BestillingWeb.UnitTests", "Birk.BestillingWeb.UnitTests\Birk.BestillingWeb.UnitTests.csproj", "{83F59A16-9845-42FE-A09A-8ED25C2C4ABC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Birk.BestillingWeb.IntegrationTests", "Birk.BestillingWeb.IntegrationTests\Birk.BestillingWeb.IntegrationTests.csproj", "{77DFE193-5567-40ED-A6B4-DDCCAFF5BC21}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Birk.BestillingWeb.FunctionalTests", "Brik.BestillingWeb.FunctionalTests\Birk.BestillingWeb.FunctionalTests.csproj", "{F2473C4F-E508-4B1A-8C85-86E4E97DC1A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +21,33 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{AFA8C7DC-6A79-4851-8C97-F4873E8B8353}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AFA8C7DC-6A79-4851-8C97-F4873E8B8353}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AFA8C7DC-6A79-4851-8C97-F4873E8B8353}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AFA8C7DC-6A79-4851-8C97-F4873E8B8353}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1736EDAF-CC63-4D43-9A96-19D15BC59614}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1736EDAF-CC63-4D43-9A96-19D15BC59614}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1736EDAF-CC63-4D43-9A96-19D15BC59614}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1736EDAF-CC63-4D43-9A96-19D15BC59614}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83F59A16-9845-42FE-A09A-8ED25C2C4ABC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83F59A16-9845-42FE-A09A-8ED25C2C4ABC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83F59A16-9845-42FE-A09A-8ED25C2C4ABC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83F59A16-9845-42FE-A09A-8ED25C2C4ABC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77DFE193-5567-40ED-A6B4-DDCCAFF5BC21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77DFE193-5567-40ED-A6B4-DDCCAFF5BC21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77DFE193-5567-40ED-A6B4-DDCCAFF5BC21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77DFE193-5567-40ED-A6B4-DDCCAFF5BC21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2473C4F-E508-4B1A-8C85-86E4E97DC1A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2473C4F-E508-4B1A-8C85-86E4E97DC1A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2473C4F-E508-4B1A-8C85-86E4E97DC1A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2473C4F-E508-4B1A-8C85-86E4E97DC1A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1736EDAF-CC63-4D43-9A96-19D15BC59614} = {205230BA-329B-4E12-B8EE-C05790982B8E}
+		{83F59A16-9845-42FE-A09A-8ED25C2C4ABC} = {8F365FA7-465A-47BB-BACA-214BFF9A9324}
+		{77DFE193-5567-40ED-A6B4-DDCCAFF5BC21} = {8F365FA7-465A-47BB-BACA-214BFF9A9324}
+		{F2473C4F-E508-4B1A-8C85-86E4E97DC1A7} = {8F365FA7-465A-47BB-BACA-214BFF9A9324}
+	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {42CA2EB0-F980-4F3A-B093-1BE2010D8B05}
+		SolutionGuid = {1AC2886A-0FF6-4A57-A58B-A6B63B573E2C}
 	EndGlobalSection
 EndGlobal
