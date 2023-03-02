@@ -1,5 +1,4 @@
-﻿using Birk.Client.Bestilling.Models.Dtos.BestillingDtoTypes;
-using Birk.Client.Bestilling.Models.Dtos;
+﻿using Birk.Client.Bestilling.Models.Dtos;
 using Birk.Client.Bestilling.Models;
 
 namespace Birk.Client.Bestilling.Utils.Mapper

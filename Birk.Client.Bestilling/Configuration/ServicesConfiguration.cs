@@ -1,5 +1,4 @@
-﻿using Birk.Client.Bestilling.Data;
-using Birk.Client.Bestilling.Models.Configuration;
+﻿using Birk.Client.Bestilling.Models.Configuration;
 using Birk.Client.Bestilling.Services.Implementation;
 using MudBlazor.Services;
 using Birk.Client.Bestilling.Services.Interfaces;
@@ -13,7 +12,6 @@ namespace Birk.Client.Bestilling.Configuration
             // Add services to the container.
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
 
             var configSection = config.GetRequiredSection(BaseUrlConfiguration.CONFIG_NAME);
             var baseUrlConfig = configSection.Get<BaseUrlConfiguration>();
