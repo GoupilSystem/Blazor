@@ -78,7 +78,7 @@ namespace Birk.Client.Bestilling.Services.Implementation
             {
                 return response.Data.Select(bt => bt.Verdi).ToArray();
             }
-            return new string[] { Language.NO["NoData"] };
+            return new[] { Language.NO["NoData"] };
         }
 
         public async Task GetKommunesAndBarneverntjenestes()
@@ -98,7 +98,9 @@ namespace Birk.Client.Bestilling.Services.Implementation
             }
         }
 
-        public string[] GetKommunes() => _kommunes.Select(k => k.Navn).ToArray() ?? new string[] { Language.NO["NoData"] };
+        public string[] GetKommunes() => _kommunes?.Select(k => k.Navn).ToArray() ?? new[] { Language.NO["NoData"] };
+
+        public string[] GetBarneverntjenestes() => _barneverntjenestes?.Select(bt => bt.EnhetsnavnOgBydelsnavn).ToArray() ?? new[] { Language.NO["NoData"] };
 
         public string[] GetBarneverntjenestesByKommunenavn(string kommunenavn) => 
             _barneverntjenestes != null
@@ -106,6 +108,6 @@ namespace Birk.Client.Bestilling.Services.Implementation
                     .Where(k => k.Kommunenavn == kommunenavn)
                     .Select(k => k.EnhetsnavnOgBydelsnavn)
                     .ToArray()
-                : new string[] { Language.NO["NoData"] };
+                : new[] { Language.NO["NoData"] };
     }
 }

@@ -36,5 +36,5 @@ app.MapFallbackToPage("/_Host");
 
 app.Run();
 
-
+// For integration tests
 public partial class Program { }

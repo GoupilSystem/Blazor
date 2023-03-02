@@ -6,7 +6,7 @@ using Birk.Client.Bestilling.Utils.Constants;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
-
+using System.Net;
 
 namespace Birk.BestillingWeb.UnitTests
 {
@@ -53,7 +53,58 @@ namespace Birk.BestillingWeb.UnitTests
             var result = await _bestillingService.GetTypes();
 
             // Assert
-            Assert.Equal(new string[] { Language.NO["NoData"] }, result);
+            Assert.Equal(new[] { Language.NO["NoData"] }, result);
+        }
+
+        [Fact]
+        public async Task GetKommunesAndBarneverntjenestes_WhenResponsesAreSuccess_PopulatesKomAndBarFields()
+        {
+            // Arrange
+            var expectedKommunes = new List<SimplifiedKommuneDto>()
+            {
+                new SimplifiedKommuneDto() { Navn = "Kommune1" },
+                new SimplifiedKommuneDto() {  Navn = "Kommune2" },
+            };
+            var kommuneResponse = new HttpResult<List<SimplifiedKommuneDto>>(true, expectedKommunes);
+            _httpServiceMock.Setup(x => x.HttpGet<List<SimplifiedKommuneDto>>("kommunes")).ReturnsAsync(kommuneResponse);
+
+            var expectedBarneverntjenestes = new List<SimplifiedBarneverntjenesteDto>()
+            {
+                new SimplifiedBarneverntjenesteDto() { EnhetsnavnOgBydelsnavn = "Tjeneste1", Kommunenavn = "Kommune1" },
+                new SimplifiedBarneverntjenesteDto() { EnhetsnavnOgBydelsnavn = "Tjeneste2", Kommunenavn = "Kommune2" },
+            };
+            var barneverntjenesteResponse = new HttpResult<List<SimplifiedBarneverntjenesteDto>>(true, expectedBarneverntjenestes);
+            _httpServiceMock.Setup(x => x.HttpGet<List<SimplifiedBarneverntjenesteDto>>("barneverntjenestes")).ReturnsAsync(barneverntjenesteResponse);
+
+            // Act
+            await _bestillingService.GetKommunesAndBarneverntjenestes();
+
+            // Assert
+            Assert.Equal(expectedKommunes.Select(k => k.Navn).ToArray(), _bestillingService.GetKommunes());
+            Assert.Equal(expectedBarneverntjenestes.Select(bt => bt.EnhetsnavnOgBydelsnavn).ToArray(), _bestillingService.GetBarneverntjenestes());
+        }
+
+        [Fact]
+        public async Task GetKommunesAndBarneverntjenestes_ShouldNotSetKomAndBarArrays_WhenApiResponseIsNotSuccessful()
+        {
+            // Arrange
+            _httpServiceMock.Setup(s => s.HttpGet<List<SimplifiedKommuneDto>>("kommunes"))
+                           .ReturnsAsync(new HttpResult<List<SimplifiedKommuneDto>>(false, null));
+
+            // Act
+            await _bestillingService.GetKommunesAndBarneverntjenestes();
+
+            // Assert
+            string[] actualKommunes = _bestillingService.GetKommunes();
+            string[] actualBarneverntjenestes = _bestillingService.GetBarneverntjenestes();
+
+            Assert.NotNull(actualKommunes);
+            Assert.NotNull(actualBarneverntjenestes);
+
+            string[] expected = new[] { Language.NO["NoData"] };
+
+            Assert.True(actualKommunes.SequenceEqual(expected));
+            Assert.True(actualBarneverntjenestes.SequenceEqual(expected));
         }
     }
 }

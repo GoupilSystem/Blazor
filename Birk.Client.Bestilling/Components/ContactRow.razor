@@ -5,11 +5,11 @@
 
 <div class="buf-row">
     <div>
-        <GenericComponent GuiType=@GuiType.Label Items=@(new string[] { _contactLabel }) />
+        <GenericComponent GuiType=@GuiType.Label Items=@(new[] { _contactLabel }) />
         <GenericComponent GuiType=@GuiType.Input Placeholder=@_contactPlaceholder />
     </div>
     <div>
-        <GenericComponent GuiType=@GuiType.Label Items=@(new string[] { Language.NO["TelefonLabel"] }) />
+        <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["TelefonLabel"] }) />
         <GenericComponent GuiType=@GuiType.Input Placeholder=@(StringHelper.BuildPlaceholder(Language.NO["TelefonPlaceholder"])) />
     </div>
 </div>

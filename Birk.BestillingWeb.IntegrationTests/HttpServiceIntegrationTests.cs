@@ -27,7 +27,7 @@ namespace Birk.BestillingWeb.IntegrationTests
         }
 
         [Fact]
-        public async Task HttpGet_Success_ReturnsExpectedData()
+        public async Task HttpGet_Success_ReturnsExpectedData_Test()
         {
             // Arrange
             var expectedData = new { Name = "John", Age = 30 };

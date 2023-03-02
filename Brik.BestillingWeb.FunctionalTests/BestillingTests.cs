@@ -35,7 +35,7 @@ namespace Birk.BestillingWeb.FunctionalTests
             // Arrange
             var bestillingServiceMock = new Mock<IBestillingService>();
             bestillingServiceMock.Setup(s => s.GetTypes())
-                                 .ReturnsAsync(new string[] { "Type1", "Type2" });
+                                 .ReturnsAsync(new[] { "Type1", "Type2" });
 
             Services.AddSingleton(bestillingServiceMock.Object);
             Services.AddMudServices();
@@ -51,7 +51,7 @@ namespace Birk.BestillingWeb.FunctionalTests
             await cut.Instance.InitializeGUI();
 
             // Assert
-            Assert.Equal(new string[] { "Type1", "Type2" }, cut.Instance._bestillingTypes);
+            Assert.Equal(new[] { "Type1", "Type2" }, cut.Instance._bestillingTypes);
         }
     }
 }

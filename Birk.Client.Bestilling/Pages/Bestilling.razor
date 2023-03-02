@@ -23,15 +23,15 @@
 
     <div class="main-panel">
         <div class="active @(_isHenvisningSelected ? "" : "minimized" )">
-            <GenericComponent GuiType=@GuiType.Title Items=@(new string[] { Language.NO["BestillingstypeTitle"] }) CssExtra="bestillingstype"/>
+            <GenericComponent GuiType=@GuiType.Title Items=@(new[] { Language.NO["BestillingstypeTitle"] }) CssExtra="bestillingstype"/>
             <DropdownComponent GuiType=@GuiType.Dropdown Items=_bestillingTypes OnSelectionChanged=@OnBestillingDropdownSelectionChanged />
 
             @if (_isHenvisningSelected)
             {
-                <GenericComponent GuiType=@GuiType.Title Items=@(new string[] { Language.NO["KommuneTitle"] }) />
-                <GenericComponent GuiType=@GuiType.Label Items=@(new string[] { @Language.NO["VelgKommuneLabel"] }) />
+                <GenericComponent GuiType=@GuiType.Title Items=@(new[] { Language.NO["KommuneTitle"] }) />
+                <GenericComponent GuiType=@GuiType.Label Items=@(new[] { @Language.NO["VelgKommuneLabel"] }) />
                 <DropdownComponent GuiType=@GuiType.Dropdown Items=_kommunes OnSelectionChanged=@OnKommuneDropdownSelectionChanged />
-                <GenericComponent GuiType=@GuiType.Label Items=@(new string[] { Language.NO["VelgBarnevernLabel"] }) />
+                <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["VelgBarnevernLabel"] }) />
                 <DropdownComponent GuiType=@GuiType.Dropdown Items=_barneverntjenestes />
 
                 @for (int i = 0; i < 2; i++)
@@ -39,8 +39,8 @@
                     <ContactRow ContactType=@(i == 0 ? ContactType.Person : ContactType.Leder) />
                 }
 
-                <GenericComponent GuiType=@GuiType.Title Items=@(new string[] { Language.NO["HvemGjelderTitle"] }) />
-                <GenericComponent GuiType=@GuiType.Label Items=@(new string[] { Language.NO["HvemGjelderLabel"] }) />
+                <GenericComponent GuiType=@GuiType.Title Items=@(new[] { Language.NO["HvemGjelderTitle"] }) />
+                <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["HvemGjelderLabel"] }) />
             }
         </div>
         <div class="footer" />
