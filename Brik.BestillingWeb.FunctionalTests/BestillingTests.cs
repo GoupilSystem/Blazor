@@ -48,7 +48,7 @@ namespace Birk.BestillingWeb.FunctionalTests
             var cut = RenderComponent<Bestilling>();
 
             // Act
-            await cut.Instance.InitializeGUI();
+            await cut.Instance.InitializeDropdowns();
 
             // Assert
             Assert.Equal(new[] { "Type1", "Type2" }, cut.Instance._bestillingTypes);

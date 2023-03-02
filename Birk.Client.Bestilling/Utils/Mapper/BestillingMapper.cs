@@ -9,7 +9,6 @@ namespace Birk.Client.Bestilling.Utils.Mapper
         {
             return new BestillingItem
             {
-                //PK ??
                 AkuttTilbudDager = dto.AkuttTilbudDager,
                 AkuttTilbudMinutter = dto.AkuttTilbudMinutter,
                 AkuttTilbudTimer = dto.AkuttTilbudTimer,

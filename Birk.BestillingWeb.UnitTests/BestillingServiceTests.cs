@@ -70,8 +70,8 @@ namespace Birk.BestillingWeb.UnitTests
 
             var expectedBarneverntjenestes = new List<SimplifiedBarneverntjenesteDto>()
             {
-                new SimplifiedBarneverntjenesteDto() { EnhetsnavnOgBydelsnavn = "Tjeneste1", Kommunenavn = "Kommune1" },
-                new SimplifiedBarneverntjenesteDto() { EnhetsnavnOgBydelsnavn = "Tjeneste2", Kommunenavn = "Kommune2" },
+                new SimplifiedBarneverntjenesteDto() { EnhetsnavnOgBydelsnavn = "Tjeneste 1", Kommunenavns = new[] { "Kommune 1" } },
+                new SimplifiedBarneverntjenesteDto() { EnhetsnavnOgBydelsnavn = "Tjeneste 2", Kommunenavns = new[] { "Kommune 2" } },
             };
             var barneverntjenesteResponse = new HttpResult<List<SimplifiedBarneverntjenesteDto>>(true, expectedBarneverntjenestes);
             _httpServiceMock.Setup(x => x.HttpGet<List<SimplifiedBarneverntjenesteDto>>("barneverntjenestes")).ReturnsAsync(barneverntjenesteResponse);

@@ -83,8 +83,8 @@ namespace Birk.BestillingWeb.IntegrationTests
 
             var expectedBarneverntjenestes = new List<SimplifiedBarneverntjenesteDto>
             {
-                new SimplifiedBarneverntjenesteDto { EnhetsnavnOgBydelsnavn = "Tjeneste 1", Kommunenavn = "Kommune 1"},
-                new SimplifiedBarneverntjenesteDto { EnhetsnavnOgBydelsnavn = "Tjeneste 2", Kommunenavn = "Kommune 2"},
+                new SimplifiedBarneverntjenesteDto { EnhetsnavnOgBydelsnavn = "Tjeneste 1", Kommunenavns = new[] { "Kommune 1" } },
+                new SimplifiedBarneverntjenesteDto { EnhetsnavnOgBydelsnavn = "Tjeneste 2", Kommunenavns = new[] { "Kommune 2" } },
             };
 
             // Create the mock server

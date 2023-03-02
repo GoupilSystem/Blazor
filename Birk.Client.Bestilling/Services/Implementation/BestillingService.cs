@@ -82,18 +82,35 @@ namespace Birk.Client.Bestilling.Services.Implementation
         }
 
         public async Task GetKommunesAndBarneverntjenestes()
-        {   
-            _logger.LogInformation("Entering {Method}", nameof(GetKommunes));
+        {
+            _logger.LogInformation("Entering {Method}", nameof(GetKommunesAndBarneverntjenestes));
 
             var kommuneResponse = await _httpService.HttpGet<List<SimplifiedKommuneDto>>("kommunes");
             if (kommuneResponse.IsSuccess)
             {
                 _kommunes = kommuneResponse.Data.ToArray();
 
-                var barneverntjenesteResponse = await _httpService.HttpGet<List<SimplifiedBarneverntjenesteDto>>("barneverntjenestes");
+                var barneverntjenesteResponse = await _httpService.HttpGet<List<TempBarneverntjenesteDto>>("barneverntjenestes");
+                // We get from KodeverkApi a [] of TempBarneverntjenesteDto
+                // with non unique string values EnhetsnavnOgBydelsnavnproperty and Kommunenavn
+                // F.ex:
+                // TempBarneverntjenesteDto1: EnhetsnavnOgBydelsnavn = 'Indre Namdal barnevern', KommuneNavn = 'Grong'
+                // TempBarneverntjenesteDto2: EnhetsnavnOgBydelsnavn = 'Indre Namdal barnevern', KommuneNavn = 'Høylandet'
+                // We need to convert this to an [] of SimplifiedBarneverntjenesteDto with unique value EnhetsnavnOgBydelsnavnproperty
+                // and a string[] Kommunenavns
+                // F.ex:
+                // SimplifiedBarneverntjenesteDto: EnhetsnavnOgBydelsnavn = 'Indre Namdal barnevern', KommuneNavns = 'Grong', 'Høylandet'
                 if (barneverntjenesteResponse.IsSuccess)
                 {
-                    _barneverntjenestes = barneverntjenesteResponse.Data.ToArray();
+                    var tjenestesWithDuplicatedNames = barneverntjenesteResponse.Data.ToArray();
+                    _barneverntjenestes = tjenestesWithDuplicatedNames
+                        .GroupBy(t => t.EnhetsnavnOgBydelsnavn)
+                        .Select(g => new SimplifiedBarneverntjenesteDto
+                        {
+                            EnhetsnavnOgBydelsnavn = g.Key,
+                            Kommunenavns = g.Select(s => s.Kommunenavn).ToArray()
+                        })
+                        .ToArray();
                 }
             }
         }
@@ -102,12 +119,9 @@ namespace Birk.Client.Bestilling.Services.Implementation
 
         public string[] GetBarneverntjenestes() => _barneverntjenestes?.Select(bt => bt.EnhetsnavnOgBydelsnavn).ToArray() ?? new[] { Language.NO["NoData"] };
 
-        public string[] GetBarneverntjenestesByKommunenavn(string kommunenavn) => 
-            _barneverntjenestes != null
-                ? _barneverntjenestes
-                    .Where(k => k.Kommunenavn == kommunenavn)
-                    .Select(k => k.EnhetsnavnOgBydelsnavn)
-                    .ToArray()
-                : new[] { Language.NO["NoData"] };
+        public string[] GetBarneverntjenestesByKommunenavn(string kommunenavn) =>
+            _barneverntjenestes == null ? new[] { Language.NO["NoData"] }
+                : string.IsNullOrEmpty(kommunenavn) ? GetBarneverntjenestes()
+                    : _barneverntjenestes.Where(k => k.Kommunenavns.Contains(kommunenavn)).Select(k => k.EnhetsnavnOgBydelsnavn).ToArray();
     }
 }

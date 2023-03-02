@@ -1,8 +1,8 @@
 ﻿namespace Birk.Client.Bestilling.Models.Dtos
 {
-    public class SimplifiedBarneverntjenesteDto
+    public class TempBarneverntjenesteDto
     {
         public string EnhetsnavnOgBydelsnavn { get; set; }
-        public string[] Kommunenavns { get; set; }
+        public string Kommunenavn { get; set; }
     }
 }

@@ -13,7 +13,8 @@ namespace Birk.Client.Bestilling.Services.Interfaces
         Task<List<BestillingItem>> List();
         Task<string[]> GetTypes();
         Task GetKommunesAndBarneverntjenestes();
-        string[] GetKommunes();
+        string[] GetKommunes(); 
+        string[] GetBarneverntjenestes();
         string[] GetBarneverntjenestesByKommunenavn(string kommunenavn);
     }
 }

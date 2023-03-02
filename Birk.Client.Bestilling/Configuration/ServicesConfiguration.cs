@@ -15,10 +15,12 @@ namespace Birk.Client.Bestilling.Configuration
 
             var configSection = config.GetRequiredSection(BaseUrlConfiguration.CONFIG_NAME);
             var baseUrlConfig = configSection.Get<BaseUrlConfiguration>();
+            var httpTimeoutSeconds = config.GetValue<int>("HttpTimeoutSeconds");
 
             services.AddScoped(sp => new HttpClient
             {
-                BaseAddress = new Uri(baseUrlConfig.KodeverkApiBase)
+                BaseAddress = new Uri(baseUrlConfig.KodeverkApiBase),
+                Timeout = TimeSpan.FromSeconds(httpTimeoutSeconds)
             });
 
             services.AddTransient<IHttpService, HttpService>();
