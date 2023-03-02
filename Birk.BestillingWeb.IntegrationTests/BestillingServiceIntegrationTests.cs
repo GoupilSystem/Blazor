@@ -156,7 +156,7 @@ namespace Birk.BestillingWeb.IntegrationTests
             Assert.NotNull(actualKommunes);
             Assert.NotNull(actualBarneverntjenestes);
 
-            string[] expected = new[] { Language.NO["NoData"] };
+            string[] expected = new[] { Language._NO["NoData"] };
 
             Assert.True(actualKommunes.SequenceEqual(expected));
             Assert.True(actualBarneverntjenestes.SequenceEqual(expected));
