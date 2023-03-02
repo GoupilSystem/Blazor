@@ -53,7 +53,7 @@ namespace Birk.BestillingWeb.UnitTests
             var result = await _bestillingService.GetTypes();
 
             // Assert
-            Assert.Equal(new[] { Language._NO["NoData"] }, result);
+            Assert.Equal(new[] { Language.NO["NoData"] }, result);
         }
 
         [Fact]
@@ -101,7 +101,7 @@ namespace Birk.BestillingWeb.UnitTests
             Assert.NotNull(actualKommunes);
             Assert.NotNull(actualBarneverntjenestes);
 
-            string[] expected = new[] { Language._NO["NoData"] };
+            string[] expected = new[] { Language.NO["NoData"] };
 
             Assert.True(actualKommunes.SequenceEqual(expected));
             Assert.True(actualBarneverntjenestes.SequenceEqual(expected));

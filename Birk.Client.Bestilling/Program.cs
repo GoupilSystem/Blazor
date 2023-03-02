@@ -1,5 +1,4 @@
 using Birk.Client.Bestilling.Configuration;
-using Birk.Client.Bestilling.Middleware;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,8 +13,6 @@ builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);
 
 var app = builder.Build();
-
-app.UseMiddleware<CorrelationIdMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

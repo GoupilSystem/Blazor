@@ -32,7 +32,7 @@ namespace Birk.Client.Bestilling.Configuration
 
             services.AddHeaderPropagation(options =>
             {
-                options.Headers.Add("Custom-correlation-ID", "800");
+                options.Headers.Add("Custom-correlation-ID", Guid.NewGuid().ToString());
             });
         }
     }
