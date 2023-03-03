@@ -1,5 +1,4 @@
-﻿using Birk.Client.Bestilling.Models.Dtos.BestillingDtoTypes;
-using Birk.Client.Bestilling.Models.Dtos;
+﻿using Birk.Client.Bestilling.Models.Dtos;
 using Birk.Client.Bestilling.Models;
 
 namespace Birk.Client.Bestilling.Utils.Mapper
@@ -10,7 +9,6 @@ namespace Birk.Client.Bestilling.Utils.Mapper
         {
             return new BestillingItem
             {
-                //PK ??
                 AkuttTilbudDager = dto.AkuttTilbudDager,
                 AkuttTilbudMinutter = dto.AkuttTilbudMinutter,
                 AkuttTilbudTimer = dto.AkuttTilbudTimer,

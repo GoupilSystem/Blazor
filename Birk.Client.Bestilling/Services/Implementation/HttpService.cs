@@ -7,10 +7,12 @@ using Birk.Client.Bestilling.Utils.Constants;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Birk.Client.Bestilling.Enums;
+using System.Net.Http;
+using Birk.Client.Bestilling.Services.Interfaces;
 
-namespace Birk.Client.Bestilling.Services
+namespace Birk.Client.Bestilling.Services.Implementation
 {
-    public class HttpService
+    public class HttpService : IHttpService
     {
         private readonly HttpClient _httpClient;
 
@@ -58,7 +60,7 @@ namespace Birk.Client.Bestilling.Services
             {
                 return new HttpResult<T>(false, null, await GetProblemDetailsAsync(null, HttpProblemType.HttpDeleteError, ex.Message));
             }
-            
+
         }
 
         public async Task<HttpResult<T>> HttpPost<T>(string uri, object dataToSend)
@@ -120,7 +122,7 @@ namespace Birk.Client.Bestilling.Services
             });
         }
 
-        private async Task<ProblemDetails> GetProblemDetailsAsync(HttpResponseMessage? result, 
+        private async Task<ProblemDetails> GetProblemDetailsAsync(HttpResponseMessage? result,
             HttpProblemType httpErrorType, string detail = "")
         {
             var pDetail = "";
@@ -129,10 +131,7 @@ namespace Birk.Client.Bestilling.Services
             else if (result != null &&
                 (httpErrorType == HttpProblemType.HttpGetNoSuccess || httpErrorType == HttpProblemType.HttpPostNoSuccess))
             {
-                JsonSerializer.Deserialize<ErrorDetails>(await result.Content.ReadAsStringAsync(), new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
+                pDetail = await result.Content.ReadAsStringAsync();
             }
 
             var problemDetails = new ProblemDetails

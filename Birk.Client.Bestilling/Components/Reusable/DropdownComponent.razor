@@ -1,16 +1,35 @@
 ﻿@inherits BaseComponent;
 
 <MudAutocomplete Class=@CssClass T="string"
-    @bind-Value="_selectedChoiceItem" SearchFunc="@Search"
-    ResetValueOnEmptyText="@_resetValueOnEmptyText"
-    CoerceText="@_coerceText" CoerceValue="@_coerceValue" />
+                 @bind-Value="SelectedBestilling " SearchFunc="@Search"
+                 ResetValueOnEmptyText="@_resetValueOnEmptyText"
+                 CoerceText="@_coerceText" CoerceValue="@_coerceValue" />
 
 @code {
 
-    private string _selectedChoiceItem;
-    private bool _resetValueOnEmptyText;
-    private bool _coerceText;
-    private bool _coerceValue;
+    [Parameter]
+    public Func<string, Task> OnSelectionChanged { get; set; }
+
+    [Parameter]
+    public string SelectedBestilling
+    {
+        get => _selectedBestilling;
+        set
+        {
+            if (value == _selectedBestilling)
+            {
+                return;
+            }
+
+            _selectedBestilling = value;
+            OnSelectionChanged?.Invoke(_selectedBestilling);
+        }
+    }
+
+    private string _selectedBestilling;
+    private bool _resetValueOnEmptyText = true;
+    private bool _coerceText = true;
+    private bool _coerceValue = true;
 
     private async Task<IEnumerable<string>> Search(string value)
     {
@@ -23,3 +42,4 @@
         return Items.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
     }
 }
+

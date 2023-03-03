@@ -1,26 +1,37 @@
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Birk.Client.Bestilling;
-using MudBlazor.Services;
-using Birk.Client.Bestilling.Models.Configuration;
-using Birk.Client.Bestilling.Services;
-using Birk.Client.Bestilling.Services.Implementation;
+using Birk.Client.Bestilling.Configuration;
+using Serilog;
 
-var builder = WebAssemblyHostBuilder.CreateDefault(args);
-builder.RootComponents.Add<App>("#app");
-builder.RootComponents.Add<HeadOutlet>("head::after");
+var builder = WebApplication.CreateBuilder(args);
+ServicesConfiguration.Configure(builder.Services, builder.Configuration);
 
-var configSection = builder.Configuration.GetRequiredSection(BaseUrlConfiguration.CONFIG_NAME);
-var baseUrlConfig = configSection.Get<BaseUrlConfiguration>();
+// Serilog
+var logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.WithCorrelationIdHeader("Custom-correlation-ID")
+    .CreateLogger();
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog(logger);
 
-builder.Services.AddScoped(sp => new HttpClient
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
 {
-    BaseAddress = new Uri(baseUrlConfig.KodeverkApiBase)
-});
+    app.UseExceptionHandler("/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
+}
 
-builder.Services.AddScoped<HttpService>();
-builder.Services.AddScoped<BestillingService>();
+app.UseHttpsRedirection();
 
-builder.Services.AddMudServices();
+app.UseStaticFiles();
 
-await builder.Build().RunAsync();
+app.UseRouting();
+
+app.MapBlazorHub();
+app.MapFallbackToPage("/_Host");
+
+app.Run();
+
+// For integration tests
+public partial class Program { }
