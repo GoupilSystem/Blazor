@@ -68,13 +68,13 @@ namespace Birk.BestillingWeb.UnitTests
             var kommuneResponse = new HttpResult<List<SimplifiedKommuneDto>>(true, expectedKommunes);
             _httpServiceMock.Setup(x => x.HttpGet<List<SimplifiedKommuneDto>>("kommunes")).ReturnsAsync(kommuneResponse);
 
-            var expectedBarneverntjenestes = new List<SimplifiedBarneverntjenesteDto>()
+            var expectedBarneverntjenestes = new List<TempBarneverntjenesteDto>()
             {
-                new SimplifiedBarneverntjenesteDto() { EnhetsnavnOgBydelsnavn = "Tjeneste 1", Kommunenavns = new[] { "Kommune 1" } },
-                new SimplifiedBarneverntjenesteDto() { EnhetsnavnOgBydelsnavn = "Tjeneste 2", Kommunenavns = new[] { "Kommune 2" } },
+                new TempBarneverntjenesteDto() { EnhetsnavnOgBydelsnavn = "Tjeneste 1", Kommunenavn = "Kommune 1" },
+                new TempBarneverntjenesteDto() { EnhetsnavnOgBydelsnavn = "Tjeneste 2", Kommunenavn = "Kommune 2" },
             };
-            var barneverntjenesteResponse = new HttpResult<List<SimplifiedBarneverntjenesteDto>>(true, expectedBarneverntjenestes);
-            _httpServiceMock.Setup(x => x.HttpGet<List<SimplifiedBarneverntjenesteDto>>("barneverntjenestes")).ReturnsAsync(barneverntjenesteResponse);
+            var barneverntjenesteResponse = new HttpResult<List<TempBarneverntjenesteDto>>(true, expectedBarneverntjenestes);
+            _httpServiceMock.Setup(x => x.HttpGet<List<TempBarneverntjenesteDto>>("barneverntjenestes")).ReturnsAsync(barneverntjenesteResponse);
 
             // Act
             await _bestillingService.GetKommunesAndBarneverntjenestes();
