@@ -1,0 +1,110 @@
+parameters:
+  name: ''
+  pool: ''
+  group: ''
+  environment: ''
+  machine: ''
+  target: ''
+  website: ''
+  websitepool: ''
+  deployuser: ''
+  deploypwd: ''
+  condition: false
+
+stages:
+  - stage: ${{parameters.name}}
+    displayName: '${{parameters.name}}'
+    pool: ${{ parameters.pool }}
+    variables:
+      - group: ${{parameters.group}}
+      - name: stageCondition
+        value: ${{parameters.condition}}
+      - name: EnableIntegrationTests
+        value: $(RunIntegrationTests)
+      - name: EnableDeploy
+        value: $(RunDeploy)
+    condition: and(succeeded(), eq(variables.stageCondition, true))
+
+    jobs:
+      - deployment: Deploy${{parameters.name}}
+        displayName: Deploy ${{parameters.name}}
+        environment: '${{parameters.environment}}'
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: none
+
+                - task: FileTransform@1
+                  displayName: Transforming settingsfile
+                  continueOnError: true
+                  condition: and(succeeded(), eq(variables.EnableDeploy, true))
+                  inputs:
+                    folderPath: '$(Agent.BuildDirectory)\$(ApiName)\$(ApiFolder)'
+                    fileType: 'json'
+                    targetFiles: '**/appsettings.json'
+
+                - task: PowerShellOnTargetMachines@3
+                  displayName: 'Stopping website ${{parameters.website}}'
+                  condition: and(succeeded(), eq(variables.EnableDeploy, true))
+                  inputs:
+                    Machines: '${{parameters.machine}}'
+                    UserName: '${{parameters.deployuser}}'
+                    UserPassword: '${{parameters.deploypwd}}'
+                    InlineScript: |
+                      Stop-WebSite -Name ${{parameters.website}}
+                      if ((Get-WebAppPoolState ${{parameters.websitepool}}).Value -eq "Started") {
+                        Stop-WebAppPool -Name ${{parameters.websitepool}}
+                      }
+                    CommunicationProtocol: 'Http'
+
+                - task: WindowsMachineFileCopy@2
+                  displayName: 'Uploading new version of the api'
+                  condition: and(succeeded(), eq(variables.EnableDeploy, true))
+                  timeoutInMinutes: 1
+                  inputs:
+                    SourcePath: '$(Agent.BuildDirectory)\$(ApiName)\$(ApiFolder)'
+                    MachineNames: '${{parameters.machine}}'
+                    AdminUserName: '${{parameters.deployuser}}'
+                    AdminPassword: '${{parameters.deploypwd}}'
+                    TargetPath: '${{parameters.target}}$(ApiName)'
+
+                - task: PowerShellOnTargetMachines@3
+                  displayName: 'Starting website ${{parameters.website}}'
+                  condition: and(succeeded(), eq(variables.EnableDeploy, true))
+                  inputs:
+                    Machines: '${{parameters.machine}}'
+                    UserName: '${{parameters.deployuser}}'
+                    UserPassword: '${{parameters.deploypwd}}'
+                    InlineScript: |
+                      Start-WebAppPool -Name ${{parameters.websitepool}}
+                      Start-WebSite -Name ${{parameters.website}}
+                    CommunicationProtocol: 'Http'
+
+      - job: IntegrationTest        
+        displayName: 'Integrationtests ${{parameters.environment}}'
+        condition: and(succeeded(), eq(variables.EnableIntegrationTests, true))
+        dependsOn: Deploy${{parameters.name}}
+        steps:
+          - checkout: none
+
+          - task: FileTransform@1
+            enabled: false
+            displayName: Transforming testsettings file
+            continueOnError: true
+            inputs:
+              folderPath: '$(Agent.BuildDirectory)\$(ApiName)\$(IntegrationTestsFolder)'
+              fileType: 'json'
+              targetFiles: '**/testsettings.json'
+
+          - task: DotNetCoreCLI@2
+            displayName: Running integrationtests
+            continueOnError: true
+            inputs:
+              command: 'test'
+              projects: '$(Agent.BuildDirectory)/$(ApiName)/$(IntegrationTestsFolder)/**.IntegrationTests.dll'
+              #arguments: '--filter ${{parameters.integrationTestFilter}}'
+              testRunTitle: 'Integrasjonstest'
+              publishTestResults: true
+
+      

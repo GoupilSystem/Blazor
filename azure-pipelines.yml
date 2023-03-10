@@ -1,0 +1,189 @@
+# CI og CD pipeline for Kodeverk API
+
+trigger:
+  - develop
+
+variables:
+  solution: '**/*.sln'
+  buildConfiguration: 'Release'
+  ApiName: 'BestillingWeb'
+
+  ApiFolder: 'Birk.Client.Bestilling'
+  IntegrationTestsFolder: '*.IntegrationTests'
+
+  ApiProjectPath: '**/*.Client.Bestilling.csproj'
+  IntegrationTestsProjectPath: '**/*.IntegrationTests.csproj'
+
+  PrepareForDeploy: true  #$(RunDeploy)
+  EnableUnitTests: true  # $(RunUnitTests)
+  EnableIntegrationTests: true # $(RunIntegrationTests)
+  EnableSonarCube: true   #$(RunSonarCube)
+
+
+stages:
+  - stage: BuildAndTest
+    displayName: Building, testing and doing code analyze
+    pool:
+      vmImage: ubuntu-latest
+
+    jobs:
+      - job: Build
+        displayName: Build, test and analyze
+
+        steps:
+
+          - task: UseDotNet@2
+            displayName: 'Install .NET 7.0.X SDK'
+            inputs:
+              packageType: 'sdk'
+              version: '7.0.x'
+              performMultiLevelLookup: true
+
+          - task: SonarQubePrepare@5
+            displayName: 'SonarQube prepare task'
+            condition: and(succeeded(), eq(variables.EnableSonarCube, true), eq(variables['Build.SourceBranch'], 'refs/heads/develop'), ne(variables['Build.Reason'], 'PullRequest'))
+            continueOnError: true
+            inputs:
+              SonarQube: 'SonarQTest'
+              scannerMode: 'MSBuild'
+              projectKey: 'Birk_Birk.Kodeverk.Web'
+              projectName: 'Birk.Kodeverk.Web'
+
+          - task: DotNetCoreCLI@2
+            displayName: Building api $(buildConfiguration)
+            inputs:
+              command: 'build'
+              projects: '$(solution)'
+              arguments: '--configuration $(buildConfiguration)'
+
+          - task: SonarQubeAnalyze@5
+            displayName: 'SonarQube Analyze'
+            condition: and(succeeded(), eq(variables.EnableSonarCube, true), eq(variables['Build.SourceBranch'], 'refs/heads/develop'), ne(variables['Build.Reason'], 'PullRequest'))
+            continueOnError: true
+
+          - task: SonarQubePublish@5
+            displayName: 'SonarQube Publish'
+            condition: and(succeeded(), eq(variables.EnableSonarCube, true), eq(variables['Build.SourceBranch'], 'refs/heads/develop'), ne(variables['Build.Reason'], 'PullRequest'))
+            continueOnError: true
+            inputs:
+              pollingTimeoutSec: '300'
+
+          - task: DotNetCoreCLI@2
+            displayName: 'Running unittests'
+            condition: and(succeeded(), eq(variables.EnableUnitTests, true))
+            continueOnError: true
+            inputs:
+              command: 'test'
+              projects: '**/*.UnitTests.csproj'
+              testRunTitle: 'KodeverkWeb Unit tests'
+              publishTestResults: true
+              arguments: '--no-build --configuration $(BuildConfiguration) --collect "XPlat Code coverage" /p:CoverletOutputFormat=cobertura'
+
+          - task: DotNetCoreCLI@2
+            displayName: 'Publish to artifacts catalog'
+            condition: and(succeeded(), eq(variables.PrepareForDeploy, true))
+            inputs:
+              command: publish
+              publishWebProjects: false
+              projects: |
+                $(ApiProjectPath) 
+                $(IntegrationTestsProjectPath)
+              arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+              zipAfterPublish: false
+
+          - task: PublishBuildArtifacts@1
+            displayName: 'Publish artifacts to container'
+            condition: and(succeeded(), eq(variables.PrepareForDeploy, true))
+            inputs:
+              ArtifactName: '$(ApiName)'
+              publishLocation: 'Container'
+
+          - task: PublishCodeCoverageResults@1
+            continueOnError: true
+            condition: and(succeeded(), eq(variables.EnableUnitTests, true))
+            displayName: 'Publish code-coverage report'
+            inputs:
+             codeCoverageTool: 'Cobertura'
+             summaryFileLocation: '$(Agent.TempDirectory)/*-*-*-*-*/coverage.cobertura.xml'
+
+
+  - template: template/iis-deploy.yml
+    parameters:
+      name: 'UTV_BestillingWeb'
+      environment: '824-web06'
+      group: 'BirkBestillingWeb-UTV'
+      pool:
+        name: '824-bygg'
+      machine: $(WebServerTargetMachineIP)
+      target: $(DestinationPath)
+      website: $(Api_WebSiteName)
+      websitepool: $(Api_WebApplicationPoolName)
+      deployuser: $(DeployServiceAccountUser)
+      deploypwd: $(DeployServiceAccountPwd)
+      condition: true
+
+  - template: template/iis-deploy.yml
+    parameters:
+      name: 'QA_BestillingWeb'
+      environment: '409-web99'
+      group: 'BirkBestillingWeb-QA'
+      pool:
+        name: '409 Registerporten'
+      machine: $(WebServerTargetMachineIP)
+      target: $(DestinationPath)
+      website: $(Api_WebSiteName)
+      websitepool: $(Api_WebApplicationPoolName)
+      deployuser: $(DeployServiceAccountUser)
+      deploypwd: $(DeployServiceAccountPwd)
+      condition: $[or(
+        eq(variables['Build.SourceBranch'], 'refs/heads/develop'),
+        startsWith(variables['Build.SourceBranch'], 'refs/heads/release/'),
+        eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/master'),
+        eq(variables['System.PullRequest.TargetBranch'], 'refs/heads/main'),
+        eq(variables['Build.SourceBranch'], 'refs/heads/master'),
+        eq(variables['Build.SourceBranch'], 'refs/heads/main')
+        )]
+
+  - template: template/iis-deploy.yml
+    parameters:
+      name: 'Prod_BestillingWeb'
+      environment: 'Buf-p-int-api-01'
+      group: 'BirkBestillingWeb-Produksjon'
+      pool:
+        name: 'Birk Produksjon'
+      machine: $(WebServerTargetMachineIP)
+      target: $(DestinationPath)
+      website: $(Api_WebSiteName)
+      websitepool: $(Api_WebApplicationPoolName)
+      deployuser: $(DeployServiceAccountUser)
+      deploypwd: $(DeployServiceAccountPwd)
+      condition: $[or(
+        eq(variables['Build.SourceBranch'], 'refs/heads/master'),
+        eq(variables['Build.SourceBranch'], 'refs/heads/main'),
+        and(
+          eq(variables['Build.Reason'], 'Manual'),
+          startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')
+        )
+        )]
+
+  - template: template/iis-deploy.yml
+    parameters:
+      name: 'Kurs_BestillingWeb'
+      environment: 'Buf-p-int-api-01'
+      group: 'BirkBestillingWeb-Kurs'
+      pool:
+        name: 'Birk Produksjon'
+      machine: $(WebServerTargetMachineIP)
+      target: $(DestinationPath)
+      website: $(Api_WebSiteName)
+      websitepool: $(Api_WebApplicationPoolName)
+      deployuser: $(DeployServiceAccountUser)
+      deploypwd: $(DeployServiceAccountPwd)
+      condition: $[or(
+        eq(variables['Build.SourceBranch'], 'refs/heads/master'),
+        eq(variables['Build.SourceBranch'], 'refs/heads/main'),
+        and(
+          eq(variables['Build.Reason'], 'Manual'),
+          startsWith(variables['Build.SourceBranch'], 'refs/heads/release/')
+        )
+        )]
