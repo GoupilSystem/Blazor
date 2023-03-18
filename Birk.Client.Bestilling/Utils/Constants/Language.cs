@@ -8,7 +8,7 @@ namespace Birk.Client.Bestilling.Utils.Constants
         {
             var dictionary = new Dictionary<string, string>
             {
-                //Panel: Vel bestillingstype
+                //Panel: Velg bestillingstype
                 { "BestillingstypeTitle", "Velg bestillingstype" },
             
                 //Panel: Hvilken kommune er ansvarlig for bestillingen?
@@ -28,15 +28,23 @@ namespace Birk.Client.Bestilling.Utils.Constants
                     "<ul class=\"bullet-list\"><li>Fødselsnummer</li><li>D-nummer/DUF-nummer</li><li>Fornavn og etternavn</li><li>BirkId</li></ul>" +
                     "Dersom barnet ikke er registrert fører søket deg til manuell registrering." },
 
+                //Panel: Søk barn
+                { "SøkBarnTitle", "Søk opp barnet i Birk" },
+                { "SøkBarnLabel", "Søk opp barn eller mor til ufødt barn i Birk. Bruk fødselsnummer for å søke." +
+                    "<br><b>Dersom barnet ikke er registrert fører søket deg til manuell registrering.</b>"},
+                { "FødselsnummerPlaceholder", "fødselsnummer" },
+                { "SøkBarnButton", "Søk" },
+                { "SøkBarnFeilmelding", "OBS! Fødselsnummer skal ha 11 siffer"},
+
                 //GUI
                 { "NoData", "No data" },
 
                 //HttpService problems
-                {"HttpProblemTitle", "Error while fetching object(s) of type: {0}" },
-                {"HttpProblemDetail", "An error occurred while making the {0} request: {1}" },
+                { "HttpProblemTitle", "Error while fetching object(s) of type: {0}" },
+                { "HttpProblemDetail", "An error occurred while making the {0} request: {1}" },
 
                 //GUI component problems
-                {"UnsupportedComponentType", "Unsupported component type: {0}" }
+                { "UnsupportedComponentType", "Unsupported component type: {0}" }
 
                 //for UTVIKLING: POC data structure
                 //{ "HenvisningVedtakStructure", "Question::0|RadioGroup::0|Label::1|Label::2|Dropdown::2|Label::3|Dropdown::3|Label::4|TextBox::4" },

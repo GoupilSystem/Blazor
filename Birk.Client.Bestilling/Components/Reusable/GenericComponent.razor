@@ -3,9 +3,15 @@
 @DynamicFragment
 
 @code {
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
 
     [Parameter]
     public string Placeholder { get; set; }
+    
+    [Parameter]
+    public string BindValue { get; set; }
+
 
     private RenderFragment DynamicFragment;
 
@@ -24,7 +30,9 @@
                 new Dictionary<string, object>
                 {
                     { "class", CssClass },
-                    { "placeholder", Placeholder }
+                    { "placeholder", Placeholder },
+                    { "bind-value", BindValue },
+                    { "oninput", EventCallback.Factory.Create(this, OnInputValueChanged) }
                 });
         }
         else if (GuiType == Enums.GuiType.Dropdown)
@@ -37,6 +45,16 @@
                     { "placeholder", Placeholder }
                 });
         }
+        else if (GuiType == Enums.GuiType.Button)
+        {
+            builder.OpenElement(1, "button");
+            builder.AddMultipleAttributes(2,
+                new Dictionary<string, object>
+                    {
+                        { "class", CssClass }
+                    });
+            builder.AddContent(3, (MarkupString)Items[0]);
+        }
 
         builder.CloseElement();
     };
@@ -44,5 +62,11 @@
     protected override void OnInitialized()
     {
         DynamicFragment = CreateComponent();
+    }
+
+    private void OnInputValueChanged(ChangeEventArgs args)
+    {
+        BindValue = args.Value?.ToString();
+        ValueChanged.InvokeAsync(BindValue);
     }
 }

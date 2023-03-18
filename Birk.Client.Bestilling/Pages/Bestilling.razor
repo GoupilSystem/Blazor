@@ -6,6 +6,8 @@
 @using Birk.Client.Bestilling.Services.Implementation;
 @using Birk.Client.Bestilling.Services.Interfaces;
 @using Birk.Client.Bestilling.Utils.Constants;
+@using Birk.Client.Bestilling.Utils.Helpers;
+@using System.Text.RegularExpressions;
 @inject IBestillingService BestillingService
 @inject ILogger<Bestilling> Logger
 
@@ -25,29 +27,47 @@
 
         <div class="main-panel">
             <div class="active @(_isHenvisningSelected ? "" : "minimized" )">
-                <GenericComponent GuiType=@GuiType.Title Items=@(new[] { Language.NO["BestillingstypeTitle"] }) CssExtra="bestillingstype"/>
+                <GenericComponent GuiType=@GuiType.Title Items=@(new[] { Language.NO["BestillingstypeTitle"] }) CssExtra="bestillingstype" />
                 <DropdownComponent GuiType=@GuiType.Dropdown Items=_bestillingTypes OnSelectionChanged=@OnBestillingDropdownSelectionChanged />
 
                 @if (_isHenvisningSelected)
+                {
+                    <GenericComponent GuiType=@GuiType.Title Items=@(new[] { Language.NO["KommuneTitle"] }) />
+                    <GenericComponent GuiType=@GuiType.Label Items=@(new[] { @Language.NO["VelgKommuneLabel"] }) />
+                    <DropdownComponent GuiType=@GuiType.Dropdown Items=_kommunes OnSelectionChanged=@OnKommuneDropdownSelectionChanged />
+                    <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["VelgBarnevernLabel"] }) />
+                    <DropdownComponent GuiType=@GuiType.Dropdown Items=_barneverntjenestes @ref="_barneverntjenesteDropdown" />
+
+                    @for (int i = 0; i < 2; i++)
                     {
-                        <GenericComponent GuiType=@GuiType.Title Items=@(new[] { Language.NO["KommuneTitle"] }) />
-                        <GenericComponent GuiType=@GuiType.Label Items=@(new[] { @Language.NO["VelgKommuneLabel"] }) />
-                        <DropdownComponent GuiType=@GuiType.Dropdown Items=_kommunes OnSelectionChanged=@OnKommuneDropdownSelectionChanged />
-                        <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["VelgBarnevernLabel"] }) />
-                        <DropdownComponent GuiType=@GuiType.Dropdown Items=_barneverntjenestes @ref="_barneverntjenesteDropdown" />
-
-                        @for (int i = 0; i < 2; i++)
-                        {
-                            <ContactRow ContactType=@(i == 0 ? ContactType.Person : ContactType.Leder) />
-                        }
-
-                        <GenericComponent GuiType=@GuiType.Title Items=@(new[] { Language.NO["HvemGjelderTitle"] }) />
-                        <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["HvemGjelderLabel"] }) />
+                        <ContactRow ContactType=@(i == 0 ? ContactType.Person : ContactType.Leder) />
                     }
-                </div>
+
+                    <GenericComponent GuiType=@GuiType.Title Items=@(new[] { Language.NO["HvemGjelderTitle"] }) />
+                    <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["HvemGjelderLabel"] }) />
+
+                    <GenericComponent GuiType=@GuiType.Title Items=@(new[] { Language.NO["SøkBarnTitle"] }) />
+                    <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["SøkBarnLabel"] }) />
+
+                    <div style="display: flex; flex-direction: row;">
+
+                    <GenericComponent GuiType="@GuiType.Input" Placeholder='@(StringHelper.BuildPlaceholder(Language.NO["FødselsnummerPlaceholder"]))'
+                              BindValue="@_birthNumber" ValueChanged="@HandleBirthNumberChanged" />
+                    <GenericComponent GuiType=@GuiType.Button Items=@(new[] { Language.NO["SøkBarnButton"] }) />
+
+                    @if (!  _isValid)
+                    {
+                        <div style="margin-left: 5px; color: var(--buf-red); font-family: Arial; font-size: 8px;">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span>@Language.NO["SøkBarnFeilmelding"]</span>
+                        </div>
+                    }
+                    </div>
+                }
+            </div>
             <div class="footer" />
         </div>
-    
+
     </div>
 }
 
@@ -65,6 +85,9 @@
     private bool _isLoading;
     private bool _isHenvisningSelected;
     private bool _isKommunesAndBarneverntjenestesSet = false;
+    private bool _isValid = false;
+
+    private string _birthNumber;
 
     protected async override Task OnInitializedAsync()
     {
@@ -84,8 +107,8 @@
 
     private async Task OnBestillingDropdownSelectionChanged(string selectedBestilling)
     {
-        _selectedBestilling  = selectedBestilling;
-        _isHenvisningSelected = _bestillingTypes.FirstOrDefault() == _selectedBestilling ;
+        _selectedBestilling = selectedBestilling;
+        _isHenvisningSelected = _bestillingTypes.FirstOrDefault() == _selectedBestilling;
 
         if (_isHenvisningSelected)
         {
@@ -115,5 +138,10 @@
         _barneverntjenesteDropdown.ResetSelection();
 
         StateHasChanged();
+    }
+
+    private void HandleBirthNumberChanged(string value)
+    {
+        _isValid = !string.IsNullOrEmpty(value) && Regex.IsMatch(value, "^[0-9]*$");
     }
 }

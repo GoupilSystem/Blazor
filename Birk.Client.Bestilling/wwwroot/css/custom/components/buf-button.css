@@ -1,0 +1,14 @@
+﻿.buf-button {
+    /*up right down left*/
+    padding: 0rem 1.2rem 0rem 1.2rem;
+    background: var(--buf-pale-grey);
+    border: 1px solid var(--buf-green);
+    border-radius: 5px;
+    outline: none;
+    height: 4rem;
+    font-family: var(--font-family);
+    font-style: normal;
+    font-weight: 600;
+    font-size: var(--font-size-20px);
+    line-height: 1.6rem;
+}
