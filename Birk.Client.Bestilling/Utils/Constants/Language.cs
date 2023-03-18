@@ -14,8 +14,8 @@ namespace Birk.Client.Bestilling.Utils.Constants
                 //Panel: Hvilken kommune er ansvarlig for bestillingen?
                 { "KommuneTitle", "Hvilken kommune er ansvarlig for bestillingen?" },
                 { "VelgKommuneLabel", "Velg ansvarlig kommune" },
-                { "VelgBarnevernLabel", "Velg barneverntjeneste" },
-                { "KontaktpersonLabel", "Velg kontaktperson" },
+                { "VelgBarnevernLabel", "Velg barneverntjeneste/bydel" },
+                { "KontaktpersonLabel", "Kontaktperson" },
                 { "KontaktpersonPlaceholder", "navn på kontaktperson" },
                 { "TelefonLabel", "Telefon/e-post" },
                 { "TelefonPlaceholder", "kontaktinfo" },

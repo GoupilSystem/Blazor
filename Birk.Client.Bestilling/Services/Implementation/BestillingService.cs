@@ -88,7 +88,7 @@ namespace Birk.Client.Bestilling.Services.Implementation
             var kommuneResponse = await _httpService.HttpGet<List<SimplifiedKommuneDto>>("kommunes");
             if (kommuneResponse.IsSuccess)
             {
-                _kommunes = kommuneResponse.Data.ToArray();
+                _kommunes = kommuneResponse.Data.DistinctBy(k => k.Navn).OrderBy(k => k.Navn).ToArray();
 
                 var barneverntjenesteResponse = await _httpService.HttpGet<List<TempBarneverntjenesteDto>>("barneverntjenestes");
                 // We get from KodeverkApi a [] of TempBarneverntjenesteDto
@@ -121,7 +121,7 @@ namespace Birk.Client.Bestilling.Services.Implementation
 
         public string[] GetBarneverntjenestesByKommunenavn(string kommunenavn) =>
             _barneverntjenestes == null ? new[] { Language.NO["NoData"] }
-                : string.IsNullOrEmpty(kommunenavn) ? GetBarneverntjenestes()
+                : string.IsNullOrEmpty(kommunenavn) ? Array.Empty<string>()
                     : _barneverntjenestes.Where(k => k.Kommunenavns.Contains(kommunenavn)).Select(k => k.EnhetsnavnOgBydelsnavn).ToArray();
     }
 }
