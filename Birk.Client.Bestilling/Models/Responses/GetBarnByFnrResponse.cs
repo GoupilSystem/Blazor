@@ -4,6 +4,6 @@ namespace Birk.Client.Bestilling.Models.Responses
 {
     public class GetBarnByFnrResponse
     {
-        public barnDto barnDto { get; set; }
+        public BarnDto barnDto { get; set; }
     }
 }

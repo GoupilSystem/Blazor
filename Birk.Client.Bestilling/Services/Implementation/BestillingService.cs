@@ -129,12 +129,19 @@ namespace Birk.Client.Bestilling.Services.Implementation
                 : string.IsNullOrEmpty(kommunenavn) ? Array.Empty<string>()
                     : _barneverntjenestes.Where(k => k.Kommunenavns.Contains(kommunenavn)).Select(k => k.EnhetsnavnOgBydelsnavn).ToArray();
 
-        public async Task<barnDto> GetBarnByFnr(string fnr)
+        public async Task<BarnDto> GetBarnByFnr(string fnr)
         {
             HttpClient client = new();
             var result = await client.GetAsync($"https://localhost:7040/BarnByFnr/{fnr}");
             var jsonResponse = await result.Content.ReadAsStringAsync();
-            var response = JsonSerializer.Deserialize<GetBarnByFnrResponse>(jsonResponse);
+
+            JsonSerializerOptions options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+
+            var response = JsonSerializer.Deserialize<GetBarnByFnrResponse>(jsonResponse, options);
 
             var barn = response.barnDto;
 

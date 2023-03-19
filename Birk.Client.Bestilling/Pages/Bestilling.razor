@@ -145,10 +145,10 @@
 
     private async Task HandleSøkBarnButtonClick()
     {
-        barnDto barn = await BestillingService.GetBarnByFnr(_fnr);
+        BarnDto barn = await BestillingService.GetBarnByFnr(_fnr);
         if (barn != null)
         {
-            _barn.EndretDato = barn.endretDato;
+            _barn.EndretDato = barn.EndretDato;
         }
     }
 }
