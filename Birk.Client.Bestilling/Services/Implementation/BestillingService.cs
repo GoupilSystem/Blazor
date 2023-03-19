@@ -6,6 +6,11 @@ using Birk.Client.Bestilling.Models.Responses;
 using Birk.Client.Bestilling.Services.Interfaces;
 using Birk.Client.Bestilling.Utils.Constants;
 using Birk.Client.Bestilling.Utils.Mapper;
+using MudBlazor.Charts;
+using System.Net.Http;
+using System;
+using Birk.Client.Bestilling.Models.HttpResults;
+using System.Text.Json;
 
 namespace Birk.Client.Bestilling.Services.Implementation
 {
@@ -123,5 +128,18 @@ namespace Birk.Client.Bestilling.Services.Implementation
             _barneverntjenestes == null ? new[] { Language.NO["NoData"] }
                 : string.IsNullOrEmpty(kommunenavn) ? Array.Empty<string>()
                     : _barneverntjenestes.Where(k => k.Kommunenavns.Contains(kommunenavn)).Select(k => k.EnhetsnavnOgBydelsnavn).ToArray();
+
+        public async Task<barnDto> GetBarnByFnr(string fnr)
+        {
+            HttpClient client = new();
+            var result = await client.GetAsync($"https://localhost:7040/BarnByFnr/{fnr}");
+            var jsonResponse = await result.Content.ReadAsStringAsync();
+            var response = JsonSerializer.Deserialize<GetBarnByFnrResponse>(jsonResponse);
+
+            var barn = response.barnDto;
+
+            //var response = await _httpService.HttpGet<GetBarnByFnrResponse>($"https://localhost:7040/BarnByFnr/{fnr}");
+            return barn;
+        }
     }
 }

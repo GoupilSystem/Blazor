@@ -1,0 +1,17 @@
+﻿@using Birk.Client.Bestilling.Models.Dtos;
+
+<div class="top-panel">
+    <div class="top-row">
+        <div>BIRK-ID: @Barn.PersonFk</div>
+        <div>Kjønn:</div>
+    </div>
+    <div class="top-row">
+        <div>Fødselsdato: @Barn.EndretDato</div>
+        <div>Alder:</div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public SimplifiedBarnDto Barn { get; set; }
+}

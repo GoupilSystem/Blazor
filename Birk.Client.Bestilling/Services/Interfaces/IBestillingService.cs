@@ -1,5 +1,6 @@
 ﻿using Birk.Client.Bestilling.Enums;
 using Birk.Client.Bestilling.Models;
+using Birk.Client.Bestilling.Models.Dtos;
 using Birk.Client.Bestilling.Models.Requests;
 
 namespace Birk.Client.Bestilling.Services.Interfaces
@@ -13,6 +14,7 @@ namespace Birk.Client.Bestilling.Services.Interfaces
         Task<List<BestillingItem>> List();
         Task<string[]> GetTypes();
         Task GetKommunesAndBarneverntjenestes();
+        Task<barnDto> GetBarnByFnr(string fnr);
         string[] GetKommunes(); 
         string[] GetBarneverntjenestes();
         string[] GetBarneverntjenestesByKommunenavn(string kommunenavn);

@@ -7,13 +7,14 @@
     public EventCallback<string> ValueChanged { get; set; }
 
     [Parameter]
-    public string Placeholder { get; set; }
-    
-    [Parameter]
-    public string BindValue { get; set; }
+    public EventCallback<MouseEventArgs> OnClick { get; set; }
 
+    [Parameter]
+    public string Placeholder { get; set; }
 
     private RenderFragment DynamicFragment;
+
+    public string _bindValue;
 
     private RenderFragment CreateComponent() => builder =>
     {
@@ -31,7 +32,7 @@
                 {
                     { "class", CssClass },
                     { "placeholder", Placeholder },
-                    { "bind-value", BindValue },
+                    { "bind-value", _bindValue },
                     { "oninput", EventCallback.Factory.Create(this, OnInputValueChanged) }
                 });
         }
@@ -50,9 +51,10 @@
             builder.OpenElement(1, "button");
             builder.AddMultipleAttributes(2,
                 new Dictionary<string, object>
-                    {
-                        { "class", CssClass }
-                    });
+                {
+                    { "class", CssClass },
+                    { "onclick", EventCallback.Factory.Create(this, OnClick) }
+                });
             builder.AddContent(3, (MarkupString)Items[0]);
         }
 
@@ -66,7 +68,12 @@
 
     private void OnInputValueChanged(ChangeEventArgs args)
     {
-        BindValue = args.Value?.ToString();
-        ValueChanged.InvokeAsync(BindValue);
+        _bindValue = args.Value?.ToString();
+        ValueChanged.InvokeAsync(_bindValue);
+    }
+
+    private async Task HandleClick(MouseEventArgs e)
+    {
+        await OnClick.InvokeAsync(e);
     }
 }

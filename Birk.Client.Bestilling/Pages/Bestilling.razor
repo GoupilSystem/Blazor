@@ -1,8 +1,9 @@
 ﻿@page "/"
 @page "/bestilling"
-@using Birk.Client.Bestilling.Components
 @using Birk.Client.Bestilling.Components.Enums;
+@using Birk.Client.Bestilling.Components.Panels
 @using Birk.Client.Bestilling.Components.Reusable
+@using Birk.Client.Bestilling.Models.Dtos;
 @using Birk.Client.Bestilling.Services.Implementation;
 @using Birk.Client.Bestilling.Services.Interfaces;
 @using Birk.Client.Bestilling.Utils.Constants;
@@ -14,16 +15,8 @@
 @if (_isLoading)
 {
     <div class="buf-page">
-        <div class="top-panel">
-            <div class="top-row">
-                <div>BIRK-ID:</div>
-                <div>Kjønn:</div>
-            </div>
-            <div class="top-row">
-                <div>Fødselsdato:</div>
-                <div>Alder:</div>
-            </div>
-        </div>
+        
+        <InfoPanel Barn=@_barn />
 
         <div class="main-panel">
             <div class="active @(_isHenvisningSelected ? "" : "minimized" )">
@@ -52,10 +45,10 @@
                     <div style="display: flex; flex-direction: row;">
 
                     <GenericComponent GuiType="@GuiType.Input" Placeholder='@(StringHelper.BuildPlaceholder(Language.NO["FødselsnummerPlaceholder"]))'
-                              BindValue="@_birthNumber" ValueChanged="@HandleBirthNumberChanged" />
-                    <GenericComponent GuiType=@GuiType.Button Items=@(new[] { Language.NO["SøkBarnButton"] }) />
+                        ValueChanged="@HandleFnrChanged" />
+                        <GenericComponent GuiType=@GuiType.Button Items=@(new[] { Language.NO["SøkBarnButton"] }) OnClick=@HandleSøkBarnButtonClick />
 
-                    @if (!  _isValid)
+                    @if (!_fnrIsValid)
                     {
                         <div style="margin-left: 5px; color: var(--buf-red); font-family: Arial; font-size: 8px;">
                             <i class="fas fa-exclamation-circle"></i>
@@ -78,6 +71,8 @@
     public string[] _kommunes;
     public string[] _barneverntjenestes;
 
+    private SimplifiedBarnDto _barn = new();
+
     private string _selectedBestilling = null;
     private string _selectedKommune = null;
     private string _selectedBernverntjeneste = null;
@@ -85,9 +80,8 @@
     private bool _isLoading;
     private bool _isHenvisningSelected;
     private bool _isKommunesAndBarneverntjenestesSet = false;
-    private bool _isValid = false;
-
-    private string _birthNumber;
+    private bool _fnrIsValid = false;
+    private string _fnr;
 
     protected async override Task OnInitializedAsync()
     {
@@ -140,8 +134,21 @@
         StateHasChanged();
     }
 
-    private void HandleBirthNumberChanged(string value)
+    private void HandleFnrChanged(string value)
     {
-        _isValid = !string.IsNullOrEmpty(value) && Regex.IsMatch(value, "^[0-9]*$");
+        _fnrIsValid = !string.IsNullOrEmpty(value) && Regex.IsMatch(value, "^[0-9]*$");
+        if (_fnrIsValid)
+        {
+            _fnr = value;
+        }
+    }
+
+    private async Task HandleSøkBarnButtonClick()
+    {
+        barnDto barn = await BestillingService.GetBarnByFnr(_fnr);
+        if (barn != null)
+        {
+            _barn.EndretDato = barn.endretDato;
+        }
     }
 }
