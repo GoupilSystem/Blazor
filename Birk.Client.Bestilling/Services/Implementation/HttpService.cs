@@ -16,9 +16,11 @@ namespace Birk.Client.Bestilling.Services.Implementation
     {
         private readonly HttpClient _httpClient;
 
-        public HttpService(HttpClient httpClient, IOptions<BaseUrlConfiguration> baseUrlConfiguration)
+        public HttpService(HttpClient httpClient, string baseUrl, int httpTimeoutSeconds)
         {
             _httpClient = httpClient;
+            _httpClient.BaseAddress = new Uri(baseUrl);
+            _httpClient.Timeout = TimeSpan.FromSeconds(httpTimeoutSeconds);
         }
 
         public async Task<HttpResult<T>> HttpGet<T>(string uri)

@@ -32,9 +32,14 @@
                 {
                     { "class", CssClass },
                     { "placeholder", Placeholder },
-                    { "bind-value:event", "onchange" },
+                    // Event triggered on content of input being changed
                     { "bind-value", _bindValue },
-                    { "onchange", EventCallback.Factory.Create(this, OnInputValueChanged) }
+                    { "oninput", EventCallback.Factory.Create(this, OnInputInputChanged) },
+                    // Event triggered on quit input (ex. copy/paste fnr value and click directly on Søk button)
+                    // Ref: https://stackoverflow.com/questions/65803149/blazor-onchange-event
+                    { "bind-value:event", "onchange" },
+                    { "onchange", EventCallback.Factory.Create(this, OnInputValueChanged) },
+                    
                 });
         }
         else if (GuiType == Enums.GuiType.Dropdown)
@@ -68,6 +73,12 @@
     }
 
     private void OnInputValueChanged(ChangeEventArgs args)
+    {
+        _bindValue = args.Value?.ToString();
+        ValueChanged.InvokeAsync(_bindValue);
+    }
+
+    private void OnInputInputChanged(ChangeEventArgs args)
     {
         _bindValue = args.Value?.ToString();
         ValueChanged.InvokeAsync(_bindValue);

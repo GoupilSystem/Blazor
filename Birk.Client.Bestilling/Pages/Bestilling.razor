@@ -145,10 +145,17 @@
 
     private async Task HandleSøkBarnButtonClick()
     {
-        BarnDto barn = await KodeverkService.GetBarnByFnr(_fnr);
-        if (barn != null)
+        if (_fnrIsValid)
         {
-            _barn.EndretDato = barn.EndretDato;
+            BarnDto barn = await KodeverkService.GetBarnByFnr(_fnr);
+            if (barn != null)
+            {
+                _barn.EndretDato = barn.EndretDato;
+            }
+        }
+        else
+        {
+            _barn.EndretDato = null;
         }
     }
 }

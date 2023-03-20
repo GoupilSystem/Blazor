@@ -4,6 +4,7 @@
     {
         public const string CONFIG_NAME = "baseUrls";
 
+        public string BarnApiBase { get; set; }
         public string KodeverkApiBase { get; set; }
     }
 }
