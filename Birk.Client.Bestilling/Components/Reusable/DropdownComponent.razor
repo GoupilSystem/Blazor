@@ -1,7 +1,7 @@
 ﻿@inherits BaseComponent;
 
 <MudAutocomplete Class=@CssClass T="string"
-                 @bind-Value="SelectedBestilling " SearchFunc="@Search"
+                 @bind-Value="SelectedBestilling" MaxItems="null" SearchFunc="@Search"
                  ResetValueOnEmptyText="@_resetValueOnEmptyText"
                  CoerceText="@_coerceText" CoerceValue="@_coerceValue" />
 
@@ -34,12 +34,17 @@
     private async Task<IEnumerable<string>> Search(string value)
     {
         // if text is null or empty, show complete list
-        if (string.IsNullOrEmpty(value))
+        if (string.IsNullOrEmpty(value) || _selectedBestilling == value)
         {
             return Items;
         }
 
         return Items.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    public void ResetSelection()
+    {
+        SelectedBestilling = null;
     }
 }
 
