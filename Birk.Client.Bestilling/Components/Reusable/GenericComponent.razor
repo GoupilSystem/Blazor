@@ -32,8 +32,9 @@
                 {
                     { "class", CssClass },
                     { "placeholder", Placeholder },
+                    { "bind-value:event", "onchange" },
                     { "bind-value", _bindValue },
-                    { "oninput", EventCallback.Factory.Create(this, OnInputValueChanged) }
+                    { "onchange", EventCallback.Factory.Create(this, OnInputValueChanged) }
                 });
         }
         else if (GuiType == Enums.GuiType.Dropdown)
