@@ -24,7 +24,7 @@ namespace Birk.Client.Bestilling.Configuration
             });
 
             services.AddTransient<IHttpService, HttpService>();
-            services.AddTransient<IBestillingService, BestillingService>();
+            services.AddTransient<IKodeverkService, KodeverkService>();
 
             services.AddMudServices();
 

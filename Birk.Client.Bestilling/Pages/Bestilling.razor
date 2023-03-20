@@ -9,7 +9,7 @@
 @using Birk.Client.Bestilling.Utils.Constants;
 @using Birk.Client.Bestilling.Utils.Helpers;
 @using System.Text.RegularExpressions;
-@inject IBestillingService BestillingService
+@inject IKodeverkService KodeverkService
 @inject ILogger<Bestilling> Logger
 
 @if (_isLoading)
@@ -93,7 +93,7 @@
     {
         Logger.LogInformation("Entering {Method}", nameof(InitializeDropdowns));
 
-        _bestillingTypes = await BestillingService.GetTypes();
+        _bestillingTypes = await KodeverkService.GetTypes();
         _isLoading = true;
 
         Logger.LogInformation("Exiting {Method}", nameof(InitializeDropdowns));
@@ -108,11 +108,11 @@
         {
             if (!_isKommunesAndBarneverntjenestesSet)
             {
-                await BestillingService.GetKommunesAndBarneverntjenestes();
+                await KodeverkService.GetKommunesAndBarneverntjenestes();
                 _isKommunesAndBarneverntjenestesSet = true;
             }
-            _kommunes = BestillingService.GetKommunes();
-            _barneverntjenestes = BestillingService.GetBarneverntjenestesByKommunenavn("");
+            _kommunes = KodeverkService.GetKommunes();
+            _barneverntjenestes = KodeverkService.GetBarneverntjenestesByKommunenavn("");
 
         }
         else
@@ -127,7 +127,7 @@
     private async Task OnKommuneDropdownSelectionChanged(string selectedKommune)
     {
         _selectedKommune = selectedKommune;
-        _barneverntjenestes = BestillingService.GetBarneverntjenestesByKommunenavn(_selectedKommune);
+        _barneverntjenestes = KodeverkService.GetBarneverntjenestesByKommunenavn(_selectedKommune);
 
         _barneverntjenesteDropdown.ResetSelection();
 
@@ -145,7 +145,7 @@
 
     private async Task HandleSøkBarnButtonClick()
     {
-        BarnDto barn = await BestillingService.GetBarnByFnr(_fnr);
+        BarnDto barn = await KodeverkService.GetBarnByFnr(_fnr);
         if (barn != null)
         {
             _barn.EndretDato = barn.EndretDato;

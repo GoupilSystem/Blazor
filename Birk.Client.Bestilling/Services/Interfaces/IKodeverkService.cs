@@ -5,7 +5,7 @@ using Birk.Client.Bestilling.Models.Requests;
 
 namespace Birk.Client.Bestilling.Services.Interfaces
 {
-    public interface IBestillingService
+    public interface IKodeverkService
     {
         Task<BestillingItem> Create(CreateBestillingItemRequest createBestillingItemRequest);
         Task<BestillingItem> Edit(BestillingItem bestillingItem);

@@ -20,8 +20,8 @@ namespace Birk.BestillingWeb.IntegrationTests
     {
         private readonly HttpClient _httpClient;
         private readonly HttpService _httpService;
-        private readonly BestillingService _bestillingService;
-        private readonly Logger<BestillingService> _nullLogger;
+        private readonly KodeverkService _bestillingService;
+        private readonly Logger<KodeverkService> _nullLogger;
 
         public BestillingServiceIntegrationTests(WebApplicationFactory<Program> factory)
         {
@@ -34,8 +34,8 @@ namespace Birk.BestillingWeb.IntegrationTests
             var url = baseUrlConfiguration.KodeverkApiBase;
             _httpClient = new HttpClient { BaseAddress = new Uri(url) };
             _httpService = new HttpService(_httpClient, Options.Create(baseUrlConfiguration));
-            _nullLogger = new Logger<BestillingService>(new NullLoggerFactory());
-            _bestillingService = new BestillingService(_httpService, _nullLogger);
+            _nullLogger = new Logger<KodeverkService>(new NullLoggerFactory());
+            _bestillingService = new KodeverkService(_httpService, _nullLogger);
         }
 
         [Fact]

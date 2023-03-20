@@ -6,23 +6,19 @@ using Birk.Client.Bestilling.Models.Responses;
 using Birk.Client.Bestilling.Services.Interfaces;
 using Birk.Client.Bestilling.Utils.Constants;
 using Birk.Client.Bestilling.Utils.Mapper;
-using MudBlazor.Charts;
-using System.Net.Http;
-using System;
-using Birk.Client.Bestilling.Models.HttpResults;
 using System.Text.Json;
 
 namespace Birk.Client.Bestilling.Services.Implementation
 {
-    public class BestillingService : IBestillingService
+    public class KodeverkService : IKodeverkService
     {
         private readonly IHttpService _httpService;
-        private readonly ILogger<BestillingService> _logger;
+        private readonly ILogger<KodeverkService> _logger;
 
         private SimplifiedKommuneDto[] _kommunes;
         private SimplifiedBarneverntjenesteDto[] _barneverntjenestes;
 
-        public BestillingService(IHttpService httpService, ILogger<BestillingService> logger)
+        public KodeverkService(IHttpService httpService, ILogger<KodeverkService> logger)
         {
             _httpService = httpService;
             _logger = logger;

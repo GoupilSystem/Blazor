@@ -33,7 +33,7 @@ namespace Birk.BestillingWeb.FunctionalTests
         public async Task ShouldInitializeGUI()
         {
             // Arrange
-            var bestillingServiceMock = new Mock<IBestillingService>();
+            var bestillingServiceMock = new Mock<IKodeverkService>();
             bestillingServiceMock.Setup(s => s.GetTypes())
                                  .ReturnsAsync(new[] { "Type1", "Type2" });
 

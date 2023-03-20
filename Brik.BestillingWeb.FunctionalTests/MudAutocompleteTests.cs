@@ -18,13 +18,13 @@ namespace Birk.BestillingWeb.FunctionalTests
 {
     public class MudAutocompleteTests
     {
-        private readonly Mock<IBestillingService> _serviceMock;
+        private readonly Mock<IKodeverkService> _serviceMock;
         private readonly List<string> _items;
 
         public MudAutocompleteTests()
         {
             _items = new List<string> { "item1", "item2", "item3" };
-            _serviceMock = new Mock<IBestillingService>();
+            _serviceMock = new Mock<IKodeverkService>();
             _serviceMock.Setup(s => s.GetTypes()).ReturnsAsync(_items.ToArray());
         }
 
@@ -38,7 +38,7 @@ namespace Birk.BestillingWeb.FunctionalTests
         {
             // Create a fake service that returns a list of items
             var items = new[] { "item1", "item2", "item3" };
-            var service = new Mock<IBestillingService>();
+            var service = new Mock<IKodeverkService>();
             service.Setup(x => x.GetTypes()).ReturnsAsync(items);
 
             // Render the MudAutocomplete component and wait for it to load
@@ -105,7 +105,7 @@ namespace Birk.BestillingWeb.FunctionalTests
             // Arrange
             // Create a fake service that returns a list of items
             var items = new[] { "item1", "item2", "item3" };
-            var service = new Mock<IBestillingService>();
+            var service = new Mock<IKodeverkService>();
             service.Setup(x => x.GetTypes()).ReturnsAsync(items);
 
             // Render the MudAutocomplete component and wait for it to load

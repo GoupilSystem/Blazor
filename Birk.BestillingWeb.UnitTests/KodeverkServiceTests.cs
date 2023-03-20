@@ -10,17 +10,17 @@ using System.Net;
 
 namespace Birk.BestillingWeb.UnitTests
 {
-    public class BestillingServiceTests
+    public class KodeverkServiceTests
     {
-        private readonly BestillingService _bestillingService;
+        private readonly KodeverkService _kodeverkService;
         private readonly Mock<IHttpService> _httpServiceMock;
-        private readonly Logger<BestillingService> _nullLogger;
+        private readonly Logger<KodeverkService> _nullLogger;
 
-        public BestillingServiceTests()
+        public KodeverkServiceTests()
         {
             _httpServiceMock = new Mock<IHttpService>();
-            _nullLogger = new Logger<BestillingService>(new NullLoggerFactory());
-            _bestillingService = new BestillingService(_httpServiceMock.Object, _nullLogger);
+            _nullLogger = new Logger<KodeverkService>(new NullLoggerFactory());
+            _kodeverkService = new KodeverkService(_httpServiceMock.Object, _nullLogger);
         }
 
         [Fact]
@@ -36,7 +36,7 @@ namespace Birk.BestillingWeb.UnitTests
             _httpServiceMock.Setup(x => x.HttpGet<List<BestillingTypeDto>>("bestillingtypes")).ReturnsAsync(response);
 
             // Act
-            var result = await _bestillingService.GetTypes();
+            var result = await _kodeverkService.GetTypes();
 
             // Assert
             Assert.Equal(expectedData.Select(bt => bt.Verdi).ToArray(), result);
@@ -50,7 +50,7 @@ namespace Birk.BestillingWeb.UnitTests
             _httpServiceMock.Setup(x => x.HttpGet<List<BestillingTypeDto>>("bestillingtypes")).ReturnsAsync(response);
 
             // Act
-            var result = await _bestillingService.GetTypes();
+            var result = await _kodeverkService.GetTypes();
 
             // Assert
             Assert.Equal(new[] { Language.NO["NoData"] }, result);
@@ -73,15 +73,31 @@ namespace Birk.BestillingWeb.UnitTests
                 new TempBarneverntjenesteDto() { EnhetsnavnOgBydelsnavn = "Tjeneste 1", Kommunenavn = "Kommune 1" },
                 new TempBarneverntjenesteDto() { EnhetsnavnOgBydelsnavn = "Tjeneste 2", Kommunenavn = "Kommune 2" },
             };
+<<<<<<< HEAD:Birk.BestillingWeb.UnitTests/BestillingServiceTests.cs
             var barneverntjenesteResponse = new HttpResult<List<TempBarneverntjenesteDto>>(true, expectedBarneverntjenestes);
             _httpServiceMock.Setup(x => x.HttpGet<List<TempBarneverntjenesteDto>>("barneverntjenestes")).ReturnsAsync(barneverntjenesteResponse);
+=======
+
+            // !!: We expect SimplifiedBarneverntjenesteDto type from the service but during the process we get TempBarneverntjenesteDto type from KodeverkApi
+            var tempBarneverntjenestes = new List<TempBarneverntjenesteDto>();
+            for (int i = 0; i < expectedBarneverntjenestes.Count; i++)
+            {
+                tempBarneverntjenestes.Add(new TempBarneverntjenesteDto()
+                {
+                    EnhetsnavnOgBydelsnavn = expectedBarneverntjenestes[i].EnhetsnavnOgBydelsnavn,
+                    Kommunenavn = expectedBarneverntjenestes[i].Kommunenavns[0]
+                });
+            }
+            var tempBarneverntjenesteResponse = new HttpResult<List<TempBarneverntjenesteDto>>(true, tempBarneverntjenestes);
+            _httpServiceMock.Setup(x => x.HttpGet<List<TempBarneverntjenesteDto>>("barneverntjenestes")).ReturnsAsync(tempBarneverntjenesteResponse);
+>>>>>>> Bestillingsservice blir KodeverkService + tests ok:Birk.BestillingWeb.UnitTests/KodeverkServiceTests.cs
 
             // Act
-            await _bestillingService.GetKommunesAndBarneverntjenestes();
+            await _kodeverkService.GetKommunesAndBarneverntjenestes();
 
             // Assert
-            Assert.Equal(expectedKommunes.Select(k => k.Navn).ToArray(), _bestillingService.GetKommunes());
-            Assert.Equal(expectedBarneverntjenestes.Select(bt => bt.EnhetsnavnOgBydelsnavn).ToArray(), _bestillingService.GetBarneverntjenestes());
+            Assert.Equal(expectedKommunes.Select(k => k.Navn).ToArray(), _kodeverkService.GetKommunes());
+            Assert.Equal(expectedBarneverntjenestes.Select(bt => bt.EnhetsnavnOgBydelsnavn).ToArray(), _kodeverkService.GetBarneverntjenestes());
         }
 
         [Fact]
@@ -92,11 +108,11 @@ namespace Birk.BestillingWeb.UnitTests
                            .ReturnsAsync(new HttpResult<List<SimplifiedKommuneDto>>(false, null));
 
             // Act
-            await _bestillingService.GetKommunesAndBarneverntjenestes();
+            await _kodeverkService.GetKommunesAndBarneverntjenestes();
 
             // Assert
-            string[] actualKommunes = _bestillingService.GetKommunes();
-            string[] actualBarneverntjenestes = _bestillingService.GetBarneverntjenestes();
+            string[] actualKommunes = _kodeverkService.GetKommunes();
+            string[] actualBarneverntjenestes = _kodeverkService.GetBarneverntjenestes();
 
             Assert.NotNull(actualKommunes);
             Assert.NotNull(actualBarneverntjenestes);
