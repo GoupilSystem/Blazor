@@ -6,3 +6,13 @@
     font-weight: 500;
     letter-spacing: 0em;
 }
+
+    .buf-label.warning {
+        display: flex; 
+        flex-direction: row; 
+        align-items: center; 
+        margin-left: 5px; 
+        color: var(--buf-red); 
+        font-family: Arial; 
+        font-size: var(--font-size-12px);
+    }

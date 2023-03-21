@@ -57,3 +57,7 @@
         height: 1.2rem;
         background: var(--buf-background-1);
     }
+
+i.fas.fa-exclamation-circle {
+    margin-right: 0.5rem;
+}

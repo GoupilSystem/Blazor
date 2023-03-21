@@ -1,4 +1,6 @@
-﻿@inherits BaseComponent;
+﻿@using Birk.Client.Bestilling.Components.Enums
+
+@inherits BaseComponent;
 
 @DynamicFragment
 
@@ -18,13 +20,25 @@
 
     private RenderFragment CreateComponent() => builder =>
     {
-        if (GuiType == Enums.GuiType.Title || GuiType == Enums.GuiType.Label)
+        if (GuiType == GuiType.Title || GuiType == GuiType.Label)
         {
+            int extraTags = 0;
             builder.OpenElement(1, "div");
             builder.AddAttribute(2, "class", CssClass);
-            builder.AddContent(3, (MarkupString)Items[0]);
+            // We add icon and span tags, which means 2 extra elements to the component
+            if (!string.IsNullOrEmpty(Icon))
+            {
+                builder.OpenElement(3, "i");
+                builder.AddAttribute(4, "class", Icon);
+                builder.CloseElement();
+                builder.OpenElement(5, "span");
+                extraTags += 3;
+            }            
+            builder.AddContent(3 + extraTags, (MarkupString)Items[0]);
+            if (extraTags == 3) builder.CloseElement();
         }
-        else if (GuiType == Enums.GuiType.Input)
+
+        else if (GuiType == GuiType.Input)
         {
             builder.OpenElement(1, "input");
             builder.AddMultipleAttributes(2, 
@@ -42,7 +56,8 @@
                     
                 });
         }
-        else if (GuiType == Enums.GuiType.Dropdown)
+
+        else if (GuiType == GuiType.Dropdown)
         {
             builder.OpenElement(1, "MudAutocomplete");
             builder.AddMultipleAttributes(2, 
@@ -52,7 +67,8 @@
                     { "placeholder", Placeholder }
                 });
         }
-        else if (GuiType == Enums.GuiType.Button)
+
+        else if (GuiType == GuiType.Button)
         {
             builder.OpenElement(1, "button");
             builder.AddMultipleAttributes(2,

@@ -16,7 +16,7 @@
 @if (_isLoading)
 {
     <div class="buf-page">
-        
+
         <InfoPanel BarnOgPerson=@_barnOgPerson />
 
         <div class="main-panel">
@@ -44,33 +44,18 @@
                     <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["SøkBarnLabel"] }) />
 
                     <div style="display: flex; flex-direction: row;">
+                        <GenericComponent GuiType="@GuiType.Input" Placeholder='@(StringHelper.BuildPlaceholder(Language.NO["FødselsnummerPlaceholder"]))'
+                                  ValueChanged="@HandleFnrChanged" />
+                        <GenericComponent GuiType=@GuiType.Button Items=@(new[] { Language.NO["SøkBarnButton"] }) OnClick=@HandleSøkBarnButtonClick CssExtra="søkbarn" />
 
-                    <GenericComponent GuiType="@GuiType.Input" Placeholder='@(StringHelper.BuildPlaceholder(Language.NO["FødselsnummerPlaceholder"]))'
-                        ValueChanged="@HandleFnrChanged" />
-                    <GenericComponent GuiType=@GuiType.Button Items=@(new[] { Language.NO["SøkBarnButton"] }) OnClick=@HandleSøkBarnButtonClick CssExtra="søkbarn" />
+                        @foreach (KeyValuePair<string, bool> warning in _warnings)
+                        {
+                            if (warning.Value)
+                            {
+                                <GenericComponent GuiType="GuiType.Label" Items=@(new[] { Language.NO[warning.Key] }) Icon="fas fa-exclamation-circle" CssExtra="warning" />
+                            }
+                        }
 
-                    @if (_fnrNotNumericWarning)
-                    {
-                        <div style="display: flex; flex-direction: row; align-items: center; margin-left: 5px; color: var(--buf-red); font-family: Arial; font-size: var(--font-size-12px);">
-                            <i class="fas fa-exclamation-circle"></i>
-                            <span>@Language.NO["SøkBarnFnrNotNumeric"]</span>
-                        </div>
-                    }
-                    else if (_fnrNot11DigitsWarning)
-                    {
-                        <div style="display: flex; flex-direction: row; align-items: center; margin-left: 5px; color: var(--buf-red); font-family: Arial; font-size: var(--font-size-12px);">
-                            <i class="fas fa-exclamation-circle"></i>
-                            <span>@Language.NO["SøkBarnFnrNot11Digits"]</span>
-                        </div>
-                    }
-                    else if (_personNotFoundWarning)
-                    {
-                        <div style="display: flex; flex-direction: row; align-items: center; margin-left: 5px; color: var(--buf-red); font-family: Arial; font-size: var(--font-size-12px);">
-                            <i class="fas fa-exclamation-circle"></i>
-                                <span>@Language.NO["SøkBarnFnrNotFound"]</span>
-                        </div>
-                    }
-                    
                     </div>
                 }
             </div>
@@ -83,11 +68,13 @@
 @code {
     private DropdownComponent _barnOgPersoneverntjenesteDropdown;
 
+    private BarnOgPersonDto _barnOgPerson = new();
+
     public string[] _bestillingTypes;
     public string[] _kommunes;
     public string[] _barnOgPersoneverntjenestes;
 
-    private BarnOgPersonDto _barnOgPerson = new();
+    private Dictionary<string, bool> _warnings = new();
 
     private string _selectedBestilling = null;
     private string _selectedKommune = null;
@@ -98,13 +85,12 @@
     private bool _isKommunesAndBarneverntjenestesSet;
 
     private string _fnr;
-    private bool _fnrNotNumericWarning => !string.IsNullOrEmpty(_fnr) && !Regex.IsMatch(_fnr, "^[0-9]*$");
-    private bool _fnrNot11DigitsWarning;
-    private bool _personNotFoundWarning;
 
     protected async override Task OnInitializedAsync()
     {
         await InitializeDropdowns();
+        InitializeWarnings();
+
         base.OnInitialized();
     }
 
@@ -116,6 +102,13 @@
         _isLoading = true;
 
         Logger.LogInformation("Exiting {Method}", nameof(InitializeDropdowns));
+    }
+
+    private void InitializeWarnings()
+    {
+        _warnings.Add("FnrNotNumericValue", false);
+        _warnings.Add("FnrNot11DigitsWarning", false);
+        _warnings.Add("PersonNotFoundWarning", false);
     }
 
     private async Task OnBestillingDropdownSelectionChanged(string selectedBestilling)
@@ -155,33 +148,28 @@
 
     private void HandleFnrChanged(string value)
     {
-        if (_fnrNot11DigitsWarning) _fnrNot11DigitsWarning = false;
-        if (_personNotFoundWarning) _personNotFoundWarning = false;
+        _warnings["FnrNot11DigitsWarning"] = false;
+        _warnings["PersonNotFoundWarning"] = false;
 
         _fnr = value;
+
+        _warnings["FnrNotNumericValue"] = !string.IsNullOrEmpty(_fnr) && !Regex.IsMatch(_fnr, "^[0-9]*$");
     }
 
     private async Task HandleSøkBarnButtonClick()
     {
-        if (!_fnrNotNumericWarning)
+        if (!string.IsNullOrEmpty(_fnr) && !_warnings["FnrNotNumericValue"])
         {
-            _fnrNot11DigitsWarning = !Regex.IsMatch(_fnr, "^[0-9]{11}$");
-            if (_fnrNot11DigitsWarning) return;
+            _warnings["FnrNot11DigitsWarning"] = !Regex.IsMatch(_fnr, "^[0-9]{11}$");
+            if (_warnings["FnrNot11DigitsWarning"]) return;
 
             _barnOgPerson = await BarnService.GetBarnByFnr(_fnr);
 
-            if (_barnOgPerson == null)
-            {
-                _personNotFoundWarning = true;
-            }
-            else
-            {
-                _personNotFoundWarning = false;
-            }
+            _warnings["PersonNotFoundWarning"] = _barnOgPerson == null;
         }
         else
         {
-            _personNotFoundWarning = false;
+            _warnings["PersonNotFoundWarning"] = false;
         }
     }
 }
