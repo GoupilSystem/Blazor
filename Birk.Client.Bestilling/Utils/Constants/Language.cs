@@ -41,6 +41,7 @@ namespace Birk.Client.Bestilling.Utils.Constants
                 { "FødselsnummerPlaceholder", "fødselsnummer" },
                 { "SøkBarnButton", "Søk" },
                 { "SøkBarnFeilmelding", "OBS! Fødselsnummer skal ha 11 siffer"},
+                { "SøkBarnNoFødselsnummer", "OBS! Ugyldig fødselsnummer"},
 
                 // GUI
                 { "NoData", "No data" },

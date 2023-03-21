@@ -47,7 +47,7 @@
 
                     <GenericComponent GuiType="@GuiType.Input" Placeholder='@(StringHelper.BuildPlaceholder(Language.NO["FødselsnummerPlaceholder"]))'
                         ValueChanged="@HandleFnrChanged" />
-                        <GenericComponent GuiType=@GuiType.Button Items=@(new[] { Language.NO["SøkBarnButton"] }) OnClick=@HandleSøkBarnButtonClick />
+                    <GenericComponent GuiType=@GuiType.Button Items=@(new[] { Language.NO["SøkBarnButton"] }) OnClick=@HandleSøkBarnButtonClick />
 
                     @if (!_fnrIsValid)
                     {
@@ -56,6 +56,14 @@
                             <span>@Language.NO["SøkBarnFeilmelding"]</span>
                         </div>
                     }
+                    else if (_personNotFound)
+                    {
+                        <div style="margin-left: 5px; color: var(--buf-red); font-family: Arial; font-size: 8px;">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span>@Language.NO["SøkBarnNoFødselsnummer"]</span>
+                        </div>
+                    }
+                    
                     </div>
                 }
             </div>
@@ -80,9 +88,10 @@
 
     private bool _isLoading;
     private bool _isHenvisningSelected;
-    private bool _isKommunesAndBarneverntjenestesSet = false;
-    private bool _fnrIsValid = false;
+    private bool _isKommunesAndBarneverntjenestesSet;
+    private bool _fnrIsValid;
     private string _fnr;
+    private bool _personNotFound;
 
     protected async override Task OnInitializedAsync()
     {
@@ -149,6 +158,19 @@
         if (_fnrIsValid)
         {
             _barnOgPerson = await BarnService.GetBarnByFnr(_fnr);
+
+            if (_barnOgPerson == null)
+            {
+                _personNotFound = true;
+            }
+            else
+            {
+                _personNotFound = false;
+            }
+        }
+        else
+        {
+            _personNotFound = false;
         }
     }
 }

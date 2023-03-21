@@ -3,12 +3,12 @@
 
 <div class="info-panel">
     <div class="top-row">
-        <div>@Language.NO["BirkId"]@BarnOgPerson.BirkId</div>
-        <div>@Language.NO["Kjønn"]@(ConvertGender(BarnOgPerson.KjønnTypeFk))</div>
+        <div>@Language.NO["BirkId"]@(BarnOgPerson != null ? BarnOgPerson.BirkId : "")</div>
+        <div>@Language.NO["Kjønn"]@(BarnOgPerson != null ? ConvertGender(BarnOgPerson.KjønnTypeFk) : "")</div>
     </div>
-    <div class="top-row">
-        <div>@Language.NO["Fødselsdato"]@BarnOgPerson.Født</div>
-        <div>@Language.NO["Alder"]@(BarnOgPerson.Født.HasValue ? CalculateAge(BarnOgPerson.Født.Value) : "")</div>
+    <div class="top-row">g
+        <div>@Language.NO["Fødselsdato"]@(BarnOgPerson != null ? BarnOgPerson.Født : null)</div>
+        <div>@Language.NO["Alder"]@(BarnOgPerson != null ? BarnOgPerson.Født.HasValue ? CalculateAge(BarnOgPerson.Født.Value) : "" : "")</div>
     </div>
 </div>
 
@@ -16,19 +16,51 @@
     [Parameter]
     public BarnOgPersonDto BarnOgPerson { get; set; }
 
-    private int CalculateAge(DateTime birthdate)
+    private string CalculateAge(DateTime birthdate)
     {
         DateTime today = DateTime.Today;
-        int age = today.Year - birthdate.Year;
-        if (birthdate > today.AddYears(-age))
+        int ageInYears = today.Year - birthdate.Year;
+        int months = today.Month - birthdate.Month;
+        if (birthdate > today.AddYears(-ageInYears))
         {
-            age--;
+            ageInYears--;
+            months = 12 - birthdate.Month + today.Month;
         }
+
+        if (months == 12)
+        {
+            ageInYears++;
+            months = 0;
+        }
+
+        string age = $"{ageInYears} år{(ageInYears != 1 ? "" : "e")}";
+
+        if (months > 0)
+        {
+            age += $" og {months} måned{(months != 1 ? "er" : "")}";
+        }
+
         return age;
     }
 
     private string ConvertGender(int numericGender)
     {
-        return numericGender == 1 ? "Gutt" : numericGender == 2 ? "Jente" : "Ukjent";
+        string gender = "";
+        switch (numericGender)
+        {
+            case 1:
+                gender = "Gutt";
+                break;
+            case 2:
+                gender = "Jente";
+                break;
+            case 3:
+                gender = "Ukjent";
+                break;
+            default:
+                break;
+        }
+        return gender;
     }
+
 }

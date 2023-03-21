@@ -27,7 +27,7 @@ namespace Birk.Client.Bestilling.Services.Implementation
             {
                 return response.Data.barnOgPersonDto;
             }
-            return new BarnOgPersonDto();
+            return null;
         }
     }
 }
