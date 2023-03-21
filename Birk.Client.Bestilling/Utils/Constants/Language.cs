@@ -40,8 +40,9 @@ namespace Birk.Client.Bestilling.Utils.Constants
                     "<br><b>Dersom barnet ikke er registrert fører søket deg til manuell registrering.</b>"},
                 { "FødselsnummerPlaceholder", "fødselsnummer" },
                 { "SøkBarnButton", "Søk" },
-                { "SøkBarnFeilmelding", "OBS! Fødselsnummer skal ha 11 siffer"},
-                { "SøkBarnNoFødselsnummer", "OBS! Ugyldig fødselsnummer"},
+                { "SøkBarnFnrNotNumeric", "OBS! Kun tall i dette feltet"},
+                { "SøkBarnFnrNot11Digits", "OBS! Fødselsnummer skal ha 11 siffer"},
+                { "SøkBarnFnrNotFound", "OBS! Ugyldig fødselsnummer"},
 
                 // GUI
                 { "NoData", "No data" },

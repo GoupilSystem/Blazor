@@ -6,7 +6,7 @@
         <div>@Language.NO["BirkId"]@(BarnOgPerson != null ? BarnOgPerson.BirkId : "")</div>
         <div>@Language.NO["Kjønn"]@(BarnOgPerson != null ? ConvertGender(BarnOgPerson.KjønnTypeFk) : "")</div>
     </div>
-    <div class="top-row">g
+    <div class="top-row">
         <div>@Language.NO["Fødselsdato"]@(BarnOgPerson != null ? BarnOgPerson.Født : null)</div>
         <div>@Language.NO["Alder"]@(BarnOgPerson != null ? BarnOgPerson.Født.HasValue ? CalculateAge(BarnOgPerson.Født.Value) : "" : "")</div>
     </div>

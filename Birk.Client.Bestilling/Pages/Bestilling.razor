@@ -47,20 +47,27 @@
 
                     <GenericComponent GuiType="@GuiType.Input" Placeholder='@(StringHelper.BuildPlaceholder(Language.NO["FødselsnummerPlaceholder"]))'
                         ValueChanged="@HandleFnrChanged" />
-                    <GenericComponent GuiType=@GuiType.Button Items=@(new[] { Language.NO["SøkBarnButton"] }) OnClick=@HandleSøkBarnButtonClick />
+                    <GenericComponent GuiType=@GuiType.Button Items=@(new[] { Language.NO["SøkBarnButton"] }) OnClick=@HandleSøkBarnButtonClick CssExtra="søkbarn" />
 
-                    @if (!_fnrIsValid)
+                    @if (_fnrNotNumericWarning)
                     {
-                        <div style="margin-left: 5px; color: var(--buf-red); font-family: Arial; font-size: 8px;">
+                        <div style="display: flex; flex-direction: row; align-items: center; margin-left: 5px; color: var(--buf-red); font-family: Arial; font-size: var(--font-size-12px);">
                             <i class="fas fa-exclamation-circle"></i>
-                            <span>@Language.NO["SøkBarnFeilmelding"]</span>
+                            <span>@Language.NO["SøkBarnFnrNotNumeric"]</span>
                         </div>
                     }
-                    else if (_personNotFound)
+                    else if (_fnrNot11DigitsWarning)
                     {
-                        <div style="margin-left: 5px; color: var(--buf-red); font-family: Arial; font-size: 8px;">
+                        <div style="display: flex; flex-direction: row; align-items: center; margin-left: 5px; color: var(--buf-red); font-family: Arial; font-size: var(--font-size-12px);">
                             <i class="fas fa-exclamation-circle"></i>
-                            <span>@Language.NO["SøkBarnNoFødselsnummer"]</span>
+                            <span>@Language.NO["SøkBarnFnrNot11Digits"]</span>
+                        </div>
+                    }
+                    else if (_personNotFoundWarning)
+                    {
+                        <div style="display: flex; flex-direction: row; align-items: center; margin-left: 5px; color: var(--buf-red); font-family: Arial; font-size: var(--font-size-12px);">
+                            <i class="fas fa-exclamation-circle"></i>
+                                <span>@Language.NO["SøkBarnFnrNotFound"]</span>
                         </div>
                     }
                     
@@ -89,9 +96,11 @@
     private bool _isLoading;
     private bool _isHenvisningSelected;
     private bool _isKommunesAndBarneverntjenestesSet;
-    private bool _fnrIsValid;
+
     private string _fnr;
-    private bool _personNotFound;
+    private bool _fnrNotNumericWarning => !string.IsNullOrEmpty(_fnr) && !Regex.IsMatch(_fnr, "^[0-9]*$");
+    private bool _fnrNot11DigitsWarning;
+    private bool _personNotFoundWarning;
 
     protected async override Task OnInitializedAsync()
     {
@@ -146,31 +155,33 @@
 
     private void HandleFnrChanged(string value)
     {
-        _fnrIsValid = !string.IsNullOrEmpty(value) && Regex.IsMatch(value, "^[0-9]*$");
-        if (_fnrIsValid)
-        {
-            _fnr = value;
-        }
+        if (_fnrNot11DigitsWarning) _fnrNot11DigitsWarning = false;
+        if (_personNotFoundWarning) _personNotFoundWarning = false;
+
+        _fnr = value;
     }
 
     private async Task HandleSøkBarnButtonClick()
     {
-        if (_fnrIsValid)
+        if (!_fnrNotNumericWarning)
         {
+            _fnrNot11DigitsWarning = !Regex.IsMatch(_fnr, "^[0-9]{11}$");
+            if (_fnrNot11DigitsWarning) return;
+
             _barnOgPerson = await BarnService.GetBarnByFnr(_fnr);
 
             if (_barnOgPerson == null)
             {
-                _personNotFound = true;
+                _personNotFoundWarning = true;
             }
             else
             {
-                _personNotFound = false;
+                _personNotFoundWarning = false;
             }
         }
         else
         {
-            _personNotFound = false;
+            _personNotFoundWarning = false;
         }
     }
 }

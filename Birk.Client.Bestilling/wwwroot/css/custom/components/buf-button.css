@@ -12,3 +12,7 @@
     font-size: var(--font-size-20px);
     line-height: 1.6rem;
 }
+
+    .buf-button.søkbarn {
+        margin-left: 0.5rem;
+    }
