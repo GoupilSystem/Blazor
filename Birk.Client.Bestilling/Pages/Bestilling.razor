@@ -10,13 +10,14 @@
 @using Birk.Client.Bestilling.Utils.Helpers;
 @using System.Text.RegularExpressions;
 @inject IKodeverkService KodeverkService
+@inject IBarnService BarnService
 @inject ILogger<Bestilling> Logger
 
 @if (_isLoading)
 {
     <div class="buf-page">
         
-        <InfoPanel Barn=@_barn />
+        <InfoPanel BarnOgPerson=@_barnOgPerson />
 
         <div class="main-panel">
             <div class="active @(_isHenvisningSelected ? "" : "minimized" )">
@@ -29,7 +30,7 @@
                     <GenericComponent GuiType=@GuiType.Label Items=@(new[] { @Language.NO["VelgKommuneLabel"] }) />
                     <DropdownComponent GuiType=@GuiType.Dropdown Items=_kommunes OnSelectionChanged=@OnKommuneDropdownSelectionChanged />
                     <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["VelgBarnevernLabel"] }) />
-                    <DropdownComponent GuiType=@GuiType.Dropdown Items=_barneverntjenestes @ref="_barneverntjenesteDropdown" />
+                    <DropdownComponent GuiType=@GuiType.Dropdown Items=_barnOgPersoneverntjenestes @ref="_barnOgPersoneverntjenesteDropdown" />
 
                     @for (int i = 0; i < 2; i++)
                     {
@@ -65,13 +66,13 @@
 }
 
 @code {
-    private DropdownComponent _barneverntjenesteDropdown;
+    private DropdownComponent _barnOgPersoneverntjenesteDropdown;
 
     public string[] _bestillingTypes;
     public string[] _kommunes;
-    public string[] _barneverntjenestes;
+    public string[] _barnOgPersoneverntjenestes;
 
-    private SimplifiedBarnDto _barn = new();
+    private BarnOgPersonDto _barnOgPerson = new();
 
     private string _selectedBestilling = null;
     private string _selectedKommune = null;
@@ -112,13 +113,13 @@
                 _isKommunesAndBarneverntjenestesSet = true;
             }
             _kommunes = KodeverkService.GetKommunes();
-            _barneverntjenestes = KodeverkService.GetBarneverntjenestesByKommunenavn("");
+            _barnOgPersoneverntjenestes = KodeverkService.GetBarneverntjenestesByKommunenavn("");
 
         }
         else
         {
             _kommunes = null;
-            _barneverntjenestes = null;
+            _barnOgPersoneverntjenestes = null;
         }
 
         StateHasChanged();
@@ -127,9 +128,9 @@
     private async Task OnKommuneDropdownSelectionChanged(string selectedKommune)
     {
         _selectedKommune = selectedKommune;
-        _barneverntjenestes = KodeverkService.GetBarneverntjenestesByKommunenavn(_selectedKommune);
+        _barnOgPersoneverntjenestes = KodeverkService.GetBarneverntjenestesByKommunenavn(_selectedKommune);
 
-        _barneverntjenesteDropdown.ResetSelection();
+        _barnOgPersoneverntjenesteDropdown.ResetSelection();
 
         StateHasChanged();
     }
@@ -147,15 +148,7 @@
     {
         if (_fnrIsValid)
         {
-            BarnDto barn = await KodeverkService.GetBarnByFnr(_fnr);
-            if (barn != null)
-            {
-                _barn.EndretDato = barn.EndretDato;
-            }
-        }
-        else
-        {
-            _barn.EndretDato = null;
+            _barnOgPerson = await BarnService.GetBarnByFnr(_fnr);
         }
     }
 }

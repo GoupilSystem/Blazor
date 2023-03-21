@@ -1,17 +1,34 @@
 ﻿@using Birk.Client.Bestilling.Models.Dtos;
+@using Birk.Client.Bestilling.Utils.Constants;
 
-<div class="top-panel">
+<div class="info-panel">
     <div class="top-row">
-        <div>BIRK-ID: @Barn.PersonFk</div>
-        <div>Kjønn:</div>
+        <div>@Language.NO["BirkId"]@BarnOgPerson.BirkId</div>
+        <div>@Language.NO["Kjønn"]@(ConvertGender(BarnOgPerson.KjønnTypeFk))</div>
     </div>
     <div class="top-row">
-        <div>Fødselsdato: @Barn.EndretDato</div>
-        <div>Alder:</div>
+        <div>@Language.NO["Fødselsdato"]@BarnOgPerson.Født</div>
+        <div>@Language.NO["Alder"]@(BarnOgPerson.Født.HasValue ? CalculateAge(BarnOgPerson.Født.Value) : "")</div>
     </div>
 </div>
 
 @code {
     [Parameter]
-    public SimplifiedBarnDto Barn { get; set; }
+    public BarnOgPersonDto BarnOgPerson { get; set; }
+
+    private int CalculateAge(DateTime birthdate)
+    {
+        DateTime today = DateTime.Today;
+        int age = today.Year - birthdate.Year;
+        if (birthdate > today.AddYears(-age))
+        {
+            age--;
+        }
+        return age;
+    }
+
+    private string ConvertGender(int numericGender)
+    {
+        return numericGender == 1 ? "Gutt" : numericGender == 2 ? "Jente" : "Ukjent";
+    }
 }

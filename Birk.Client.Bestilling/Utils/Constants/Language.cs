@@ -8,10 +8,16 @@ namespace Birk.Client.Bestilling.Utils.Constants
         {
             var dictionary = new Dictionary<string, string>
             {
-                //Panel: Velg bestillingstype
+                // Top panel
+                { "BirkId", "BIRK-ID: " },
+                { "Kjønn", "Kjønn: " },
+                { "Fødselsdato", "Fødselsdato: " },
+                { "Alder", "Alder: " },
+                
+                // Panel: Velg bestillingstype
                 { "BestillingstypeTitle", "Velg bestillingstype" },
             
-                //Panel: Hvilken kommune er ansvarlig for bestillingen?
+                // Panel: Hvilken kommune er ansvarlig for bestillingen?
                 { "KommuneTitle", "Hvilken kommune er ansvarlig for bestillingen?" },
                 { "VelgKommuneLabel", "Velg ansvarlig kommune" },
                 { "VelgBarnevernLabel", "Velg barneverntjeneste/bydel" },
@@ -22,13 +28,13 @@ namespace Birk.Client.Bestilling.Utils.Constants
                 { "KontaktlederLabel", "Nærmeste leder til kontaktperson" },
                 { "KontaktlederPlaceholder", "navn på nærmeste leder" },
 
-                //Panel: Hvem gjelder bestillingen?
+                // Panel: Hvem gjelder bestillingen?
                 { "HvemGjelderTitle", "Hvem gjelder bestillingen?" },
                 { "HvemGjelderLabel", "Søk opp barn eller mor til ufødt barn i Birk. For å søke, bruk enten" +
                     "<ul class=\"bullet-list\"><li>Fødselsnummer</li><li>D-nummer/DUF-nummer</li><li>Fornavn og etternavn</li><li>BirkId</li></ul>" +
                     "Dersom barnet ikke er registrert fører søket deg til manuell registrering." },
 
-                //Panel: Søk barn
+                // Panel: Søk barn
                 { "SøkBarnTitle", "Søk opp barnet i Birk" },
                 { "SøkBarnLabel", "Søk opp barn eller mor til ufødt barn i Birk. Bruk fødselsnummer for å søke." +
                     "<br><b>Dersom barnet ikke er registrert fører søket deg til manuell registrering.</b>"},
@@ -36,14 +42,14 @@ namespace Birk.Client.Bestilling.Utils.Constants
                 { "SøkBarnButton", "Søk" },
                 { "SøkBarnFeilmelding", "OBS! Fødselsnummer skal ha 11 siffer"},
 
-                //GUI
+                // GUI
                 { "NoData", "No data" },
 
-                //HttpService problems
+                // HttpService problems
                 { "HttpProblemTitle", "Error while fetching object(s) of type: {0}" },
                 { "HttpProblemDetail", "An error occurred while making the {0} request: {1}" },
 
-                //GUI component problems
+                // GUI component problems
                 { "UnsupportedComponentType", "Unsupported component type: {0}" }
 
                 //for UTVIKLING: POC data structure

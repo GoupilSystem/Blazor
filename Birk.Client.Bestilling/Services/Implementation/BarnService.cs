@@ -1,7 +1,6 @@
 ﻿using Birk.Client.Bestilling.Models.Dtos;
 using Birk.Client.Bestilling.Models.Responses;
 using Birk.Client.Bestilling.Services.Interfaces;
-using System.Text.Json;
 
 namespace Birk.Client.Bestilling.Services.Implementation
 {
@@ -19,24 +18,16 @@ namespace Birk.Client.Bestilling.Services.Implementation
             _logger = logger;
         }
         
-        public async Task<BarnDto> GetBarnByFnr(string fnr)
+        public async Task<BarnOgPersonDto> GetBarnByFnr(string fnr)
         {
-            HttpClient client = new();
-            var result = await client.GetAsync($"https://localhost:7040/BarnByFnr/{fnr}");
-            var jsonResponse = await result.Content.ReadAsStringAsync();
+            _logger.LogInformation("Entering {Method}", nameof(GetBarnByFnr));
 
-            JsonSerializerOptions options = new JsonSerializerOptions
+            var response = await _httpService.HttpGet<GetBarnOgPersonByFnrResponse>($"BarnOgPersonByFnr/{fnr}");
+            if (response.IsSuccess)
             {
-                PropertyNameCaseInsensitive = true
-            };
-
-
-            var response = JsonSerializer.Deserialize<GetBarnByFnrResponse>(jsonResponse, options);
-
-            var barn = response.barnDto;
-
-            //var response = await _httpService.HttpGet<GetBarnByFnrResponse>($"https://localhost:7040/BarnByFnr/{fnr}");
-            return barn;
+                return response.Data.barnOgPersonDto;
+            }
+            return new BarnOgPersonDto();
         }
     }
 }

@@ -4,6 +4,6 @@ namespace Birk.Client.Bestilling.Services.Interfaces
 {
     public interface IBarnService
     {
-        Task<BarnDto> GetBarnByFnr(string fnr);
+        Task<BarnOgPersonDto> GetBarnByFnr(string fnr);
     }
 }

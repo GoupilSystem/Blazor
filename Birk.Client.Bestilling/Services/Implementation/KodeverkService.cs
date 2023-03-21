@@ -125,7 +125,7 @@ namespace Birk.Client.Bestilling.Services.Implementation
                 : string.IsNullOrEmpty(kommunenavn) ? Array.Empty<string>()
                     : _barneverntjenestes.Where(k => k.Kommunenavns.Contains(kommunenavn)).Select(k => k.EnhetsnavnOgBydelsnavn).ToArray();
 
-        public async Task<BarnDto> GetBarnByFnr(string fnr)
+        public async Task<BarnOgPersonDto> GetBarnByFnr(string fnr)
         {
             HttpClient client = new();
             var result = await client.GetAsync($"https://localhost:7040/BarnByFnr/{fnr}");
@@ -137,9 +137,9 @@ namespace Birk.Client.Bestilling.Services.Implementation
             };
 
 
-            var response = JsonSerializer.Deserialize<GetBarnByFnrResponse>(jsonResponse, options);
+            var response = JsonSerializer.Deserialize<GetBarnOgPersonByFnrResponse>(jsonResponse, options);
 
-            var barn = response.barnDto;
+            var barn = response.barnOgPersonDto;
 
             //var response = await _httpService.HttpGet<GetBarnByFnrResponse>($"https://localhost:7040/BarnByFnr/{fnr}");
             return barn;
