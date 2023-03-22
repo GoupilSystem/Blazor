@@ -1,5 +1,9 @@
 ﻿:root {
     --font-family: Arial, sans-serif;
+    --font-size-8px: 0.8rem;
+    --font-size-9px: 0.9rem;
+    --font-size-10px: 1rem;
+    --font-size-11px: 1.1rem;
     --font-size-12px: 1.2rem;
     --font-size-15px: 1.5rem;
     --font-size-16px: 1.6rem;

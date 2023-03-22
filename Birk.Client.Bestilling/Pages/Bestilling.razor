@@ -27,9 +27,9 @@
                 @if (_isHenvisningSelected)
                 {
                     <GenericComponent GuiType=@GuiType.Title Items=@(new[] { Language.NO["KommuneTitle"] }) />
-                    <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["VelgKommuneLabel"] }) />
+                    <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["VelgKommuneLabel"] + Language.NO["RedStarTopSize8"] }) />
                     <DropdownComponent GuiType=@GuiType.Dropdown Items=_kommunes OnSelectionChanged=@OnKommuneDropdownSelectionChanged />
-                    <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["VelgBarnevernLabel"] }) />
+                    <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["VelgBarnevernLabel"] + Language.NO["RedStarTopSize8"] }) />
                     <DropdownComponent GuiType=@GuiType.Dropdown Items=_barnOgPersoneverntjenestes @ref="_barnOgPersoneverntjenesteDropdown" />
 
                     @for (int i = 0; i < 2; i++)

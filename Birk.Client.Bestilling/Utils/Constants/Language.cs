@@ -19,11 +19,11 @@ namespace Birk.Client.Bestilling.Utils.Constants
             
                 // Panel: Hvilken kommune er ansvarlig for bestillingen?
                 { "KommuneTitle", "Hvilken kommune er ansvarlig for bestillingen?" },
-                { "VelgKommuneLabel", "Velg ansvarlig kommune" },
-                { "VelgBarnevernLabel", "Velg barneverntjeneste/bydel" },
-                { "KontaktpersonLabel", "Kontaktperson" },
+                { "VelgKommuneLabel", "Velg ansvarlig kommune " },
+                { "VelgBarnevernLabel", "Velg barneverntjeneste/bydel " },
+                { "KontaktpersonLabel", "Kontaktperson " },
                 { "KontaktpersonPlaceholder", "navn på kontaktperson" },
-                { "TelefonLabel", "Telefon/e-post" },
+                { "TelefonLabel", "Telefon/e-post " },
                 { "TelefonPlaceholder", "kontaktinfo" },
                 { "KontaktlederLabel", "Nærmeste leder til kontaktperson" },
                 { "KontaktlederPlaceholder", "navn på nærmeste leder" },
@@ -43,6 +43,10 @@ namespace Birk.Client.Bestilling.Utils.Constants
                 { "FnrNotNumericValue", "OBS! Kun tall i dette feltet"},
                 { "FnrNot11DigitsWarning", "OBS! Fødselsnummer skal ha 11 siffer"},
                 { "PersonNotFoundWarning", "OBS! Ugyldig fødselsnummer"},
+
+                // Icons as markup string
+                { "RedStarTopSize8", "<i class=\"fas fa-star top size8\" style=\"color: red;\"></i>" }, // Red cannot pass as a class
+                { "WarningSize8", "<i class=\"fas fa-exclamation-circle size8\"></i>" },
 
                 // GUI
                 { "NoData", "No data" },

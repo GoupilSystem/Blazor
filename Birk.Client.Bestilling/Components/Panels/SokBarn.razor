@@ -16,7 +16,8 @@
     {
         if (warning.Value)
         {
-            <GenericComponent GuiType="GuiType.Label" Items=@(new[] { Language.NO[warning.Key] }) Icon="fas fa-exclamation-circle" CssExtra="warning" />
+            @*<GenericComponent GuiType="GuiType.Label" Items=@(new[] { Language.NO[warning.Key] }) Icon="fas fa-exclamation-circle" CssExtra="warning" />*@
+           <GenericComponent GuiType="GuiType.Label" Items=@(new[] { Language.NO["WarningSize8"] + Language.NO[warning.Key]}) CssExtra="warning" />
         }
     }
 </div>

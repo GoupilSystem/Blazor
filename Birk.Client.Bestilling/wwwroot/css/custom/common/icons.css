@@ -1,0 +1,14 @@
+﻿
+.top {
+    display: inline-block;
+    height: 10px;
+    vertical-align: top;
+}
+
+.red {
+    color: red;
+}
+
+.size8 {
+    font-size: var(--font-size-8px);
+}
