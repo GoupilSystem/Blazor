@@ -27,7 +27,7 @@
                 @if (_isHenvisningSelected)
                 {
                     <GenericComponent GuiType=@GuiType.Title Items=@(new[] { Language.NO["KommuneTitle"] }) />
-                    <GenericComponent GuiType=@GuiType.Label Items=@(new[] { @Language.NO["VelgKommuneLabel"] }) />
+                    <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["VelgKommuneLabel"] }) />
                     <DropdownComponent GuiType=@GuiType.Dropdown Items=_kommunes OnSelectionChanged=@OnKommuneDropdownSelectionChanged />
                     <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["VelgBarnevernLabel"] }) />
                     <DropdownComponent GuiType=@GuiType.Dropdown Items=_barnOgPersoneverntjenestes @ref="_barnOgPersoneverntjenesteDropdown" />
@@ -43,20 +43,7 @@
                     <GenericComponent GuiType=@GuiType.Title Items=@(new[] { Language.NO["SøkBarnTitle"] }) />
                     <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["SøkBarnLabel"] }) />
 
-                    <div style="display: flex; flex-direction: row;">
-                        <GenericComponent GuiType="@GuiType.Input" Placeholder='@(StringHelper.BuildPlaceholder(Language.NO["FødselsnummerPlaceholder"]))'
-                                  ValueChanged="@HandleFnrChanged" />
-                        <GenericComponent GuiType=@GuiType.Button Items=@(new[] { Language.NO["SøkBarnButton"] }) OnClick=@HandleSøkBarnButtonClick CssExtra="søkbarn" />
-
-                        @foreach (KeyValuePair<string, bool> warning in _warnings)
-                        {
-                            if (warning.Value)
-                            {
-                                <GenericComponent GuiType="GuiType.Label" Items=@(new[] { Language.NO[warning.Key] }) Icon="fas fa-exclamation-circle" CssExtra="warning" />
-                            }
-                        }
-
-                    </div>
+                    <SokBarn BarnOgPerson="_barnOgPerson" OnBarnSearched="@HandleBarnSearched" />
                 }
             </div>
             <div class="footer" />
@@ -74,8 +61,6 @@
     public string[] _kommunes;
     public string[] _barnOgPersoneverntjenestes;
 
-    private Dictionary<string, bool> _warnings = new();
-
     private string _selectedBestilling = null;
     private string _selectedKommune = null;
     private string _selectedBernverntjeneste = null;
@@ -84,31 +69,21 @@
     private bool _isHenvisningSelected;
     private bool _isKommunesAndBarneverntjenestesSet;
 
-    private string _fnr;
-
     protected async override Task OnInitializedAsync()
     {
-        await InitializeDropdowns();
-        InitializeWarnings();
+        await InitializeDropdownsAsync();
 
         base.OnInitialized();
     }
 
-    public async Task InitializeDropdowns()
+    public async Task InitializeDropdownsAsync()
     {
-        Logger.LogInformation("Entering {Method}", nameof(InitializeDropdowns));
+        Logger.LogInformation("Entering {Method}", nameof(InitializeDropdownsAsync));
 
         _bestillingTypes = await KodeverkService.GetTypes();
         _isLoading = true;
 
-        Logger.LogInformation("Exiting {Method}", nameof(InitializeDropdowns));
-    }
-
-    private void InitializeWarnings()
-    {
-        _warnings.Add("FnrNotNumericValue", false);
-        _warnings.Add("FnrNot11DigitsWarning", false);
-        _warnings.Add("PersonNotFoundWarning", false);
+        Logger.LogInformation("Exiting {Method}", nameof(InitializeDropdownsAsync));
     }
 
     private async Task OnBestillingDropdownSelectionChanged(string selectedBestilling)
@@ -146,30 +121,9 @@
         StateHasChanged();
     }
 
-    private void HandleFnrChanged(string value)
+    private void HandleBarnSearched(BarnOgPersonDto barnOgPerson)
     {
-        _warnings["FnrNot11DigitsWarning"] = false;
-        _warnings["PersonNotFoundWarning"] = false;
+        _barnOgPerson = barnOgPerson;
+    } 
 
-        _fnr = value;
-
-        _warnings["FnrNotNumericValue"] = !string.IsNullOrEmpty(_fnr) && !Regex.IsMatch(_fnr, "^[0-9]*$");
-    }
-
-    private async Task HandleSøkBarnButtonClick()
-    {
-        if (!string.IsNullOrEmpty(_fnr) && !_warnings["FnrNotNumericValue"])
-        {
-            _warnings["FnrNot11DigitsWarning"] = !Regex.IsMatch(_fnr, "^[0-9]{11}$");
-            if (_warnings["FnrNot11DigitsWarning"]) return;
-
-            _barnOgPerson = await BarnService.GetBarnByFnr(_fnr);
-
-            _warnings["PersonNotFoundWarning"] = _barnOgPerson == null;
-        }
-        else
-        {
-            _warnings["PersonNotFoundWarning"] = false;
-        }
-    }
 }

@@ -1,0 +1,78 @@
+﻿@using Birk.Client.Bestilling.Components.Enums;
+@using Birk.Client.Bestilling.Components.Reusable
+@using Birk.Client.Bestilling.Models.Dtos;
+@using Birk.Client.Bestilling.Services.Interfaces;
+@using Birk.Client.Bestilling.Utils.Constants;
+@using Birk.Client.Bestilling.Utils.Helpers;
+@using System.Text.RegularExpressions;
+@inject IBarnService BarnService
+
+<div style="display: flex; flex-direction: row;">
+    <GenericComponent GuiType="@GuiType.Input" Placeholder='@(StringHelper.BuildPlaceholder(Language.NO["FødselsnummerPlaceholder"]))'
+                ValueChanged="@HandleFnrChanged" />
+    <GenericComponent GuiType=@GuiType.Button Items=@(new[] { Language.NO["SøkBarnButton"] }) OnClick=@HandleSøkBarnButtonClick CssExtra="søkbarn" />
+
+    @foreach (KeyValuePair<string, bool> warning in _warnings)
+    {
+        if (warning.Value)
+        {
+            <GenericComponent GuiType="GuiType.Label" Items=@(new[] { Language.NO[warning.Key] }) Icon="fas fa-exclamation-circle" CssExtra="warning" />
+        }
+    }
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback<BarnOgPersonDto> OnBarnSearched { get; set; }
+
+    [Parameter]
+    public BarnOgPersonDto BarnOgPerson { get; set; }
+
+    private Dictionary<string, bool> _warnings = new();
+
+    private string _fnr;
+
+    protected override void OnInitialized()
+    {
+        InitializeWarnings();
+    }
+
+    private void InitializeWarnings()
+    {
+        _warnings.Add("FnrNotNumericValue", false);
+        _warnings.Add("FnrNot11DigitsWarning", false);
+        _warnings.Add("PersonNotFoundWarning", false);
+    }
+
+    private void HandleFnrChanged(string value)
+    {
+        _warnings["FnrNot11DigitsWarning"] = false;
+        _warnings["PersonNotFoundWarning"] = false;
+
+        _fnr = value;
+
+        _warnings["FnrNotNumericValue"] = !string.IsNullOrEmpty(_fnr) && !Regex.IsMatch(_fnr, "^[0-9]*$");
+    }
+
+    private async Task HandleSøkBarnButtonClick()
+    {
+        if (!string.IsNullOrEmpty(_fnr) && !_warnings["FnrNotNumericValue"])
+        {
+            _warnings["FnrNot11DigitsWarning"] = !Regex.IsMatch(_fnr, "^[0-9]{11}$");
+            
+            if (_warnings["FnrNot11DigitsWarning"]) { return; }
+
+            BarnOgPerson = await BarnService.GetBarnByFnr(_fnr);
+
+            _warnings["PersonNotFoundWarning"] = BarnOgPerson == null;
+
+            OnBarnSearched.InvokeAsync(BarnOgPerson);
+        }
+        else
+        {
+            _warnings["PersonNotFoundWarning"] = false;
+
+            OnBarnSearched.InvokeAsync(null);
+        }
+    }
+}
