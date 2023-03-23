@@ -1,4 +1,5 @@
 ﻿@using Birk.Client.Bestilling.Components.Enums
+@using static Birk.Client.Bestilling.Components.Panels.SokBarn;
 
 @inherits BaseComponent;
 
@@ -14,9 +15,9 @@
     [Parameter]
     public string Placeholder { get; set; }
 
-    private RenderFragment DynamicFragment;
+    private string _inputValue { get; set; }
 
-    public string _bindValue;
+    private RenderFragment DynamicFragment;
 
     private RenderFragment CreateComponent() => builder =>
     {
@@ -47,9 +48,10 @@
                     { "class", CssClass },
                     { "placeholder", Placeholder },
                     // Event triggered on content of input being changed
-                    { "bind-value", _bindValue },
+                    { "value", _inputValue },
+                    { "bind-value", _inputValue },
                     { "oninput", EventCallback.Factory.Create(this, OnInputValueChanged) },
-                    // Event triggered on quit input (ex. copy/paste fnr value and click directly on Søk button)
+                    // Event triggered on quit input (ex. copy/paste _inputValue value and click directly on Søk button)
                     // Ref: https://stackoverflow.com/questions/65803149/blazor-onchange-event
                     { "bind-value:event", "onchange" },
                     { "onchange", EventCallback.Factory.Create(this, OnBlurValueChanged) },
@@ -86,18 +88,20 @@
     protected override void OnInitialized()
     {
         DynamicFragment = CreateComponent();
+
+        StateHasChanged();
     }
 
     private void OnBlurValueChanged(ChangeEventArgs args)
     {
-        _bindValue = args.Value?.ToString();
-        ValueChanged.InvokeAsync(_bindValue);
+        _inputValue = args.Value?.ToString();
+        ValueChanged.InvokeAsync(_inputValue);
     }
 
     private void OnInputValueChanged(ChangeEventArgs args)
     {
-        _bindValue = args.Value?.ToString();
-        ValueChanged.InvokeAsync(_bindValue);
+        _inputValue = args.Value?.ToString();
+        ValueChanged.InvokeAsync(_inputValue);
     }
 
     private async Task HandleClick(MouseEventArgs e)
@@ -107,7 +111,7 @@
 
     public void Reset()
     {
-        _bindValue = string.Empty;
-        ValueChanged.InvokeAsync(_bindValue);
+        _inputValue = "";
+        ValueChanged.InvokeAsync(_inputValue);
     }
 }

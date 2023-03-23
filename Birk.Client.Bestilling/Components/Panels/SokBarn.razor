@@ -40,7 +40,7 @@
 
     private Dictionary<string, bool> _warnings = new();
 
-    private string _fnr;
+    public string Fnr = "HAHA";
 
     protected override void OnInitialized()
     {
@@ -54,25 +54,24 @@
         _warnings.Add("PersonNotFoundWarning", false);
     }
 
-    private void HandleFnrChanged(string value)
+    private void HandleFnrChanged(string fnr)
     {
+        Fnr = fnr;
+
         _warnings["FnrNot11DigitsWarning"] = false;
         _warnings["PersonNotFoundWarning"] = false;
-
-        _fnr = value;
-
-        _warnings["FnrNotNumericValue"] = !string.IsNullOrEmpty(_fnr) && !Regex.IsMatch(_fnr, "^[0-9]*$");
+        _warnings["FnrNotNumericValue"] = !string.IsNullOrEmpty(Fnr) && !Regex.IsMatch(Fnr, "^[0-9]*$");
     }
 
     private async Task HandleSøkBarnButtonClick()
     {
-        if (!string.IsNullOrEmpty(_fnr) && !_warnings["FnrNotNumericValue"])
+        if (!string.IsNullOrEmpty(Fnr) && !_warnings["FnrNotNumericValue"])
         {
-            _warnings["FnrNot11DigitsWarning"] = !Regex.IsMatch(_fnr, "^[0-9]{11}$");
+            _warnings["FnrNot11DigitsWarning"] = !Regex.IsMatch(Fnr, "^[0-9]{11}$");
 
             if (_warnings["FnrNot11DigitsWarning"]) { return; }
 
-            BarnOgPerson = await BarnService.GetBarnByFnr(_fnr);
+            BarnOgPerson = await BarnService.GetBarnByFnr(Fnr);
 
             _warnings["PersonNotFoundWarning"] = BarnOgPerson == null;
 
@@ -89,7 +88,7 @@
     private async Task HandleUkjentFnrButtonClick()
     {
         _fnrInput.Reset();
-        _fnr = string.Empty;
-        OnBarnUpdated.InvokeAsync(null);
+
+        await HandleSøkBarnButtonClick();
     }
 }
