@@ -68,15 +68,11 @@ namespace Birk.BestillingWeb.UnitTests
             var kommuneResponse = new HttpResult<List<SimplifiedKommuneDto>>(true, expectedKommunes);
             _httpServiceMock.Setup(x => x.HttpGet<List<SimplifiedKommuneDto>>("kommunes")).ReturnsAsync(kommuneResponse);
 
-            var expectedBarneverntjenestes = new List<TempBarneverntjenesteDto>()
+            var expectedBarneverntjenestes = new List<SimplifiedBarneverntjenesteDto>()
             {
-                new TempBarneverntjenesteDto() { EnhetsnavnOgBydelsnavn = "Tjeneste 1", Kommunenavn = "Kommune 1" },
-                new TempBarneverntjenesteDto() { EnhetsnavnOgBydelsnavn = "Tjeneste 2", Kommunenavn = "Kommune 2" },
+                new SimplifiedBarneverntjenesteDto() { EnhetsnavnOgBydelsnavn = "Tjeneste 1", Kommunenavns = new[] { "Kommune 1" } },
+                new SimplifiedBarneverntjenesteDto() { EnhetsnavnOgBydelsnavn = "Tjeneste 2", Kommunenavns = new[] { "Kommune 2" } },
             };
-<<<<<<< HEAD:Birk.BestillingWeb.UnitTests/BestillingServiceTests.cs
-            var barneverntjenesteResponse = new HttpResult<List<TempBarneverntjenesteDto>>(true, expectedBarneverntjenestes);
-            _httpServiceMock.Setup(x => x.HttpGet<List<TempBarneverntjenesteDto>>("barneverntjenestes")).ReturnsAsync(barneverntjenesteResponse);
-=======
 
             // !!: We expect SimplifiedBarneverntjenesteDto type from the service but during the process we get TempBarneverntjenesteDto type from KodeverkApi
             var tempBarneverntjenestes = new List<TempBarneverntjenesteDto>();
@@ -90,7 +86,6 @@ namespace Birk.BestillingWeb.UnitTests
             }
             var tempBarneverntjenesteResponse = new HttpResult<List<TempBarneverntjenesteDto>>(true, tempBarneverntjenestes);
             _httpServiceMock.Setup(x => x.HttpGet<List<TempBarneverntjenesteDto>>("barneverntjenestes")).ReturnsAsync(tempBarneverntjenesteResponse);
->>>>>>> Bestillingsservice blir KodeverkService + tests ok:Birk.BestillingWeb.UnitTests/KodeverkServiceTests.cs
 
             // Act
             await _kodeverkService.GetKommunesAndBarneverntjenestes();
