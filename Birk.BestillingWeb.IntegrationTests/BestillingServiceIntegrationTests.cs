@@ -1,15 +1,10 @@
-﻿using Birk.Client.Bestilling.Models.Configuration;
-using Birk.Client.Bestilling.Models.Dtos;
+﻿using Birk.Client.Bestilling.Models.Dtos;
 using Birk.Client.Bestilling.Services.Implementation;
-using Birk.Client.Bestilling.Services.Interfaces;
 using Birk.Client.Bestilling.Utils.Constants;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
 using System.Net;
-using System.Net.Http;
 using WireMock.RequestBuilders;
 using WireMock.ResponseBuilders;
 using WireMock.Server;
@@ -18,23 +13,23 @@ namespace Birk.BestillingWeb.IntegrationTests
 {
     public class BestillingServiceIntegrationTests : IClassFixture<WebApplicationFactory<Program>>
     {
-        private readonly HttpClient _httpClient;
         private readonly HttpService _httpService;
         private readonly KodeverkService _bestillingService;
+        private readonly WireMockServer _server;
         private readonly Logger<KodeverkService> _nullLogger;
 
         public BestillingServiceIntegrationTests(WebApplicationFactory<Program> factory)
         {
-            // Create an HttpClient that can be used to send requests to the web app
-            var config = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json")
-            .Build();
+            // Create the mock server
+            _server = WireMockServer.Start();
 
-            var baseUrlConfiguration = config.GetSection(BaseUrlConfiguration.CONFIG_NAME).Get<BaseUrlConfiguration>();
-            var url = baseUrlConfiguration.KodeverkApiBase;
+            // Create an instance of the HttpService using the mock HttpClient and the mock BaseUrlConfiguration
+            var httpClient = new HttpClient();
+            // We will configure the HttpClient in HttpService to use the mock server URL
+            var url = new Uri(_server.Urls[0]).ToString();
             var timeoutSeconds = 30;
-            _httpClient = new HttpClient { BaseAddress = new Uri(url) };
-            _httpService = new HttpService(_httpClient, Options.Create(baseUrlConfiguration).ToString(), timeoutSeconds);
+            _httpService = new HttpService(httpClient, url, timeoutSeconds);
+
             _nullLogger = new Logger<KodeverkService>(new NullLoggerFactory());
             _bestillingService = new KodeverkService(_httpService, _nullLogger);
         }
@@ -49,18 +44,12 @@ namespace Birk.BestillingWeb.IntegrationTests
                 new BestillingTypeDto { Pk = 2, Verdi = "Type 2"}
             };
 
-            // Create the mock server
-            var server = WireMockServer.Start();
-
             // Using WireMock.Server package
             // Define a mock response for the HTTP request to /bestillingtypes
-            server.Given(Request.Create().WithPath("/bestillingtypes").UsingGet())
+            _server.Given(Request.Create().WithPath("/bestillingtypes").UsingGet())
                 .RespondWith(Response.Create()
                 .WithStatusCode(HttpStatusCode.OK)
                 .WithBodyAsJson(expectedData));
-
-            // Configure the HttpClient to use the mock server URL
-            _httpClient.BaseAddress = new Uri(server.Urls[0]);
 
             // Act
             var result = await _bestillingService.GetTypes();
@@ -69,7 +58,7 @@ namespace Birk.BestillingWeb.IntegrationTests
             Assert.Equal(expectedData.Select(bt => bt.Verdi).ToArray(), result);
 
             // Stop the mock server
-            server.Stop();
+            _server.Stop();
         }
 
         [Fact]
@@ -88,23 +77,17 @@ namespace Birk.BestillingWeb.IntegrationTests
                 new SimplifiedBarneverntjenesteDto { EnhetsnavnOgBydelsnavn = "Tjeneste 2", Kommunenavns = new[] { "Kommune 2" } },
             };
 
-            // Create the mock server
-            var server = WireMockServer.Start();
-
             // Using WireMock.Server package
             // Define a mock response for the HTTP request to /kommunes and /barneverntjenestes
-            server.Given(Request.Create().WithPath("/kommunes").UsingGet())
+            _server.Given(Request.Create().WithPath("/kommunes").UsingGet())
                 .RespondWith(Response.Create()
                 .WithStatusCode(HttpStatusCode.OK)
                 .WithBodyAsJson(expectedKommunes));
 
-            server.Given(Request.Create().WithPath("/barneverntjenestes").UsingGet())
+            _server.Given(Request.Create().WithPath("/barneverntjenestes").UsingGet())
                 .RespondWith(Response.Create()
                 .WithStatusCode(HttpStatusCode.OK)
                 .WithBodyAsJson(expectedBarneverntjenestes));
-
-            // Configure the HttpClient to use the mock server URL
-            _httpClient.BaseAddress = new Uri(server.Urls[0]);
 
             // Act
             await _bestillingService.GetKommunesAndBarneverntjenestes();
@@ -125,26 +108,20 @@ namespace Birk.BestillingWeb.IntegrationTests
             Assert.True(actualBarneverntjenestes[0] == expectedBarneverntjenestes[0].EnhetsnavnOgBydelsnavn);
 
             // Stop the mock server
-            server.Stop();
+            _server.Stop();
         }
 
         [Fact]
         public async Task GetKommunesAndBarneverntjenestes_ReturnsInternalServerError_Test()
         {
             // Arrange
-            // Create the mock server
-            var server = WireMockServer.Start();
-
             // Using WireMock.Server package
             // Define a mock response for the HTTP request to /kommunes and /barneverntjenestes
-            server.Given(Request.Create().WithPath("/kommunes").UsingGet())
+            _server.Given(Request.Create().WithPath("/kommunes").UsingGet())
                 .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.InternalServerError));
 
-            server.Given(Request.Create().WithPath("/barneverntjenestes").UsingGet())
+            _server.Given(Request.Create().WithPath("/barneverntjenestes").UsingGet())
                 .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.InternalServerError));
-
-            // Configure the HttpClient to use the mock server URL
-            _httpClient.BaseAddress = new Uri(server.Urls[0]);
 
             // Act
             await _bestillingService.GetKommunesAndBarneverntjenestes();
@@ -163,7 +140,7 @@ namespace Birk.BestillingWeb.IntegrationTests
             Assert.True(actualBarneverntjenestes.SequenceEqual(expected));
 
             // Stop the mock server
-            server.Stop();
+            _server.Stop();
         }
     }
 
