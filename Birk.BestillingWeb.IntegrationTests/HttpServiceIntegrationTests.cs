@@ -12,18 +12,18 @@ namespace Birk.BestillingWeb.IntegrationTests
 {
     public class HttpServiceIntegrationTests
     {
-        private readonly HttpClient _httpClient;
         private readonly HttpService _httpService;
 
         public HttpServiceIntegrationTests()
         {
+            var httpClient = new HttpClient();
             var config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .Build();
-
             var baseUrlConfiguration = config.GetSection(BaseUrlConfiguration.CONFIG_NAME).Get<BaseUrlConfiguration>();
-            var url = baseUrlConfiguration.KodeverkApiBase;
-            _httpService = new HttpService(_httpClient, Options.Create(baseUrlConfiguration));
+            var kodeverkApiBaseUrl = Options.Create(baseUrlConfiguration).Value.KodeverkApiBase;
+            var timeoutSeconds = 30;
+            _httpService = new HttpService(httpClient, kodeverkApiBaseUrl, timeoutSeconds);
         }
 
         [Fact]
@@ -51,7 +51,9 @@ namespace Birk.BestillingWeb.IntegrationTests
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
             var baseUrlConfiguration = config.GetSection(BaseUrlConfiguration.CONFIG_NAME).Get<BaseUrlConfiguration>();
-            var httpService = new HttpService(httpClient, Options.Create(baseUrlConfiguration));
+            var kodeverkApiBaseUrl = Options.Create(baseUrlConfiguration).Value.KodeverkApiBase;
+            var timeoutSeconds = 30;
+            var httpService = new HttpService(httpClient, kodeverkApiBaseUrl, timeoutSeconds);
 
             // Act
             var result = await httpService.HttpGet<dynamic>(uri);
@@ -96,7 +98,9 @@ namespace Birk.BestillingWeb.IntegrationTests
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
             var baseUrlConfiguration = config.GetSection(BaseUrlConfiguration.CONFIG_NAME).Get<BaseUrlConfiguration>();
-            var httpService = new HttpService(httpClient, Options.Create(baseUrlConfiguration));
+            var kodeverkApiBaseUrl = Options.Create(baseUrlConfiguration).Value.KodeverkApiBase;
+            var timeoutSeconds = 30;
+            var httpService = new HttpService(httpClient, kodeverkApiBaseUrl, timeoutSeconds);
 
             // Act
             var result = await httpService.HttpGet<ProblemDetails>(uri);

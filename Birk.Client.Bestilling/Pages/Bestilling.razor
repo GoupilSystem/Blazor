@@ -43,7 +43,7 @@
                     <GenericComponent GuiType=@GuiType.Title Items=@(new[] { Language.NO["SøkBarnTitle"] }) />
                     <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["SøkBarnLabel"] }) />
 
-                    <SokBarn BarnOgPerson="_barnOgPerson" OnBarnSearched="@HandleBarnSearched" />
+                    <SokBarn BarnOgPerson="_barnOgPerson" OnBarnUpdated="@HandleBarnUpdated" />
                 }
             </div>
             <div class="footer" />
@@ -57,9 +57,9 @@
 
     private BarnOgPersonDto _barnOgPerson = new();
 
-    public string[] _bestillingTypes;
-    public string[] _kommunes;
-    public string[] _barnOgPersoneverntjenestes;
+    private string[] _bestillingTypes;
+    private string[] _kommunes;
+    private string[] _barnOgPersoneverntjenestes;
 
     private string _selectedBestilling = null;
     private string _selectedKommune = null;
@@ -100,7 +100,6 @@
             }
             _kommunes = KodeverkService.GetKommunes();
             _barnOgPersoneverntjenestes = KodeverkService.GetBarneverntjenestesByKommunenavn("");
-
         }
         else
         {
@@ -116,12 +115,15 @@
         _selectedKommune = selectedKommune;
         _barnOgPersoneverntjenestes = KodeverkService.GetBarneverntjenestesByKommunenavn(_selectedKommune);
 
-        _barnOgPersoneverntjenesteDropdown.ResetSelection();
+        // Update the items in the Barneverntjeneste dropdown
+        _barnOgPersoneverntjenesteDropdown.Items = _barnOgPersoneverntjenestes;
+        // Displays automaticaly the only possible item or nothing if more than one
+        _barnOgPersoneverntjenesteDropdown.SetSelected();
 
         StateHasChanged();
     }
 
-    private void HandleBarnSearched(BarnOgPersonDto barnOgPerson)
+    private void HandleBarnUpdated(BarnOgPersonDto barnOgPerson)
     {
         _barnOgPerson = barnOgPerson;
     } 

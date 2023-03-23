@@ -11,20 +11,20 @@ namespace Birk.BestillingWeb.UnitTests
 {
     public class HttpServiceTests
     {
-        private readonly HttpService _httpService;
-        private readonly HttpClient _httpClient;
+        int timeoutSeconds;
+        string uri;
 
         public HttpServiceTests()
         {
-            _httpClient = new HttpClient();
-            _httpService = new HttpService(_httpClient, null);
+            timeoutSeconds = 30;
+            uri = "https://example.com";
         }
 
         [Fact]
         public async Task HttpGet_ReturnsSuccessResult_WhenResponseIsSuccess_Test()
         {
             // Arrange
-            var uri = "https://example.com";
+            
             var responseContent = "{\"id\":1,\"name\":\"Test\"}";
             var response = new HttpResponseMessage(HttpStatusCode.OK)
             {
@@ -39,7 +39,7 @@ namespace Birk.BestillingWeb.UnitTests
                 .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                 .ReturnsAsync(response);
             var httpClient = new HttpClient(handlerMock.Object);
-            var httpService = new HttpService(httpClient, Options.Create(new BaseUrlConfiguration()));
+            var httpService = new HttpService(httpClient, uri, timeoutSeconds);
 
             // Act
             var result = await httpService.HttpGet<HttpServiceDataTest>(uri);
@@ -55,14 +55,13 @@ namespace Birk.BestillingWeb.UnitTests
         public async Task HttpGet_ReturnsUnsuccessfulResult_WhenResponseIsNotSuccess_Test()
         {
             // Arrange
-            var uri = "https://example.com";
             var response = new HttpResponseMessage(HttpStatusCode.BadRequest);
             var handlerMock = new Mock<HttpMessageHandler>();
             handlerMock.Protected()
                 .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                 .ReturnsAsync(response);
             var httpClient = new HttpClient(handlerMock.Object);
-            var httpService = new HttpService(httpClient, Options.Create(new BaseUrlConfiguration()));
+            var httpService = new HttpService(httpClient, uri, timeoutSeconds);
 
             // Act
             var result = await httpService.HttpGet<HttpServiceDataTest>(uri);

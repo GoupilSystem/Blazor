@@ -5,14 +5,20 @@
     border: 1px solid var(--buf-green);
     border-radius: 5px;
     outline: none;
-    height: 4rem;
     font-family: var(--font-family);
-    font-style: normal;
-    font-weight: 600;
-    font-size: var(--font-size-20px);
+    font-style: normal;    
     line-height: 1.6rem;
 }
 
     .buf-button.søkbarn {
         margin-left: 0.5rem;
+        height: 4rem;
+        font-size: var(--font-size-28px);
+        font-weight: 400;
+    }
+
+    .buf-button.ukjentfnr {
+        margin-top: 0.4rem;
+        font-size: var(--font-size-14px);
+        height: 2.5rem;
     }

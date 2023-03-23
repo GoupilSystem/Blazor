@@ -43,6 +43,7 @@ namespace Birk.Client.Bestilling.Utils.Constants
                 { "FnrNotNumericValue", "OBS! Kun tall i dette feltet"},
                 { "FnrNot11DigitsWarning", "OBS! Fødselsnummer skal ha 11 siffer"},
                 { "PersonNotFoundWarning", "OBS! Ugyldig fødselsnummer"},
+                { "UkjentFnr", "Ukjent fødselsnummer"},
 
                 // Icons as markup string
                 { "RedStarTopSize8", "<i class=\"fas fa-star top size8\" style=\"color: red;\"></i>" }, // Red cannot pass as a class

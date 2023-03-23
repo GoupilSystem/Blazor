@@ -32,8 +32,9 @@ namespace Birk.BestillingWeb.IntegrationTests
 
             var baseUrlConfiguration = config.GetSection(BaseUrlConfiguration.CONFIG_NAME).Get<BaseUrlConfiguration>();
             var url = baseUrlConfiguration.KodeverkApiBase;
+            var timeoutSeconds = 30;
             _httpClient = new HttpClient { BaseAddress = new Uri(url) };
-            _httpService = new HttpService(_httpClient, Options.Create(baseUrlConfiguration));
+            _httpService = new HttpService(_httpClient, Options.Create(baseUrlConfiguration).ToString(), timeoutSeconds);
             _nullLogger = new Logger<KodeverkService>(new NullLoggerFactory());
             _bestillingService = new KodeverkService(_httpService, _nullLogger);
         }

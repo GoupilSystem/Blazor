@@ -109,8 +109,9 @@ namespace Birk.Client.Bestilling.Services.Implementation
                         .Select(g => new SimplifiedBarneverntjenesteDto
                         {
                             EnhetsnavnOgBydelsnavn = g.Key,
-                            Kommunenavns = g.Select(s => s.Kommunenavn).ToArray()
+                            Kommunenavns = g.Select(s => s.Kommunenavn).OrderBy(k => k).ToArray()
                         })
+                        .OrderBy(sb => sb.Kommunenavns[0])
                         .ToArray();
                 }
             }
@@ -121,8 +122,10 @@ namespace Birk.Client.Bestilling.Services.Implementation
         public string[] GetBarneverntjenestes() => _barneverntjenestes?.Select(bt => bt.EnhetsnavnOgBydelsnavn).ToArray() ?? new[] { Language.NO["NoData"] };
 
         public string[] GetBarneverntjenestesByKommunenavn(string kommunenavn) =>
-            _barneverntjenestes == null ? new[] { Language.NO["NoData"] }
-                : string.IsNullOrEmpty(kommunenavn) ? Array.Empty<string>()
+            _barneverntjenestes == null 
+                ? new[] { Language.NO["NoData"] }
+                : string.IsNullOrEmpty(kommunenavn) 
+                    ? _barneverntjenestes.Select(k => k.EnhetsnavnOgBydelsnavn).ToArray()
                     : _barneverntjenestes.Where(k => k.Kommunenavns.Contains(kommunenavn)).Select(k => k.EnhetsnavnOgBydelsnavn).ToArray();
 
         public async Task<BarnOgPersonDto> GetBarnByFnr(string fnr)

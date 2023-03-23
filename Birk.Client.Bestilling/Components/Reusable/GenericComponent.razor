@@ -53,7 +53,7 @@
                     // Ref: https://stackoverflow.com/questions/65803149/blazor-onchange-event
                     { "bind-value:event", "onchange" },
                     { "onchange", EventCallback.Factory.Create(this, OnBlurValueChanged) },
-                    
+
                 });
         }
 
@@ -103,5 +103,11 @@
     private async Task HandleClick(MouseEventArgs e)
     {
         await OnClick.InvokeAsync(e);
+    }
+
+    public void Reset()
+    {
+        _bindValue = string.Empty;
+        ValueChanged.InvokeAsync(_bindValue);
     }
 }
