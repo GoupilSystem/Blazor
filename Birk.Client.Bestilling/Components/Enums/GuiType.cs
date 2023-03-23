@@ -6,7 +6,6 @@
         Dropdown,
         Title,
         Input,
-        Button,
-        Warning
+        Button
     }
 }

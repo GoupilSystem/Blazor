@@ -23,20 +23,9 @@
     {
         if (GuiType == GuiType.Title || GuiType == GuiType.Label)
         {
-            int extraTags = 0;
             builder.OpenElement(1, "div");
             builder.AddAttribute(2, "class", CssClass);
-            // We add icon and span tags, which means 2 extra elements to the component
-            if (!string.IsNullOrEmpty(Icon))
-            {
-                builder.OpenElement(3, "i");
-                builder.AddAttribute(4, "class", Icon);
-                builder.CloseElement();
-                builder.OpenElement(5, "span");
-                extraTags += 3;
-            }            
-            builder.AddContent(3 + extraTags, (MarkupString)Items[0]);
-            if (extraTags == 3) builder.CloseElement();
+            builder.AddContent(3, (MarkupString)Items[0]);
         }
 
         else if (GuiType == GuiType.Input)
