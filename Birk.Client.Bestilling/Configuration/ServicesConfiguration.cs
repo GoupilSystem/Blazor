@@ -24,6 +24,13 @@ namespace Birk.Client.Bestilling.Configuration
                 return new BarnService(new HttpService(httpClient, baseUrl, httpTimeoutSeconds), provider.GetRequiredService<ILogger<BarnService>>());
             });
 
+            services.AddTransient<IBestillingService>(provider =>
+            {
+                var baseUrl = baseUrlConfig.BestillingApiBase;
+                var httpClient = new HttpClient();
+                return new BestillingService(new HttpService(httpClient, baseUrl, httpTimeoutSeconds), provider.GetRequiredService<ILogger<BestillingService>>());
+            });
+
             services.AddTransient<IKodeverkService>(provider =>
             {
                 var baseUrl = baseUrlConfig.KodeverkApiBase;
