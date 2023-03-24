@@ -6,7 +6,6 @@ using Birk.Client.Bestilling.Models.Responses;
 using Birk.Client.Bestilling.Services.Interfaces;
 using Birk.Client.Bestilling.Utils.Constants;
 using Birk.Client.Bestilling.Utils.Mapper;
-using System.Text.Json;
 
 namespace Birk.Client.Bestilling.Services.Implementation
 {
