@@ -8,35 +8,55 @@ namespace Birk.Client.Bestilling.Utils.Constants
         {
             var dictionary = new Dictionary<string, string>
             {
-                //Panel: Vel bestillingstype
+                // Top panel
+                { "BirkId", "BIRK-ID: " },
+                { "Kjønn", "Kjønn: " },
+                { "Fødselsdato", "Fødselsdato: " },
+                { "Alder", "Alder: " },
+                
+                // Panel: Velg bestillingstype
                 { "BestillingstypeTitle", "Velg bestillingstype" },
             
-                //Panel: Hvilken kommune er ansvarlig for bestillingen?
+                // Panel: Hvilken kommune er ansvarlig for bestillingen?
                 { "KommuneTitle", "Hvilken kommune er ansvarlig for bestillingen?" },
-                { "VelgKommuneLabel", "Velg ansvarlig kommune" },
-                { "VelgBarnevernLabel", "Velg barneverntjeneste/bydel" },
-                { "KontaktpersonLabel", "Kontaktperson" },
+                { "VelgKommuneLabel", "Velg ansvarlig kommune " },
+                { "VelgBarnevernLabel", "Velg barneverntjeneste/bydel " },
+                { "KontaktpersonLabel", "Kontaktperson " },
                 { "KontaktpersonPlaceholder", "navn på kontaktperson" },
-                { "TelefonLabel", "Telefon/e-post" },
+                { "TelefonLabel", "Telefon/e-post " },
                 { "TelefonPlaceholder", "kontaktinfo" },
                 { "KontaktlederLabel", "Nærmeste leder til kontaktperson" },
                 { "KontaktlederPlaceholder", "navn på nærmeste leder" },
 
-                //Panel: Hvem gjelder bestillingen?
+                // Panel: Hvem gjelder bestillingen?
                 { "HvemGjelderTitle", "Hvem gjelder bestillingen?" },
                 { "HvemGjelderLabel", "Søk opp barn eller mor til ufødt barn i Birk. For å søke, bruk enten" +
-                    "<ul class=\"bullet-list\"><li>Fødselsnummer</li><li>D-nummer/DUF-nummer</li><li>Fornavn og etternavn</li><li>BirkId</li></ul>" +
-                    "Dersom barnet ikke er registrert fører søket deg til manuell registrering." },
+                    "<ul class=\"bullet-list\"><li>Fødselsnummer</li><li>D-nummer/DUF-nummer</li><li>Fornavn og etternavn</li><li>BirkId</li></ul>" },
 
-                //GUI
+                // Panel: Søk barn
+                { "SøkBarnTitle", "Søk opp barnet i Birk" },
+                { "SøkBarnLabel", "Søk opp barn eller mor til ufødt barn i Birk. Bruk fødselsnummer for å søke." +
+                    "<br><b>Dersom barnet ikke er registrert fører søket deg til manuell registrering.</b>"},
+                { "FødselsnummerPlaceholder", "fødselsnummer" },
+                { "SøkBarnButton", "Søk" },
+                { "FnrNotNumericValue", "OBS! Kun tall i dette feltet"},
+                { "FnrNot11DigitsWarning", "OBS! Fødselsnummer skal ha 11 siffer"},
+                { "PersonNotFoundWarning", "OBS! Ugyldig fødselsnummer"},
+                { "UkjentFnr", "Ukjent fødselsnummer"},
+
+                // Icons as markup string
+                { "RedStarTopSize8", "<i class=\"fas fa-star top size8\" style=\"color: red;\"></i>" }, // Red cannot pass as a class
+                { "WarningSize8", "<i class=\"fas fa-exclamation-circle size8\"></i>" },
+
+                // GUI
                 { "NoData", "No data" },
 
-                //HttpService problems
-                {"HttpProblemTitle", "Error while fetching object(s) of type: {0}" },
-                {"HttpProblemDetail", "An error occurred while making the {0} request: {1}" },
+                // HttpService problems
+                { "HttpProblemTitle", "Error while fetching object(s) of type: {0}" },
+                { "HttpProblemDetail", "An error occurred while making the {0} request: {1}" },
 
-                //GUI component problems
-                {"UnsupportedComponentType", "Unsupported component type: {0}" }
+                // GUI component problems
+                { "UnsupportedComponentType", "Unsupported component type: {0}" }
 
                 //for UTVIKLING: POC data structure
                 //{ "HenvisningVedtakStructure", "Question::0|RadioGroup::0|Label::1|Label::2|Dropdown::2|Label::3|Dropdown::3|Label::4|TextBox::4" },

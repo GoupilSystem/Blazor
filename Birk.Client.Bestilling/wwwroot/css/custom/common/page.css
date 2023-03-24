@@ -6,7 +6,7 @@
     height: 100vh;
 }
 
-.top-panel {
+.info-panel {
     width: 100%;
     height: 6.4rem;
     display: flex;
@@ -57,3 +57,7 @@
         height: 1.2rem;
         background: var(--buf-background-1);
     }
+
+i.fas.fa-exclamation-circle {
+    margin-right: 0.5rem;
+}

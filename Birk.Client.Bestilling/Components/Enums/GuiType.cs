@@ -5,6 +5,7 @@
         Label,
         Dropdown,
         Title,
-        Input
+        Input,
+        Button
     }
 }

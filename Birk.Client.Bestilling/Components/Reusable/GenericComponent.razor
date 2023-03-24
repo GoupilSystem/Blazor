@@ -1,33 +1,54 @@
-﻿@inherits BaseComponent;
+﻿@using Birk.Client.Bestilling.Components.Enums
+@using static Birk.Client.Bestilling.Components.Panels.SokBarn;
+
+@inherits BaseComponent;
 
 @DynamicFragment
 
 @code {
+    [Parameter]
+    public EventCallback<string> ValueChanged { get; set; }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClick { get; set; }
 
     [Parameter]
     public string Placeholder { get; set; }
+
+    private string _inputValue { get; set; }
 
     private RenderFragment DynamicFragment;
 
     private RenderFragment CreateComponent() => builder =>
     {
-        if (GuiType == Enums.GuiType.Title || GuiType == Enums.GuiType.Label)
+        if (GuiType == GuiType.Title || GuiType == GuiType.Label)
         {
             builder.OpenElement(1, "div");
             builder.AddAttribute(2, "class", CssClass);
             builder.AddContent(3, (MarkupString)Items[0]);
         }
-        else if (GuiType == Enums.GuiType.Input)
+
+        else if (GuiType == GuiType.Input)
         {
             builder.OpenElement(1, "input");
             builder.AddMultipleAttributes(2, 
                 new Dictionary<string, object>
                 {
                     { "class", CssClass },
-                    { "placeholder", Placeholder }
+                    { "placeholder", Placeholder },
+                    // Event triggered on content of input being changed
+                    { "value", _inputValue },
+                    { "bind-value", _inputValue },
+                    { "oninput", EventCallback.Factory.Create(this, OnInputValueChanged) },
+                    // Event triggered on quit input (ex. copy/paste _inputValue value and click directly on Søk button)
+                    // Ref: https://stackoverflow.com/questions/65803149/blazor-onchange-event
+                    { "bind-value:event", "onchange" },
+                    { "onchange", EventCallback.Factory.Create(this, OnBlurValueChanged) },
+
                 });
         }
-        else if (GuiType == Enums.GuiType.Dropdown)
+
+        else if (GuiType == GuiType.Dropdown)
         {
             builder.OpenElement(1, "MudAutocomplete");
             builder.AddMultipleAttributes(2, 
@@ -38,11 +59,48 @@
                 });
         }
 
+        else if (GuiType == GuiType.Button)
+        {
+            builder.OpenElement(1, "button");
+            builder.AddMultipleAttributes(2,
+                new Dictionary<string, object>
+                {
+                    { "class", CssClass },
+                    { "onclick", EventCallback.Factory.Create(this, OnClick) }
+                });
+            builder.AddContent(3, (MarkupString)Items[0]);
+        }
+
         builder.CloseElement();
     };
 
     protected override void OnInitialized()
     {
         DynamicFragment = CreateComponent();
+
+        StateHasChanged();
+    }
+
+    private void OnBlurValueChanged(ChangeEventArgs args)
+    {
+        _inputValue = args.Value?.ToString();
+        ValueChanged.InvokeAsync(_inputValue);
+    }
+
+    private void OnInputValueChanged(ChangeEventArgs args)
+    {
+        _inputValue = args.Value?.ToString();
+        ValueChanged.InvokeAsync(_inputValue);
+    }
+
+    private async Task HandleClick(MouseEventArgs e)
+    {
+        await OnClick.InvokeAsync(e);
+    }
+
+    public void Reset()
+    {
+        _inputValue = "";
+        ValueChanged.InvokeAsync(_inputValue);
     }
 }

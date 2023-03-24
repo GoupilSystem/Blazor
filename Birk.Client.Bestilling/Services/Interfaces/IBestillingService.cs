@@ -1,6 +1,6 @@
 ﻿using Birk.Client.Bestilling.Enums;
-using Birk.Client.Bestilling.Models;
 using Birk.Client.Bestilling.Models.Requests;
+using Birk.Client.Bestilling.Models;
 
 namespace Birk.Client.Bestilling.Services.Interfaces
 {
@@ -11,10 +11,5 @@ namespace Birk.Client.Bestilling.Services.Interfaces
         Task<DeleteStatus> Delete(int bestillingItemId);
         Task<BestillingItem> GetById(int id);
         Task<List<BestillingItem>> List();
-        Task<string[]> GetTypes();
-        Task GetKommunesAndBarneverntjenestes();
-        string[] GetKommunes(); 
-        string[] GetBarneverntjenestes();
-        string[] GetBarneverntjenestesByKommunenavn(string kommunenavn);
     }
 }

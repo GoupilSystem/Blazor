@@ -8,7 +8,11 @@
     width: 25.6rem;
     font-family: var(--font-family);
     font-style: normal;
-    font-weight: 400;
     font-size: var(--font-size-12px);
     line-height: 1.6rem;
 }
+
+    .buf-input.søkbarn {
+        font-size: var(--font-size-14px);
+        font-weight: 600;
+    }

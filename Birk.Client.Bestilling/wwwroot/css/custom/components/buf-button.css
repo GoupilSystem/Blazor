@@ -1,0 +1,24 @@
+﻿.buf-button {
+    /*up right down left*/
+    padding: 0rem 1.2rem 0rem 1.2rem;
+    background: var(--buf-pale-grey);
+    border: 1px solid var(--buf-green);
+    border-radius: 5px;
+    outline: none;
+    font-family: var(--font-family);
+    font-style: normal;    
+    line-height: 1.6rem;
+}
+
+    .buf-button.søkbarn {
+        margin-left: 0.5rem;
+        height: 4rem;
+        font-size: var(--font-size-28px);
+        font-weight: 400;
+    }
+
+    .buf-button.ukjentfnr {
+        margin-top: 0.4rem;
+        font-size: var(--font-size-14px);
+        height: 2.5rem;
+    }

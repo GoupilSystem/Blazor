@@ -42,9 +42,8 @@
         return Items.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
     }
 
-    public void ResetSelection()
+    public void SetSelected()
     {
-        SelectedBestilling = null;
+        SelectedBestilling = Items.Length > 1 ? null: Items[0];
     }
 }
-
