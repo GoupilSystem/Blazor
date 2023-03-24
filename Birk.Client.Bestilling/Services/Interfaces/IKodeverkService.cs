@@ -1,9 +1,4 @@
-﻿using Birk.Client.Bestilling.Enums;
-using Birk.Client.Bestilling.Models;
-using Birk.Client.Bestilling.Models.Dtos;
-using Birk.Client.Bestilling.Models.Requests;
-
-namespace Birk.Client.Bestilling.Services.Interfaces
+﻿namespace Birk.Client.Bestilling.Services.Interfaces
 {
     public interface IKodeverkService
     {
