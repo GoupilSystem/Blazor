@@ -13,8 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Birk.BestillingWeb.UnitTest
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Birk.BestillingWeb.IntegrationTests", "Birk.BestillingWeb.IntegrationTests\Birk.BestillingWeb.IntegrationTests.csproj", "{77DFE193-5567-40ED-A6B4-DDCCAFF5BC21}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Birk.BestillingWeb.FunctionalTests", "Brik.BestillingWeb.FunctionalTests\Birk.BestillingWeb.FunctionalTests.csproj", "{F2473C4F-E508-4B1A-8C85-86E4E97DC1A7}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "md", "md", "{22ED5C4E-1558-4D24-AA4D-601FCB6360BD}"
 	ProjectSection(SolutionItems) = preProject
 		.md = .md
@@ -38,10 +36,6 @@ Global
 		{77DFE193-5567-40ED-A6B4-DDCCAFF5BC21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77DFE193-5567-40ED-A6B4-DDCCAFF5BC21}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77DFE193-5567-40ED-A6B4-DDCCAFF5BC21}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F2473C4F-E508-4B1A-8C85-86E4E97DC1A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F2473C4F-E508-4B1A-8C85-86E4E97DC1A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F2473C4F-E508-4B1A-8C85-86E4E97DC1A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F2473C4F-E508-4B1A-8C85-86E4E97DC1A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,7 +44,6 @@ Global
 		{1736EDAF-CC63-4D43-9A96-19D15BC59614} = {205230BA-329B-4E12-B8EE-C05790982B8E}
 		{83F59A16-9845-42FE-A09A-8ED25C2C4ABC} = {8F365FA7-465A-47BB-BACA-214BFF9A9324}
 		{77DFE193-5567-40ED-A6B4-DDCCAFF5BC21} = {8F365FA7-465A-47BB-BACA-214BFF9A9324}
-		{F2473C4F-E508-4B1A-8C85-86E4E97DC1A7} = {8F365FA7-465A-47BB-BACA-214BFF9A9324}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1AC2886A-0FF6-4A57-A58B-A6B63B573E2C}

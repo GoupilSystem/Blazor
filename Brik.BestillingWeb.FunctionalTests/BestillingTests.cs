@@ -48,10 +48,10 @@ namespace Birk.BestillingWeb.FunctionalTests
             var cut = RenderComponent<Bestilling>();
 
             // Act
-            await cut.Instance.InitializeDropdowns();
+            await cut.Instance.InitializeDropdownsAsync();
 
             // Assert
-            Assert.Equal(new[] { "Type1", "Type2" }, cut.Instance._bestillingTypes);
+            Assert.Equal(new[] { "Type1", "Type2" }, cut.Instance.BestillingsTypes);
         }
     }
 }
