@@ -31,8 +31,7 @@ namespace Birk.Client.Bestilling.Utils.Constants
                 // Panel: Hvem gjelder bestillingen?
                 { "HvemGjelderTitle", "Hvem gjelder bestillingen?" },
                 { "HvemGjelderLabel", "Søk opp barn eller mor til ufødt barn i Birk. For å søke, bruk enten" +
-                    "<ul class=\"bullet-list\"><li>Fødselsnummer</li><li>D-nummer/DUF-nummer</li><li>Fornavn og etternavn</li><li>BirkId</li></ul>" +
-                    "Dersom barnet ikke er registrert fører søket deg til manuell registrering." },
+                    "<ul class=\"bullet-list\"><li>Fødselsnummer</li><li>D-nummer/DUF-nummer</li><li>Fornavn og etternavn</li><li>BirkId</li></ul>" },
 
                 // Panel: Søk barn
                 { "SøkBarnTitle", "Søk opp barnet i Birk" },
