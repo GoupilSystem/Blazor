@@ -22,15 +22,15 @@
         <div class="main-panel">
             <div class="active @(_isHenvisningSelected ? "" : "minimized" )">
                 <GenericComponent GuiType=@GuiType.Title Items=@(new[] { Language.NO["BestillingstypeTitle"] }) CssExtra="bestillingstype" />
-                <DropdownComponent GuiType=@GuiType.Dropdown Items=_bestillingTypes OnSelectionChanged=@OnBestillingDropdownSelectionChanged />
+                <DropdownComponent GuiType=@GuiType.Dropdown Items=BestillingsTypes OnSelectionChanged=@OnBestillingDropdownSelectionChanged />
 
                 @if (_isHenvisningSelected)
                 {
                     <GenericComponent GuiType=@GuiType.Title Items=@(new[] { Language.NO["KommuneTitle"] }) />
                     <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["VelgKommuneLabel"] + Language.NO["RedStarTopSize8"] }) />
-                    <DropdownComponent GuiType=@GuiType.Dropdown Items=_kommunes OnSelectionChanged=@OnKommuneDropdownSelectionChanged />
+                    <DropdownComponent GuiType=@GuiType.Dropdown Items=Kommunes OnSelectionChanged=@OnKommuneDropdownSelectionChanged />
                     <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["VelgBarnevernLabel"] + Language.NO["RedStarTopSize8"] }) />
-                    <DropdownComponent GuiType=@GuiType.Dropdown Items=_barnOgPersoneverntjenestes @ref="_barnOgPersoneverntjenesteDropdown" />
+                    <DropdownComponent GuiType=@GuiType.Dropdown Items=BarnOgPersoneverntjenestes @ref="_barnOgPersoneverntjenesteDropdown" />
 
                     @for (int i = 0; i < 2; i++)
                     {
@@ -53,13 +53,14 @@
 }
 
 @code {
+    // Public for tests
+    public string[] BestillingsTypes { get; set; }
+    public string[] Kommunes { get; set; }
+    public string[] BarnOgPersoneverntjenestes { get; set; }
+
     private DropdownComponent _barnOgPersoneverntjenesteDropdown;
 
     private BarnOgPersonDto _barnOgPerson = new();
-
-    private string[] _bestillingTypes;
-    private string[] _kommunes;
-    private string[] _barnOgPersoneverntjenestes;
 
     private string _selectedBestilling = null;
     private string _selectedKommune = null;
@@ -80,7 +81,7 @@
     {
         Logger.LogInformation("Entering {Method}", nameof(InitializeDropdownsAsync));
 
-        _bestillingTypes = await KodeverkService.GetTypes();
+        BestillingsTypes = await KodeverkService.GetTypes();
         _isLoading = true;
 
         Logger.LogInformation("Exiting {Method}", nameof(InitializeDropdownsAsync));
@@ -89,7 +90,7 @@
     private async Task OnBestillingDropdownSelectionChanged(string selectedBestilling)
     {
         _selectedBestilling = selectedBestilling;
-        _isHenvisningSelected = _bestillingTypes.FirstOrDefault() == _selectedBestilling;
+        _isHenvisningSelected = BestillingsTypes.FirstOrDefault() == _selectedBestilling;
 
         if (_isHenvisningSelected)
         {
@@ -98,13 +99,13 @@
                 await KodeverkService.GetKommunesAndBarneverntjenestes();
                 _isKommunesAndBarneverntjenestesSet = true;
             }
-            _kommunes = KodeverkService.GetKommunes();
-            _barnOgPersoneverntjenestes = KodeverkService.GetBarneverntjenestesByKommunenavn("");
+            Kommunes = KodeverkService.GetKommunes();
+            BarnOgPersoneverntjenestes = KodeverkService.GetBarneverntjenestesByKommunenavn("");
         }
         else
         {
-            _kommunes = null;
-            _barnOgPersoneverntjenestes = null;
+            Kommunes = null;
+            BarnOgPersoneverntjenestes = null;
         }
 
         StateHasChanged();
@@ -113,10 +114,10 @@
     private async Task OnKommuneDropdownSelectionChanged(string selectedKommune)
     {
         _selectedKommune = selectedKommune;
-        _barnOgPersoneverntjenestes = KodeverkService.GetBarneverntjenestesByKommunenavn(_selectedKommune);
+        BarnOgPersoneverntjenestes = KodeverkService.GetBarneverntjenestesByKommunenavn(_selectedKommune);
 
         // Update the items in the Barneverntjeneste dropdown
-        _barnOgPersoneverntjenesteDropdown.Items = _barnOgPersoneverntjenestes;
+        _barnOgPersoneverntjenesteDropdown.Items = BarnOgPersoneverntjenestes;
         // Displays automaticaly the only possible item or nothing if more than one
         _barnOgPersoneverntjenesteDropdown.SetSelected();
 
