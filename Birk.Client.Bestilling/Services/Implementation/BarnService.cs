@@ -10,7 +10,7 @@ namespace Birk.Client.Bestilling.Services.Implementation
         private readonly ILogger<BarnService> _logger;
 
         private SimplifiedKommuneDto[] _kommunes;
-        private SimplifiedBarneverntjenesteDto[] _barneverntjenestes;
+        private SimplifiedBvtjenesteDto[] _barneverntjenestes;
 
         public BarnService(IHttpService httpService, ILogger<BarnService> logger)
         {

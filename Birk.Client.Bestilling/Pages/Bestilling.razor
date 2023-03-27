@@ -28,9 +28,12 @@
                 {
                     <GenericComponent GuiType=@GuiType.Title Items=@(new[] { Language.NO["KommuneTitle"] }) />
                     <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["VelgKommuneLabel"] + Language.NO["RedStarTopSize8"] }) />
-                    <DropdownComponent GuiType=@GuiType.Dropdown Items=Kommunes OnSelectionChanged=@OnKommuneDropdownSelectionChanged />
+                    <DropdownComponent GuiType=@GuiType.Dropdown Items=Kommunes OnSelectionChanged=@OnKommuneDropdownSelectionChanged
+                        @ref="_kommuneDropdown" />
                     <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["VelgBarnevernLabel"] + Language.NO["RedStarTopSize8"] }) />
-                    <DropdownComponent GuiType=@GuiType.Dropdown Items=BarnOgPersoneverntjenestes @ref="_barnOgPersoneverntjenesteDropdown" />
+                    <DropdownComponent GuiType=@GuiType.Dropdown Items=Bvtjenestes 
+                        @ref="_btDropdown" />
+                    @*OnSelectionChanged = @OnBarneverntjenesteDropdownSelectionChanged*@
 
                     @for (int i = 0; i < 2; i++)
                     {
@@ -56,19 +59,21 @@
     // Public for tests
     public string[] BestillingsTypes { get; set; }
     public string[] Kommunes { get; set; }
-    public string[] BarnOgPersoneverntjenestes { get; set; }
+    public string[] Bvtjenestes { get; set; }
 
-    private DropdownComponent _barnOgPersoneverntjenesteDropdown;
+    private DropdownComponent _kommuneDropdown;
+    private DropdownComponent _btDropdown;
 
     private BarnOgPersonDto _barnOgPerson = new();
 
     private string _selectedBestilling = null;
     private string _selectedKommune = null;
-    private string _selectedBernverntjeneste = null;
+    private string _selectedBvtjeneste = null;
 
     private bool _isLoading;
     private bool _isHenvisningSelected;
-    private bool _isKommunesAndBarneverntjenestesSet;
+    private bool _isKommunesAndBvtjenestesSet;
+    private bool _selectBvtjenesteWhenNoKommune;
 
     protected async override Task OnInitializedAsync()
     {
@@ -94,18 +99,18 @@
 
         if (_isHenvisningSelected)
         {
-            if (!_isKommunesAndBarneverntjenestesSet)
+            if (!_isKommunesAndBvtjenestesSet)
             {
-                await KodeverkService.GetKommunesAndBarneverntjenestes();
-                _isKommunesAndBarneverntjenestesSet = true;
+                await KodeverkService.GetKommunesAndBvtjenestes();
+                _isKommunesAndBvtjenestesSet = true;
             }
             Kommunes = KodeverkService.GetKommunes();
-            BarnOgPersoneverntjenestes = KodeverkService.GetBarneverntjenestesByKommunenavn("");
+            Bvtjenestes = KodeverkService.GetBvtjenestesByKommunenavn("");
         }
         else
         {
             Kommunes = null;
-            BarnOgPersoneverntjenestes = null;
+            Bvtjenestes = null;
         }
 
         StateHasChanged();
@@ -113,15 +118,43 @@
 
     private async Task OnKommuneDropdownSelectionChanged(string selectedKommune)
     {
-        _selectedKommune = selectedKommune;
-        BarnOgPersoneverntjenestes = KodeverkService.GetBarneverntjenestesByKommunenavn(_selectedKommune);
+        // If OnKommuneDropdownSelectionChanged() is called from OnBarneverntjenesteDropdownSelectionChanged
+        // We don't have to re-update Barnverntjenestedropdown
+        if (_selectBvtjenesteWhenNoKommune)
+        {
+            _selectBvtjenesteWhenNoKommune = false;
+        }
+        // Otherwise OnKommuneDropdownSelectionChanged() is called from a item change in KommuneDropdown,
+        // we update the items in the Barneverntjeneste dropdown
+        else
+        {
+            _selectedKommune = selectedKommune;
+            Bvtjenestes = KodeverkService.GetBvtjenestesByKommunenavn(_selectedKommune);
+            _btDropdown.Items = Bvtjenestes;
+            // Displays automaticaly the only possible item or nothing if more than one
+            _btDropdown.SetSelected();
+            StateHasChanged();
+        }
+    }
 
-        // Update the items in the Barneverntjeneste dropdown
-        _barnOgPersoneverntjenesteDropdown.Items = BarnOgPersoneverntjenestes;
-        // Displays automaticaly the only possible item or nothing if more than one
-        _barnOgPersoneverntjenesteDropdown.SetSelected();
+    private async Task OnBarneverntjenesteDropdownSelectionChanged(string selectedBarneverntjeneste)
+    {
+        // If no selecte kommune, chosing an barneverntjeneste automatically sets kommune dropdown to the right item
+        if (string.IsNullOrEmpty(_selectedKommune))
+        {
+            _selectBvtjenesteWhenNoKommune = true;
 
-        StateHasChanged();
+            _selectedBvtjeneste = selectedBarneverntjeneste;
+            var matchingKommuneIndex = KodeverkService.GetKommuneIndexByBvtjeneste(selectedBarneverntjeneste);
+
+            if (matchingKommuneIndex != -1)
+            {
+                // Update the items in the Kommune dropdown
+                _kommuneDropdown.SetSelected(matchingKommuneIndex);
+            }
+
+            StateHasChanged();
+        }
     }
 
     private void HandleBarnUpdated(BarnOgPersonDto barnOgPerson)
