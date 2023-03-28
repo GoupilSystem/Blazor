@@ -3,9 +3,10 @@
     public interface IKodeverkService
     {
         Task<string[]> GetTypes();
-        Task GetKommunesAndBarneverntjenestes();
-        string[] GetKommunes(); 
-        string[] GetBarneverntjenestes();
-        string[] GetBarneverntjenestesByKommunenavn(string kommunenavn);
+        Task GetKommunesAndBvtjenestes();
+        string[] GetKommunes();
+        int GetKommuneIndexByBvtjeneste(string selectedBvtjeneste);
+        string[] GetBvtjenetes();
+        string[] GetBvtjenestesByKommunenavn(string kommunenavn);
     }
 }

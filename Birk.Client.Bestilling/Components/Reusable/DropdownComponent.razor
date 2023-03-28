@@ -16,7 +16,7 @@
         get => _selectedBestilling;
         set
         {
-            if (value == _selectedBestilling)
+           if (value == _selectedBestilling)
             {
                 return;
             }
@@ -42,8 +42,15 @@
         return Items.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
     }
 
-    public void SetSelected()
+    public void SetSelected(int? selectedItemIndex = null)
     {
-        SelectedBestilling = Items.Length > 1 ? null: Items[0];
+        if (selectedItemIndex == null)
+        { 
+            SelectedBestilling = Items.Length > 1 ? null : Items[0]; 
+        }
+        else
+        {
+            SelectedBestilling = Items[selectedItemIndex ?? 0];
+        }
     }
 }

@@ -71,10 +71,10 @@ namespace Birk.BestillingWeb.IntegrationTests
                 new SimplifiedKommuneDto { Navn = "Kommune 2"}
             };
 
-            var expectedBarneverntjenestes = new List<SimplifiedBarneverntjenesteDto>
+            var expectedBarneverntjenestes = new List<SimplifiedBvtjenesteDto>
             {
-                new SimplifiedBarneverntjenesteDto { EnhetsnavnOgBydelsnavn = "Tjeneste 1", Kommunenavns = new[] { "Kommune 1" } },
-                new SimplifiedBarneverntjenesteDto { EnhetsnavnOgBydelsnavn = "Tjeneste 2", Kommunenavns = new[] { "Kommune 2" } },
+                new SimplifiedBvtjenesteDto { EnhetsnavnOgBydelsnavn = "Tjeneste 1", Kommunenavns = new[] { "Kommune 1" } },
+                new SimplifiedBvtjenesteDto { EnhetsnavnOgBydelsnavn = "Tjeneste 2", Kommunenavns = new[] { "Kommune 2" } },
             };
 
             // Using WireMock.Server package
@@ -90,12 +90,12 @@ namespace Birk.BestillingWeb.IntegrationTests
                 .WithBodyAsJson(expectedBarneverntjenestes));
 
             // Act
-            await _bestillingService.GetKommunesAndBarneverntjenestes();
+            await _bestillingService.GetKommunesAndBvtjenestes();
 
             // Assert
             // Check that the _kommunes and _barneverntjenestes fields are not null and have the expected data
             string[] actualKommunes = _bestillingService.GetKommunes();
-            string[] actualBarneverntjenestes = _bestillingService.GetBarneverntjenestes();
+            string[] actualBarneverntjenestes = _bestillingService.GetBvtjenetes();
 
             Assert.NotNull(actualKommunes);
             Assert.NotNull(actualBarneverntjenestes);
@@ -124,12 +124,12 @@ namespace Birk.BestillingWeb.IntegrationTests
                 .RespondWith(Response.Create().WithStatusCode(HttpStatusCode.InternalServerError));
 
             // Act
-            await _bestillingService.GetKommunesAndBarneverntjenestes();
+            await _bestillingService.GetKommunesAndBvtjenestes();
 
             // Assert
             // Check that the _kommunes and _barneverntjenestes fields are not null and have the expected data
             string[] actualKommunes = _bestillingService.GetKommunes();
-            string[] actualBarneverntjenestes = _bestillingService.GetBarneverntjenestes();
+            string[] actualBarneverntjenestes = _bestillingService.GetBvtjenetes();
 
             Assert.NotNull(actualKommunes);
             Assert.NotNull(actualBarneverntjenestes);
