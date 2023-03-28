@@ -33,9 +33,9 @@
                         @ref="_kommuneDropdown" />
                     <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["VelgBarnevernLabel"] + Language.NO["RedStarTopSize8"] }) />
                     <DropdownComponent GuiType=@GuiType.Dropdown Items=Bvtjenestes
-                        
+                        OnSelectionChanged=@OnBvtjenesteDropdownSelectionChanged    
                         @ref="_bvtjenesteDropdown" />
-                    @*OnSelectionChanged = @OnBvtjenesteDropdownSelectionChanged*@
+                    
                     @for (int i = 0; i < 2; i++)
                     {
                         <ContactRow ContactType=@(i == 0 ? ContactType.Person : ContactType.Leder) />
@@ -132,10 +132,11 @@
             _selectedKommune = selectedKommune;
             Bvtjenestes = KodeverkService.GetBvtjenestesByKommunenavn(_selectedKommune);
             _bvtjenesteDropdown.Items = Bvtjenestes;
+
             // Displays automaticaly the only possible item or nothing if more than one
-            _bvtjenesteDropdown.SetSelected();
+            _bvtjenesteDropdown.SelectedBestilling = Bvtjenestes[0];
+
             
-            StateHasChanged();
         }
     }
 
@@ -149,14 +150,13 @@
             _selectedBvtjeneste = selectedBarneverntjeneste;
             var matchingKommuneIndex = KodeverkService.GetKommuneIndexByBvtjeneste(selectedBarneverntjeneste);
 
-        //    if (matchingKommuneIndex != -1)
-        //    {
-        //        // Update the items in the Kommune dropdown
-        //        _kommuneDropdown.SetSelected(matchingKommuneIndex);
-        //    }
-
-        //    StateHasChanged();
+            if (matchingKommuneIndex != -1)
+            {
+                // Update the items in the Kommune dropdown
+                _kommuneDropdown.SetSelected(matchingKommuneIndex);
+            }
         }
+        StateHasChanged();
     }
 
     private void HandleBarnUpdated(BarnOgPersonDto barnOgPerson)
