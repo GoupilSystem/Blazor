@@ -5,12 +5,12 @@
 
 <div class="buf-row">
     <div>
-        <GenericComponent GuiType=@GuiType.Label Items=@(new[] { _contactLabel  + _starIcon}) />
-        <GenericComponent GuiType=@GuiType.Input Placeholder=@_contactPlaceholder />
+        <GenericComponent GuiType=GuiType.Label Content=@($"{_contactLabel}{_starIcon}") />
+        <GenericComponent GuiType=GuiType.Input Placeholder=@_contactPlaceholder />
     </div>
     <div>
-        <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["TelefonLabel"] + _starIcon }) />
-        <GenericComponent GuiType=@GuiType.Input Placeholder=@(StringHelper.BuildPlaceholder(Language.NO["TelefonPlaceholder"])) />
+        <GenericComponent GuiType=GuiType.Label Content=@($"TelefonLabel{_starIcon}") />
+        <GenericComponent GuiType=GuiType.Input Placeholder="Telefon" />
     </div>
 </div>
 
@@ -18,7 +18,7 @@
     [Parameter]
     public ContactType ContactType { get; set; }
 
-    private string _contactLabel => Language.NO[$"Kontakt{ContactType.ToString().ToLower()}Label"];
-    private string _contactPlaceholder => StringHelper.BuildPlaceholder(Language.NO[$"Kontakt{ContactType.ToString().ToLower()}Placeholder"]);
-    private string _starIcon => ContactType == ContactType.Person ? Language.NO["RedStarTopSize8"] : "";
+    private string _contactLabel => $"Kontakt{ContactType.ToString().ToLower()}Label";
+    private string _contactPlaceholder => $"Kontakt{ContactType.ToString().ToLower()}";
+    private string _starIcon => ContactType == ContactType.Person ? "|RedStarTopSize8" : "";
 }

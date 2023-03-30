@@ -1,5 +1,6 @@
 ﻿@using Birk.Client.Bestilling.Components.Enums;
-@using static Birk.Client.Bestilling.Components.Panels.SokBarn;
+@using Birk.Client.Bestilling.Utils.Constants;
+@using Birk.Client.Bestilling.Utils.Helpers;
 @using Microsoft.AspNetCore.Components;
 
 @inherits BaseComponent;
@@ -19,6 +20,7 @@
     //[Parameter]
     //public ElementReference DropdownElement { get; set; }
 
+    private string _placeholderValue { get; set; }
     private string _inputValue { get; set; }
 
     private RenderFragment DynamicFragment;
@@ -29,7 +31,7 @@
         {
             builder.OpenElement(1, "div");
             builder.AddAttribute(2, "class", CssClass);
-            builder.AddContent(3, (MarkupString)Items[0]);
+            builder.AddContent(3, (MarkupString)Content);
         }
 
         else if (GuiType == GuiType.Input)
@@ -39,7 +41,7 @@
                 new Dictionary<string, object>
                 {
                     { "class", CssClass },
-                    { "placeholder", Placeholder },
+                    { "placeholder", _placeholderValue },
                     // Event triggered on content of input being changed
                     { "value", _inputValue },
                     { "bind-value", _inputValue },
@@ -47,8 +49,7 @@
                     // Event triggered on quit input (ex. copy/paste _inputValue value and click directly on Søk button)
                     // Ref: https://stackoverflow.com/questions/65803149/blazor-onchange-event
                     { "bind-value:event", "onchange" },
-                    { "onchange", EventCallback.Factory.Create(this, OnBlurValueChanged) },
-
+                    { "onchange", EventCallback.Factory.Create(this, OnBlurValueChanged) }
                 });
         }
 
@@ -59,7 +60,7 @@
                 new Dictionary<string, object>
                 {
                     { "class", CssClass },
-                    { "placeholder", Placeholder }
+                    { "placeholder", _placeholderValue }
                     //{ "ref", Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck(DropdownElement) }
                 });
         }
@@ -73,7 +74,7 @@
                     { "class", CssClass },
                     { "onclick", EventCallback.Factory.Create(this, OnClick) }
                 });
-            builder.AddContent(3, (MarkupString)Items[0]);
+            builder.AddContent(3, (MarkupString)Content);
         }
 
         builder.CloseElement();
@@ -81,9 +82,14 @@
 
     protected override void OnInitialized()
     {
-        DynamicFragment = CreateComponent();
+        base.OnInitialized();
 
-        StateHasChanged();
+        if (!string.IsNullOrEmpty(Placeholder))
+        { 
+            _placeholderValue = StringHelper.BuildPlaceholder(Language.NO[$"{Placeholder}Placeholder"]); 
+        }
+
+        DynamicFragment = CreateComponent();
     }
 
     private void OnBlurValueChanged(ChangeEventArgs args)

@@ -44,6 +44,15 @@ namespace Birk.Client.Bestilling.Utils.Constants
                 { "PersonNotFoundWarning", "OBS! Ugyldig fødselsnummer"},
                 { "UkjentFnr", "Ukjent fødselsnummer"},
 
+                // Panel: Barnopplysning
+                { "BarnInfoTitle", "Informasjon om barnet" },
+                { "Fornavn", "Fornavn"},
+                { "FornavnPlaceholder", "fornavn"},
+                { "Etternavn", "Etternavn"},
+                { "EtternavnPlaceholder", "etternavn"},
+                { "BarnBirkId", "BirkId"},
+                { "BirkIdPlaceholder", "BirkId"},
+
                 // Icons as markup string
                 { "RedStarTopSize8", "<i class=\"fas fa-star top size8\" style=\"color: red;\"></i>" }, // Red cannot pass as a class
                 { "WarningSize8", "<i class=\"fas fa-exclamation-circle size8\"></i>" },

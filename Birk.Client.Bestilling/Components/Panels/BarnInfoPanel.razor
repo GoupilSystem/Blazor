@@ -1,0 +1,32 @@
+﻿@using Birk.Client.Bestilling.Components.Enums;
+@using Birk.Client.Bestilling.Components.Reusable
+@using Birk.Client.Bestilling.Utils.Constants;
+@using Birk.Client.Bestilling.Utils.Helpers;
+
+<div>
+    <GenericComponent GuiType=GuiType.Title Content="BarnInfoTitle" />
+    <GenericComponent GuiType=GuiType.Label Content="Fornavn|RedStarTopSize8" />
+    <GenericComponent GuiType=GuiType.Input Placeholder="Fornavn"
+                      ValueChanged=HandleFornavnChanged @ref="_fornavnInput" />
+    <GenericComponent GuiType=GuiType.Label Content="Etternavn|RedStarTopSize8" />
+    <GenericComponent GuiType=GuiType.Input Placeholder="Etternavn"
+                      ValueChanged=HandleEtternavnChanged @ref="_etternavnInput" />
+    <GenericComponent GuiType=GuiType.Label Content="BarnBirkId" />
+    <GenericComponent GuiType=GuiType.Input Placeholder="BirkId"
+                      ValueChanged=HandleBirkIdChanged @ref="_birkIdInput" />
+</div>
+
+@code {
+    private GenericComponent _fornavnInput;
+    private GenericComponent _etternavnInput;
+    private GenericComponent _birkIdInput;
+
+    private void HandleFornavnChanged(string value)
+    { }
+
+    private void HandleEtternavnChanged(string value)
+    { }
+
+    private void HandleBirkIdChanged(string value)
+    { }
+}

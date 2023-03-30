@@ -21,13 +21,13 @@
 
         <div class="main-panel">
             <div class="active @(_isHenvisningSelected ? "" : "minimized" )">
-                <GenericComponent GuiType=@GuiType.Title Items=@(new[] { Language.NO["BestillingstypeTitle"] }) CssExtra="bestillingstype" />
-                <DropdownComponent GuiType=@GuiType.Dropdown Items=BestillingsTypes OnSelectionChanged=@OnBestillingDropdownSelectionChanged />
+                <GenericComponent GuiType=GuiType.Title Content="BestillingstypeTitle" CssExtra="bestillingstype" />
+                <DropdownComponent GuiType=GuiType.Dropdown Items=BestillingsTypes OnSelectionChanged=OnBestillingDropdownSelectionChanged />
 
                 @if (_isHenvisningSelected)
                 {
-                    <GenericComponent GuiType=@GuiType.Title Items=@(new[] { Language.NO["KommuneTitle"] }) />
-                    <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["VelgKommuneLabel"] + Language.NO["RedStarTopSize8"] }) />
+                    <GenericComponent GuiType=GuiType.Title Content="KommuneTitle" />
+                    <GenericComponent GuiType=GuiType.Label Content="VelgKommuneLabel|RedStarTopSize8" />
                     <MudAutocomplete T="string" Class="buf-dropdown"
                              SearchFunc=SearchKommune
                              ValueChanged=OnKommuneDropdownSelectionChanged
@@ -35,8 +35,8 @@
                              ResetValueOnEmptyText=true
                              CoerceText=true CoerceValue=true @ref=_kommuneDropdown />
 
-                    <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["VelgBarnevernLabel"] + Language.NO["RedStarTopSize8"] }) />
-                    @*<DropdownComponent GuiType=@GuiType.Dropdown Items=Bvtjenestes
+                    <GenericComponent GuiType=GuiType.Label Content="VelgBarnevernLabel|RedStarTopSize8" />
+                    @*<DropdownComponent GuiType=GuiType.Dropdown Items=Bvtjenestes
             OnSelectionChanged=@OnBvtjenesteDropdownSelectionChanged
             @ref="_bvtjenesteDropdown" />*@
 
@@ -54,13 +54,15 @@
                         <ContactRow ContactType=@(i == 0 ? ContactType.Person : ContactType.Leder) />
                     }
 
-                    <GenericComponent GuiType=@GuiType.Title Items=@(new[] { Language.NO["HvemGjelderTitle"] }) />
-                    <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["HvemGjelderLabel"] }) />
+                    <GenericComponent GuiType=GuiType.Title Content="HvemGjelderTitle" />
+                    <GenericComponent GuiType=GuiType.Label Content="HvemGjelderLabel" />
 
-                    <GenericComponent GuiType=@GuiType.Title Items=@(new[] { Language.NO["SøkBarnTitle"] }) />
-                    <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["SøkBarnLabel"] }) />
+                    <GenericComponent GuiType=GuiType.Title Content="SøkBarnTitle" />
+                    <GenericComponent GuiType=GuiType.Label Content="SøkBarnLabel" />
 
-                    <SokBarn BarnOgPerson="_barnOgPerson" OnBarnUpdated="@HandleBarnUpdated" />
+                    <SokBarn BarnOgPerson=_barnOgPerson OnBarnUpdated=HandleBarnUpdated />
+
+                    <BarnInfoPanel />
                 }
             </div>
             <div class="footer" />

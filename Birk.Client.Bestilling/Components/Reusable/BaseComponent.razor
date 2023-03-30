@@ -1,14 +1,15 @@
-﻿@using Birk.Client.Bestilling.Components.Enums
+﻿@using Birk.Client.Bestilling.Components.Enums;
+@using Birk.Client.Bestilling.Utils.Constants;
 
 @code {
     [Parameter]
     public GuiType GuiType { get; set; }
 
     [Parameter]
-    public string CssExtra { get; set; } = "";
+    public string CssExtra { get; set; }
 
     [Parameter]
-    public string[] Items { get; set; }
+    public string Content { get; set; }
 
     [Parameter]
     public string Icon { get; set; }
@@ -17,6 +18,8 @@
 
     protected override void OnInitialized()
     {
-        base.OnInitialized();
+        Content = string.IsNullOrEmpty(Content)
+            ? ""
+            : string.Concat(Content.Split('|').Select(s => Language.NO[s]));
     }
 }

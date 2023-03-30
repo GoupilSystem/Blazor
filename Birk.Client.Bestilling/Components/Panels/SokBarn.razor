@@ -10,21 +10,19 @@
 <div>
 
     <div style="display: flex; flex-direction: row;">
-        <GenericComponent GuiType="@GuiType.Input" Placeholder='@(StringHelper.BuildPlaceholder(Language.NO["FødselsnummerPlaceholder"]))'
-                          ValueChanged="@HandleFnrChanged" CssExtra="søkbarn" @ref="_fnrInput" />
-        <GenericComponent GuiType=@GuiType.Button Items=@(new[] { Language.NO["SøkBarnButton"] }) OnClick=@HandleSøkBarnButtonClick CssExtra="søkbarn" />
+        <GenericComponent GuiType=GuiType.Input Placeholder="Fødselsnummer" ValueChanged=HandleFnrChanged CssExtra="søkbarn" @ref="_fnrInput" />
+        <GenericComponent GuiType=GuiType.Button Content="SøkBarnButton" OnClick=HandleSøkBarnButtonClick CssExtra="søkbarn" />
 
         @foreach (KeyValuePair<string, bool> warning in _warnings)
         {
             if (warning.Value)
             {
-                @*<GenericComponent GuiType="GuiType.Label" Items=@(new[] { Language.NO[warning.Key] }) Icon="fas fa-exclamation-circle" CssExtra="warning" />*@
-                <GenericComponent GuiType="GuiType.Label" Items=@(new[] { Language.NO["WarningSize8"] + Language.NO[warning.Key]}) CssExtra="warning" />
+                <GenericComponent GuiType=GuiType.Label Content=@($"WarningSize8|{warning.Key}") CssExtra="warning" />
             }
         }
     </div>
 
-    <GenericComponent GuiType=@GuiType.Button Items=@(new[] { Language.NO["UkjentFnr"] }) OnClick=@HandleUkjentFnrButtonClick CssExtra="ukjentfnr" />
+    <GenericComponent GuiType=GuiType.Button Content="UkjentFnr" OnClick=HandleUkjentFnrButtonClick CssExtra="ukjentfnr" />
 
 </div>
 
