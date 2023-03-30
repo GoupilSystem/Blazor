@@ -28,27 +28,27 @@
                 {
                     <GenericComponent GuiType=@GuiType.Title Items=@(new[] { Language.NO["KommuneTitle"] }) />
                     <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["VelgKommuneLabel"] + Language.NO["RedStarTopSize8"] }) />
-                    <DropdownComponent GuiType=@GuiType.Dropdown Items=Kommunes 
-                        OnSelectionChanged=@OnKommuneDropdownSelectionChanged
-                        @ref="_kommuneDropdown" />
+                    <MudAutocomplete T="string" Class="buf-dropdown"
+                             SearchFunc=SearchKommune
+                             ValueChanged=OnKommuneDropdownSelectionChanged
+                             Value=_selectedKommune MaxItems="null"
+                             ResetValueOnEmptyText=true
+                             CoerceText=true CoerceValue=true @ref=_kommuneDropdown />
+
                     <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["VelgBarnevernLabel"] + Language.NO["RedStarTopSize8"] }) />
-                    <DropdownComponent GuiType=@GuiType.Dropdown Items=Bvtjenestes
-                        OnSelectionChanged=@OnBvtjenesteDropdownSelectionChanged
-                               @ref="_bvtjenesteDropdown" />
+                    @*<DropdownComponent GuiType=@GuiType.Dropdown Items=Bvtjenestes
+            OnSelectionChanged=@OnBvtjenesteDropdownSelectionChanged
+            @ref="_bvtjenesteDropdown" />*@
 
-                    <MudAutocomplete T="string" Class="buf-dropdown" 
-                            SearchFunc=TrySearchKommune
-                            ValueChanged=OnTryKommuneDropdownSelectionChanged
-                             Value=selectedTryKommune MaxItems="null"
-                             ResetValueOnEmptyText=true
-                             CoerceText=true CoerceValue=true @ref=tryKommuneDropdown/>
 
-                    <MudAutocomplete T="string" Class="buf-dropdown" SearchFunc=TrySearchBarn
-                             ValueChanged=OnTryBarnDropdownSelectionChanged
-                             Value=selectedTryBarn MaxItems="null"
+
+                    <MudAutocomplete T="string" Class="buf-dropdown"
+                             SearchFunc=SearchBvtjeneste
+                             ValueChanged=OnBvtjenesteDropdownSelectionChanged
+                             Value=_selectedBvtjeneste MaxItems="null"
                              ResetValueOnEmptyText=true
-                             CoerceText=true CoerceValue=true @ref=tryBarnDropdown/>
-                    
+                             CoerceText=true CoerceValue=true @ref=_bvtjenesteDropdown />
+
                     @for (int i = 0; i < 2; i++)
                     {
                         <ContactRow ContactType=@(i == 0 ? ContactType.Person : ContactType.Leder) />
@@ -71,111 +71,8 @@
 
 @code {
 
-    private MudAutocomplete<string> tryBarnDropdown;
-    private MudAutocomplete<string> tryKommuneDropdown;
-    private string selectedTryKommune = "";
-    private string[] tryKommunes = new[]
-    {
-        "kommune1",
-        "kommune2",
-        "kommune3",
-        "kommune4",
-        "kommune5"
-    };
-
-    private string selectedTryBarn = "";
-    private string[] totalBarns = new[]
-    {
-        "barn1kommune1", "barn2kommune1", "barn3kommune1", "barn4kommune1",
-        "barn1kommune2", "barn2kommune2", "barn3kommune2",
-        "barn1kommune3", "barn1kommune4",
-        "barn1kommune5", "barn2kommune5"
-    };
-    private string[] tryBarns = new[] { "" };
-
-    private async Task<IEnumerable<string>> TrySearchKommune(string value)
-    {
-        // if text is null or empty, show complete list
-        if (string.IsNullOrEmpty(value) || selectedTryKommune == value)
-        {
-            return tryKommunes;
-        }
-
-        return tryKommunes.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
-    }
-
-    private async Task OnTryKommuneDropdownSelectionChanged(string value)
-    {
-        selectedTryKommune = value;
-        // If no kommune is selected, all bvtjenestes are available
-        if (string.IsNullOrEmpty(selectedTryKommune))
-        {
-            tryBarns = totalBarns;
-        }
-        else
-        {
-            tryBarns = totalBarns.Where(b => b.Contains(selectedTryKommune)).ToArray();
-            // Displays automatically the only possible item or nothing if more than one
-            selectedTryBarn = tryBarns.Length == 1 ? tryBarns[0] : null;
-            tryBarnDropdown.Value = selectedTryBarn;
-            tryBarnDropdown.Text = selectedTryBarn;
-        }
-    }
-
-    private async Task OnTryBarnDropdownSelectionChanged(string value)
-    {
-        selectedTryBarn = value;
-
-        if (string.IsNullOrEmpty(selectedTryKommune))
-        {
-            _selectBvtjenesteWhenNoKommune = true;
-
-            var matchingKommuneIndex = GetKommuneIndexByBarn(selectedTryBarn);
-
-            if (matchingKommuneIndex != -1)
-            {
-                // Update the items in the Kommune dropdown
-                selectedTryKommune = tryKommunes[matchingKommuneIndex];
-                tryKommuneDropdown.Value = selectedTryKommune;
-                tryKommuneDropdown.Text = selectedTryKommune;
-            }
-        }
-    }
-
-    private async Task<IEnumerable<string>> TrySearchBarn(string value)
-    {
-        // if text is null or empty, show complete list
-        if (string.IsNullOrEmpty(value) || selectedTryBarn == value)
-        {
-            return tryBarns;
-        }
-
-        return tryBarns.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
-    }
-
-    public int GetKommuneIndexByBarn(string selectedBarn)
-    {
-        if (tryBarns == null)
-        {
-            return -1;
-        }
-        var indexOfKommune = selectedBarn.IndexOf("kommune");
-        var kommuneInBarn = selectedBarn.Substring(indexOfKommune);
-        foreach (var kommune in tryKommunes)
-        {            
-            if (kommune == kommuneInBarn)
-            {
-                return Array.IndexOf(tryKommunes, kommune);
-            }
-        }
-
-        return -1;
-    }
-
     protected async override Task OnInitializedAsync()
     {
-        tryBarns = (string[])totalBarns.Clone();
-
         await InitializeDropdownsAsync();
 
         base.OnInitialized();
@@ -186,11 +83,9 @@
     public string[] Kommunes { get; set; }
     public string[] Bvtjenestes { get; set; }
 
-    private DropdownComponent _kommuneDropdown;
-    private DropdownComponent _bvtjenesteDropdown;
-    private ElementReference _kommuneDropdownRef;
-    private ElementReference _bvtjenesteDropdownRef;
-
+    private MudAutocomplete<string> _kommuneDropdown;
+    private MudAutocomplete<string> _bvtjenesteDropdown;
+    
     private BarnOgPersonDto _barnOgPerson = new();
 
     private string _selectedBestilling = null;
@@ -201,8 +96,6 @@
     private bool _isHenvisningSelected;
     private bool _isKommunesAndBvtjenestesSet;
     private bool _selectBvtjenesteWhenNoKommune;
-
-    
 
     public async Task InitializeDropdownsAsync()
     {
@@ -238,51 +131,70 @@
         StateHasChanged();
     }
 
-    private async Task OnKommuneDropdownSelectionChanged(string selectedKommune)
+    private async Task OnKommuneDropdownSelectionChanged(string value)
     {
-        // If OnKommuneDropdownSelectionChanged() is called from OnBarneverntjenesteDropdownSelectionChanged
-        // We don't have to re-update Barnverntjenestedropdown
-        if (_selectBvtjenesteWhenNoKommune)
+        _selectedKommune = value;
+
+        // If no kommune is selected, all bvtjenestes are available
+        if (string.IsNullOrEmpty(_selectedKommune))
         {
-            _selectBvtjenesteWhenNoKommune = false;
+            Bvtjenestes = KodeverkService.GetBvtjenestesByKommunenavn(_selectedKommune);
         }
-        // Otherwise OnKommuneDropdownSelectionChanged() is called from a item change in KommuneDropdown,
-        // we update the items in the Barneverntjeneste dropdown
         else
         {
-            _selectedKommune = selectedKommune;
             Bvtjenestes = KodeverkService.GetBvtjenestesByKommunenavn(_selectedKommune);
-            _bvtjenesteDropdown.Items = Bvtjenestes;
-
-            // Displays automaticaly the only possible item or nothing if more than one
-            _bvtjenesteDropdown.SelectedBestilling = Bvtjenestes[0];
-
-            
+            // Displays automatically the only possible item or nothing if more than one
+            _selectedBvtjeneste = Bvtjenestes.Length == 1 ? Bvtjenestes[0] : null;
+            _bvtjenesteDropdown.Value = _selectedBvtjeneste;
+            _bvtjenesteDropdown.Text = _selectedBvtjeneste;
         }
     }
 
-    private async Task OnBvtjenesteDropdownSelectionChanged(string selectedBarneverntjeneste)
+    private async Task OnBvtjenesteDropdownSelectionChanged(string value)
     {
-        //// If no selecte kommune, chosing an barneverntjeneste automatically sets kommune dropdown to the right item
+        _selectedBvtjeneste = value;
+        
+        // If we select a barneverntjeneste while no kommune selected, 
+        // we set automatically the matching selected Kommune
         if (string.IsNullOrEmpty(_selectedKommune))
         {
-            _selectBvtjenesteWhenNoKommune = true;
-
-            _selectedBvtjeneste = selectedBarneverntjeneste;
-            var matchingKommuneIndex = KodeverkService.GetKommuneIndexByBvtjeneste(selectedBarneverntjeneste);
+            var matchingKommuneIndex = KodeverkService.GetKommuneIndexByBvtjeneste(_selectedBvtjeneste);
 
             if (matchingKommuneIndex != -1)
             {
                 // Update the items in the Kommune dropdown
-                _kommuneDropdown.SetSelected(matchingKommuneIndex);
+                _selectedKommune = Kommunes[matchingKommuneIndex];
+                _kommuneDropdown.Value = _selectedKommune;
+                _kommuneDropdown.Text = _selectedKommune;
             }
         }
-        StateHasChanged();
+    }
+
+    private async Task<IEnumerable<string>> SearchKommune(string value)
+    {
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value) || _selectedKommune == value)
+        {
+            return Kommunes;
+        }
+
+        return Kommunes.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    private async Task<IEnumerable<string>> SearchBvtjeneste(string value)
+    {
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value) || _selectedBvtjeneste == value)
+        {
+            return Bvtjenestes;
+        }
+
+        return Bvtjenestes.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
     }
 
     private void HandleBarnUpdated(BarnOgPersonDto barnOgPerson)
     {
         _barnOgPerson = barnOgPerson;
-    } 
+    }
 
 }
