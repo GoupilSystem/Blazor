@@ -41,7 +41,7 @@ namespace Birk.Client.Bestilling.Configuration
             services.AddMudServices();
 
             services.AddHttpContextAccessor();
-
+                
             services.AddHeaderPropagation(options =>
             {
                 options.Headers.Add("Custom-correlation-ID", Guid.NewGuid().ToString());

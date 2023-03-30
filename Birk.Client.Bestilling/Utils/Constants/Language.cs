@@ -74,4 +74,4 @@ namespace Birk.Client.Bestilling.Utils.Constants
 
         public static ReadOnlyDictionary<string, string> NO => _NO.Value;
     }
-}
+}   

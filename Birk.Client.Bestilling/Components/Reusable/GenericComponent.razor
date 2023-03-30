@@ -1,5 +1,6 @@
-﻿@using Birk.Client.Bestilling.Components.Enums
+﻿@using Birk.Client.Bestilling.Components.Enums;
 @using static Birk.Client.Bestilling.Components.Panels.SokBarn;
+@using Microsoft.AspNetCore.Components;
 
 @inherits BaseComponent;
 
@@ -14,6 +15,9 @@
 
     [Parameter]
     public string Placeholder { get; set; }
+
+    //[Parameter]
+    //public ElementReference DropdownElement { get; set; }
 
     private string _inputValue { get; set; }
 
@@ -56,6 +60,7 @@
                 {
                     { "class", CssClass },
                     { "placeholder", Placeholder }
+                    //{ "ref", Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck(DropdownElement) }
                 });
         }
 
