@@ -17,6 +17,12 @@
     [Parameter]
     public string Placeholder { get; set; }
 
+    [Parameter]
+    public EventCallback<bool> OnCheck { get; set; }
+
+    [Parameter]
+    public bool Checked { get; set; }
+
     //[Parameter]
     //public ElementReference DropdownElement { get; set; }
 
@@ -77,6 +83,14 @@
             builder.AddContent(3, (MarkupString)Content);
         }
 
+        else if (GuiType == GuiType.CheckBox)
+        {
+            builder.OpenElement(1, "input");
+            builder.AddAttribute(2, "type", "checkbox");
+            builder.AddAttribute(3, "checked", Checked);
+            builder.AddAttribute(4, "onchange", EventCallback.Factory.Create(this, HandleCheck));
+        }
+
         builder.CloseElement();
     };
 
@@ -102,6 +116,15 @@
     {
         _inputValue = args.Value?.ToString();
         ValueChanged.InvokeAsync(_inputValue);
+    }
+
+    private async Task HandleCheck(ChangeEventArgs args)
+    {
+        if (args.Value is bool checkedValue)
+        {
+            Checked = checkedValue;
+            await OnCheck.InvokeAsync(checkedValue);
+        }
     }
 
     private async Task HandleClick(MouseEventArgs e)

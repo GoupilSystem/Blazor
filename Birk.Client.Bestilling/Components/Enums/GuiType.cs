@@ -6,6 +6,7 @@
         Dropdown,
         Title,
         Input,
-        Button
+        Button,
+        CheckBox
     }
 }

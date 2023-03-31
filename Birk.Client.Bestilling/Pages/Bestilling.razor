@@ -13,6 +13,11 @@
 @inject IBarnService BarnService
 @inject ILogger<Bestilling> Logger
 
+<input type="checkbox" id="@CheckboxId" checked="@Checked" @onchange="ValueChanged" />
+<label for="@CheckboxId">@LabelText</label>
+<input type="checkbox" @bind="isChecked" />
+<label for="@checkboxId">Check this box</label>
+<GenericComponent GuiType=GuiType.CheckBox Checked=true OnCheck=Check/>
 @if (_isLoading)
 {
     <div class="buf-page">
@@ -87,7 +92,7 @@
 
     private MudAutocomplete<string> _kommuneDropdown;
     private MudAutocomplete<string> _bvtjenesteDropdown;
-    
+
     private BarnOgPersonDto _barnOgPerson = new();
 
     private string _selectedBestilling = null;
@@ -101,6 +106,8 @@
 
     public async Task InitializeDropdownsAsync()
     {
+        CheckboxId = $"checkbox_{Guid.NewGuid()}";
+
         Logger.LogInformation("Entering {Method}", nameof(InitializeDropdownsAsync));
 
         BestillingsTypes = await KodeverkService.GetTypes();
@@ -155,7 +162,7 @@
     private async Task OnBvtjenesteDropdownSelectionChanged(string value)
     {
         _selectedBvtjeneste = value;
-        
+
         // If we select a barneverntjeneste while no kommune selected, 
         // we set automatically the matching selected Kommune
         if (string.IsNullOrEmpty(_selectedKommune))
@@ -199,4 +206,21 @@
         _barnOgPerson = barnOgPerson;
     }
 
+    public bool Checked { get; set; }
+    public EventCallback<bool> CheckedChanged { get; set; }
+    public string LabelText = "Some label";
+    private string CheckboxId { get; set; }
+
+    private async Task ValueChanged(ChangeEventArgs e)
+    {
+        Checked = (bool)e.Value;
+        await CheckedChanged.InvokeAsync(Checked);
+    }
+
+    private bool isChecked;
+    private string checkboxId = Guid.NewGuid().ToString();
+    private void Check(bool value)
+    {
+        var gh = value;
+    }
 }
