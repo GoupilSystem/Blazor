@@ -23,13 +23,11 @@
     [Parameter]
     public bool Checked { get; set; }
 
-    //[Parameter]
-    //public ElementReference DropdownElement { get; set; }
-
-    private string _placeholderValue { get; set; }
-    private string _inputValue { get; set; }
-
+    private string _buildingPlaceholder => StringHelper.BuildPlaceholder(Language.NO[$"{Placeholder}Placeholder"]);
+    
     private RenderFragment DynamicFragment;
+
+    private string _inputValue { get; set; }
 
     private RenderFragment CreateComponent() => builder =>
     {
@@ -37,7 +35,7 @@
         {
             builder.OpenElement(1, "div");
             builder.AddAttribute(2, "class", CssClass);
-            builder.AddContent(3, (MarkupString)Content);
+            builder.AddContent(3, (MarkupString)BuildingContent);
         }
 
         else if (GuiType == GuiType.Input)
@@ -47,7 +45,7 @@
                 new Dictionary<string, object>
                 {
                     { "class", CssClass },
-                    { "placeholder", _placeholderValue },
+                    { "placeholder", _buildingPlaceholder },
                     // Event triggered on content of input being changed
                     { "value", _inputValue },
                     { "bind-value", _inputValue },
@@ -66,7 +64,7 @@
                 new Dictionary<string, object>
                 {
                     { "class", CssClass },
-                    { "placeholder", _placeholderValue }
+                    { "placeholder", _buildingPlaceholder }
                     //{ "ref", Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck(DropdownElement) }
                 });
         }
@@ -80,15 +78,24 @@
                     { "class", CssClass },
                     { "onclick", EventCallback.Factory.Create(this, OnClick) }
                 });
-            builder.AddContent(3, (MarkupString)Content);
+            builder.AddContent(3, (MarkupString)BuildingContent);
         }
 
         else if (GuiType == GuiType.CheckBox)
         {
-            builder.OpenElement(1, "input");
-            builder.AddAttribute(2, "type", "checkbox");
-            builder.AddAttribute(3, "checked", Checked);
-            builder.AddAttribute(4, "onchange", EventCallback.Factory.Create(this, HandleCheck));
+            builder.OpenElement(1, "div");
+            builder.AddAttribute(2, "class", CssClass);
+
+            builder.OpenElement(3, "input");
+            builder.AddAttribute(4, "type", "checkbox");
+            builder.AddAttribute(5, "checked", Checked);
+            builder.AddAttribute(6, "onchange", EventCallback.Factory.Create(this, HandleCheck));
+            builder.CloseElement();
+
+            builder.OpenElement(7, "label");
+            builder.AddAttribute(8, "for", "checkbox-input");
+            builder.AddContent(9, (MarkupString)BuildingContent);
+            builder.CloseElement();
         }
 
         builder.CloseElement();
@@ -97,11 +104,6 @@
     protected override void OnInitialized()
     {
         base.OnInitialized();
-
-        if (!string.IsNullOrEmpty(Placeholder))
-        { 
-            _placeholderValue = StringHelper.BuildPlaceholder(Language.NO[$"{Placeholder}Placeholder"]); 
-        }
 
         DynamicFragment = CreateComponent();
     }

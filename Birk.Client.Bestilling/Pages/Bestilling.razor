@@ -13,11 +13,13 @@
 @inject IBarnService BarnService
 @inject ILogger<Bestilling> Logger
 
+@*<input type="checkbox" id="@CheckboxId" checked="@Checked" @onchange="ValueChanged" />
 <input type="checkbox" id="@CheckboxId" checked="@Checked" @onchange="ValueChanged" />
-<label for="@CheckboxId">@LabelText</label>
+<label>@LabelText</label>
 <input type="checkbox" @bind="isChecked" />
 <label for="@checkboxId">Check this box</label>
-<GenericComponent GuiType=GuiType.CheckBox Checked=true OnCheck=Check/>
+*@
+
 @if (_isLoading)
 {
     <div class="buf-page">
@@ -27,7 +29,7 @@
         <div class="main-panel">
             <div class="active @(_isHenvisningSelected ? "" : "minimized" )">
                 <GenericComponent GuiType=GuiType.Title Content="BestillingstypeTitle" CssExtra="bestillingstype" />
-                <DropdownComponent GuiType=GuiType.Dropdown Items=BestillingsTypes OnSelectionChanged=OnBestillingDropdownSelectionChanged />
+                <DropdownComponent GuiType=GuiType.Dropdown Items=BestillingsTypes OnSelectionChanged=OnBestillingChanged />
 
                 @if (_isHenvisningSelected)
                 {
@@ -35,21 +37,21 @@
                     <GenericComponent GuiType=GuiType.Label Content="VelgKommuneLabel|RedStarTopSize8" />
                     <MudAutocomplete T="string" Class="buf-dropdown"
                              SearchFunc=SearchKommune
-                             ValueChanged=OnKommuneDropdownSelectionChanged
+                             ValueChanged=OnKommuneChanged
                              Value=_selectedKommune MaxItems="null"
                              ResetValueOnEmptyText=true
                              CoerceText=true CoerceValue=true @ref=_kommuneDropdown />
 
                     <GenericComponent GuiType=GuiType.Label Content="VelgBarnevernLabel|RedStarTopSize8" />
                     @*<DropdownComponent GuiType=GuiType.Dropdown Items=Bvtjenestes
-            OnSelectionChanged=@OnBvtjenesteDropdownSelectionChanged
+            OnSelectionChanged=@OnBvtjenesteChanged
             @ref="_bvtjenesteDropdown" />*@
 
 
 
                     <MudAutocomplete T="string" Class="buf-dropdown"
                              SearchFunc=SearchBvtjeneste
-                             ValueChanged=OnBvtjenesteDropdownSelectionChanged
+                             ValueChanged=OnBvtjenesteChanged
                              Value=_selectedBvtjeneste MaxItems="null"
                              ResetValueOnEmptyText=true
                              CoerceText=true CoerceValue=true @ref=_bvtjenesteDropdown />
@@ -106,8 +108,6 @@
 
     public async Task InitializeDropdownsAsync()
     {
-        CheckboxId = $"checkbox_{Guid.NewGuid()}";
-
         Logger.LogInformation("Entering {Method}", nameof(InitializeDropdownsAsync));
 
         BestillingsTypes = await KodeverkService.GetTypes();
@@ -116,7 +116,7 @@
         Logger.LogInformation("Exiting {Method}", nameof(InitializeDropdownsAsync));
     }
 
-    private async Task OnBestillingDropdownSelectionChanged(string selectedBestilling)
+    private async Task OnBestillingChanged(string selectedBestilling)
     {
         _selectedBestilling = selectedBestilling;
         _isHenvisningSelected = BestillingsTypes.FirstOrDefault() == _selectedBestilling;
@@ -140,7 +140,7 @@
         StateHasChanged();
     }
 
-    private async Task OnKommuneDropdownSelectionChanged(string value)
+    private async Task OnKommuneChanged(string value)
     {
         _selectedKommune = value;
 
@@ -159,7 +159,7 @@
         }
     }
 
-    private async Task OnBvtjenesteDropdownSelectionChanged(string value)
+    private async Task OnBvtjenesteChanged(string value)
     {
         _selectedBvtjeneste = value;
 
@@ -206,21 +206,19 @@
         _barnOgPerson = barnOgPerson;
     }
 
-    public bool Checked { get; set; }
-    public EventCallback<bool> CheckedChanged { get; set; }
-    public string LabelText = "Some label";
-    private string CheckboxId { get; set; }
+    //public bool Checked { get; set; }
+    //CheckboxId = $"checkbox_{Guid.NewGuid()}";
+    //public EventCallback<bool> CheckedChanged { get; set; }
+    //public string LabelText = "Some label";
+    //private string CheckboxId { get; set; }
 
-    private async Task ValueChanged(ChangeEventArgs e)
-    {
-        Checked = (bool)e.Value;
-        await CheckedChanged.InvokeAsync(Checked);
-    }
+    //private async Task ValueChanged(ChangeEventArgs e)
+    //{
+    //    Checked = (bool)e.Value;
+    //    await CheckedChanged.InvokeAsync(Checked);
+    //}
 
-    private bool isChecked;
-    private string checkboxId = Guid.NewGuid().ToString();
-    private void Check(bool value)
-    {
-        var gh = value;
-    }
+    //private bool isChecked;
+    //private string checkboxId = Guid.NewGuid().ToString();
+    
 }

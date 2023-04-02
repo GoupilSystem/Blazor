@@ -15,11 +15,6 @@
     public string Icon { get; set; }
 
     public string CssClass => $"buf-{GuiType.ToString().ToLower()} {CssExtra}";
-
-    protected override void OnInitialized()
-    {
-        Content = string.IsNullOrEmpty(Content)
-            ? ""
-            : string.Concat(Content.Split('|').Select(s => Language.NO[s]));
-    }
+    public string BuildingContent => Content = string.IsNullOrEmpty(Content) ? "" 
+        : string.Concat(Content.Split('|').Select(s => Language.NO[s]));
 }

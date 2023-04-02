@@ -14,12 +14,17 @@
     <GenericComponent GuiType=GuiType.Label Content="BarnBirkId" />
     <GenericComponent GuiType=GuiType.Input Placeholder="BirkId"
                       ValueChanged=HandleBirkIdChanged @ref="_birkIdInput" />
+    <GenericComponent GuiType=GuiType.CheckBox Content=UsikkertFnr OnCheck=Check />
+    <GenericComponent GuiType=GuiType.Label Content="Sikkerhetsnivå" />
+    <DropdownComponent GuiType=GuiType.Dropdown Items=_sikkerhetsnivåTypes OnSelectionChanged=OnSikkerhetsnivåChanged />
 </div>
 
 @code {
     private GenericComponent _fornavnInput;
     private GenericComponent _etternavnInput;
     private GenericComponent _birkIdInput;
+
+    private string[] _sikkerhetsnivåTypes = Language.NO["SikkerhetnivåTypes"].Split("|");
 
     private void HandleFornavnChanged(string value)
     { }
@@ -29,4 +34,14 @@
 
     private void HandleBirkIdChanged(string value)
     { }
+
+    private void Check(bool value)
+    {
+        var gh = value;
+    }
+
+    private async Task OnSikkerhetsnivåChanged(string selectedSikkerhetsnivåType)
+    {
+        
+    }
 }

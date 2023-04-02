@@ -52,6 +52,9 @@ namespace Birk.Client.Bestilling.Utils.Constants
                 { "EtternavnPlaceholder", "etternavn"},
                 { "BarnBirkId", "BirkId"},
                 { "BirkIdPlaceholder", "BirkId"},
+                { "UsikkertFnr", "Usikkert fødselsnummer"},
+                { "Sikkerhetsnivå", "Sikkerhetsnivå" },
+                { "SikkerhetnivåTypes", "Ordinært sikkerhetsnivå|Skjult adresse|Sperret adresse, fortrolig|Sperret adresse, strengt fortrolig" },
 
                 // Icons as markup string
                 { "RedStarTopSize8", "<i class=\"fas fa-star top size8\" style=\"color: red;\"></i>" }, // Red cannot pass as a class
