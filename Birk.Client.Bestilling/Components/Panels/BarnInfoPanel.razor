@@ -16,7 +16,27 @@
                       ValueChanged=HandleBirkIdChanged @ref="_birkIdInput" />
     <GenericComponent GuiType=GuiType.CheckBox Content=UsikkertFnr OnCheck=Check />
     <GenericComponent GuiType=GuiType.Label Content="Sikkerhetsnivå" />
-    <DropdownComponent GuiType=GuiType.Dropdown Items=_sikkerhetsnivåTypes OnSelectionChanged=OnSikkerhetsnivåChanged />
+
+    <div class="dropdown-container">
+        <div>
+            <DropdownComponent GuiType=GuiType.Dropdown Items=_sikkerhetsnivåTypes OnSelectionChanged=OnSikkerhetsnivåChanged />
+        </div>
+        <div class="info-icon-container">
+            <div>
+                <i class="fas fa-info-circle info size12" @onclick="() => { ShowHelp = !ShowHelp; }" />
+            </div>
+
+            @if (ShowHelp)
+            {
+                <div class="help-text-container">
+                    <div class="help-text">
+                        @(new MarkupString(Language.NO["InfoText"]))
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
 </div>
 
 @code {
@@ -25,6 +45,8 @@
     private GenericComponent _birkIdInput;
 
     private string[] _sikkerhetsnivåTypes = Language.NO["SikkerhetnivåTypes"].Split("|");
+
+    private bool ShowHelp { get; set; }
 
     private void HandleFornavnChanged(string value)
     { }
@@ -42,6 +64,6 @@
 
     private async Task OnSikkerhetsnivåChanged(string selectedSikkerhetsnivåType)
     {
-        
+
     }
 }

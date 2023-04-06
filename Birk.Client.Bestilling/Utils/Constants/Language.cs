@@ -55,6 +55,8 @@ namespace Birk.Client.Bestilling.Utils.Constants
                 { "UsikkertFnr", "Usikkert fødselsnummer"},
                 { "Sikkerhetsnivå", "Sikkerhetsnivå" },
                 { "SikkerhetnivåTypes", "Ordinært sikkerhetsnivå|Skjult adresse|Sperret adresse, fortrolig|Sperret adresse, strengt fortrolig" },
+                { "InfoText", "Beskrivelse av hva du skal gjøre hvis det er skjerpet sikkerhetsnivå!" +
+                    "<ul class=\"bullet-list\"><li>Melde inn i ephorte</li><li>Melde sikkerhetsbehov og hvem som skal ha tilgang</li></ul>" },
 
                 // Icons as markup string
                 { "RedStarTopSize8", "<i class=\"fas fa-star top size8\" style=\"color: red;\"></i>" }, // Red cannot pass as a class

@@ -13,13 +13,6 @@
 @inject IBarnService BarnService
 @inject ILogger<Bestilling> Logger
 
-@*<input type="checkbox" id="@CheckboxId" checked="@Checked" @onchange="ValueChanged" />
-<input type="checkbox" id="@CheckboxId" checked="@Checked" @onchange="ValueChanged" />
-<label>@LabelText</label>
-<input type="checkbox" @bind="isChecked" />
-<label for="@checkboxId">Check this box</label>
-*@
-
 @if (_isLoading)
 {
     <div class="buf-page">
@@ -205,20 +198,4 @@
     {
         _barnOgPerson = barnOgPerson;
     }
-
-    //public bool Checked { get; set; }
-    //CheckboxId = $"checkbox_{Guid.NewGuid()}";
-    //public EventCallback<bool> CheckedChanged { get; set; }
-    //public string LabelText = "Some label";
-    //private string CheckboxId { get; set; }
-
-    //private async Task ValueChanged(ChangeEventArgs e)
-    //{
-    //    Checked = (bool)e.Value;
-    //    await CheckedChanged.InvokeAsync(Checked);
-    //}
-
-    //private bool isChecked;
-    //private string checkboxId = Guid.NewGuid().ToString();
-    
 }

@@ -12,3 +12,17 @@
 .size8 {
     font-size: var(--font-size-8px);
 }
+
+.size12 {
+    font-size: var(--font-size-12px);
+}
+
+i.fas.fa-exclamation-circle {
+    margin-right: 0.5rem;
+}
+
+.info {
+    cursor: pointer;
+    color: var(--buf-info-grey);
+}
+
