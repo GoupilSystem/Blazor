@@ -83,22 +83,23 @@
 
         else if (GuiType == GuiType.CheckBox)
         {
-            builder.OpenElement(1, "div");
-            builder.AddAttribute(2, "class", CssClass);
+            builder.OpenElement(1, "label");
+            builder.AddAttribute(2, "class", "container");
+            builder.AddContent(3, BuildingContent);
 
-            builder.OpenElement(3, "input");
-            builder.AddAttribute(4, "type", "checkbox");
-            builder.AddAttribute(5, "checked", Checked);
-            builder.AddAttribute(6, "onchange", EventCallback.Factory.Create(this, HandleCheck));
+            builder.OpenElement(4, "input");
+            builder.AddAttribute(5, "type", "checkbox");
+            builder.AddAttribute(6, "class", "buf-checkbox__input");
+            builder.AddAttribute(7, "checked", Checked);
+            builder.AddAttribute(8, "onchange", EventCallback.Factory.Create(this, HandleCheck));
             builder.CloseElement();
 
-            builder.OpenElement(7, "label");
-            builder.AddAttribute(8, "for", "checkbox-input");
-            builder.AddContent(9, (MarkupString)BuildingContent);
+            builder.OpenElement(9, "span");
+            builder.AddAttribute(10, "class", "checkmark");
             builder.CloseElement();
         }
 
-        builder.CloseElement();
+        builder.CloseElement(); // close the container div
     };
 
     protected override void OnInitialized()

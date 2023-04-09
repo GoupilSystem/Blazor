@@ -17,15 +17,17 @@
     <GenericComponent GuiType=GuiType.CheckBox Content=UsikkertFnr OnCheck=Check />
     <GenericComponent GuiType=GuiType.Label Content="Sikkerhetsnivå" />
 
+    <div class="checkbox-example">
+        <input type="checkbox" value="1" id="checkboxOneInput" />
+        <label for="checkboxOneInput"></label>
+    </div>
+
     <div class="dropdown-container">
         <div>
             <DropdownComponent GuiType=GuiType.Dropdown Items=_sikkerhetsnivåTypes OnSelectionChanged=OnSikkerhetsnivåChanged />
         </div>
         <div class="info-icon-container">
-            <div>
-                <i class="fas fa-info-circle info size12" @onclick="() => { ShowHelp = !ShowHelp; }" />
-            </div>
-
+            <i class="fas fa-info-circle info size12" @onclick="() => { ShowHelp = !ShowHelp; }" />
             @if (ShowHelp)
             {
                 <div class="help-text-container">
@@ -34,7 +36,6 @@
                     </div>
                 </div>
             }
-
         </div>
     </div>
 </div>
