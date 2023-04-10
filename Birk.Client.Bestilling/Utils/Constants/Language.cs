@@ -37,7 +37,6 @@ namespace Birk.Client.Bestilling.Utils.Constants
                 { "SøkBarnTitle", "Søk opp barnet i Birk" },
                 { "SøkBarnLabel", "Søk opp barn eller mor til ufødt barn i Birk. Bruk fødselsnummer for å søke." +
                     "<br><b>Dersom barnet ikke er registrert fører søket deg til manuell registrering.</b>"},
-                { "FødselsnummerPlaceholder", "fødselsnummer" },
                 { "SøkBarnButton", "Søk" },
                 { "FnrNotNumericValue", "OBS! Kun tall i dette feltet"},
                 { "FnrNot11DigitsWarning", "OBS! Fødselsnummer skal ha 11 siffer"},
@@ -50,6 +49,8 @@ namespace Birk.Client.Bestilling.Utils.Constants
                 { "FornavnPlaceholder", "fornavn"},
                 { "Etternavn", "Etternavn"},
                 { "EtternavnPlaceholder", "etternavn"},
+                { "Fødselsnummer", "Fødselsnummer" },
+                { "FødselsnummerPlaceholder", "fødselsnummer" },
                 { "BarnBirkId", "BirkId"},
                 { "BirkIdPlaceholder", "BirkId"},
                 { "UsikkertFnr", "Usikkert fødselsnummer"},

@@ -11,18 +11,20 @@
     <GenericComponent GuiType=GuiType.Label Content="Etternavn|RedStarTopSize8" />
     <GenericComponent GuiType=GuiType.Input Placeholder="Etternavn"
                       ValueChanged=HandleEtternavnChanged @ref="_etternavnInput" />
+    <GenericComponent GuiType=GuiType.Label Content="Fødselsnummer" />
+    <div class="buf-row">
+        <GenericComponent GuiType=GuiType.Input Placeholder="Fødselsnummer"
+                          ValueChanged=HandleBirkIdChanged @ref="_fnrInput" />
+        <GenericComponent GuiType=GuiType.CheckBox Content=UsikkertFnr OnCheck=Check />
+    </div>
     <GenericComponent GuiType=GuiType.Label Content="BarnBirkId" />
     <GenericComponent GuiType=GuiType.Input Placeholder="BirkId"
+                      ValueChanged=HandleBirkIdChanged @ref="_birkIdInput" /><GenericComponent GuiType=GuiType.Label Content="BarnBirkId" />
+    <GenericComponent GuiType=GuiType.Input Placeholder="BirkId"
                       ValueChanged=HandleBirkIdChanged @ref="_birkIdInput" />
-    <GenericComponent GuiType=GuiType.CheckBox Content=UsikkertFnr OnCheck=Check />
     <GenericComponent GuiType=GuiType.Label Content="Sikkerhetsnivå" />
 
-    <div class="checkbox-example">
-        <input type="checkbox" value="1" id="checkboxOneInput" />
-        <label for="checkboxOneInput"></label>
-    </div>
-
-    <div class="dropdown-container">
+    <div class="buf-row">
         <div>
             <DropdownComponent GuiType=GuiType.Dropdown Items=_sikkerhetsnivåTypes OnSelectionChanged=OnSikkerhetsnivåChanged />
         </div>
@@ -43,6 +45,7 @@
 @code {
     private GenericComponent _fornavnInput;
     private GenericComponent _etternavnInput;
+    private GenericComponent _fnrInput;
     private GenericComponent _birkIdInput;
 
     private string[] _sikkerhetsnivåTypes = Language.NO["SikkerhetnivåTypes"].Split("|");

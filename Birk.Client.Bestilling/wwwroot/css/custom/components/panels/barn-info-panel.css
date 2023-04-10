@@ -1,11 +1,4 @@
-﻿.dropdown-container {
-    display: flex;
-    align-items: center;
-    display: flex;
-    width: 100%;
-}
-
-.info-icon-container {
+﻿.info-icon-container {
     position: relative;
     margin-left: 0.5rem;
     display: flex;
