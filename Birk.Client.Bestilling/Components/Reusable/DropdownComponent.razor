@@ -27,9 +27,9 @@
     }
 
     private string _selectedBestilling;
-    private bool _resetValueOnEmptyText = true;
-    private bool _coerceText = true;
-    private bool _coerceValue = true;
+    private bool _resetValueOnEmptyText = false;
+    private bool _coerceText = false;
+    private bool _coerceValue = false;
 
     private async Task<IEnumerable<string>> Search(string value)
     {
