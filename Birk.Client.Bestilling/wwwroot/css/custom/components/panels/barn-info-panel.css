@@ -1,4 +1,8 @@
-﻿.info-icon-container {
+﻿#sikkerhetsnivå-container {
+    margin-bottom: 3rem;
+}
+
+.info-icon-container {
     position: relative;
     margin-left: 0.5rem;
     display: flex;
@@ -17,6 +21,10 @@
 }
 
 @media screen and (max-width: 768px) {
+    #sikkerhetsnivå-container {
+        flex-wrap: wrap;
+    }
+    
     .dropdown-container {
         flex-wrap: wrap;
     }

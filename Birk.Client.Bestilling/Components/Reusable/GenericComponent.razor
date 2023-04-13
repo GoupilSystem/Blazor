@@ -1,6 +1,5 @@
 ﻿@using Birk.Client.Bestilling.Components.Enums;
 @using Birk.Client.Bestilling.Utils.Constants;
-@using Birk.Client.Bestilling.Utils.Helpers;
 @using Microsoft.AspNetCore.Components;
 
 @inherits BaseComponent;
@@ -23,7 +22,7 @@
     [Parameter]
     public bool Checked { get; set; }
 
-    private string _buildingPlaceholder => StringHelper.BuildPlaceholder(Language.NO[$"{Placeholder}Placeholder"]);
+    private string _placeholder => Language.NO[$"{Placeholder}Placeholder"];
     
     private RenderFragment DynamicFragment;
 
@@ -45,7 +44,7 @@
                 new Dictionary<string, object>
                 {
                     { "class", CssClass },
-                    { "placeholder", _buildingPlaceholder },
+                    { "placeholder", _placeholder },
                     // Event triggered on content of input being changed
                     { "value", _inputValue },
                     { "bind-value", _inputValue },
@@ -64,7 +63,7 @@
                 new Dictionary<string, object>
                 {
                     { "class", CssClass },
-                    { "placeholder", _buildingPlaceholder }
+                    { "placeholder", _placeholder }
                     //{ "ref", Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck(DropdownElement) }
                 });
         }

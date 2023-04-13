@@ -7,7 +7,6 @@
 @using Birk.Client.Bestilling.Services.Implementation;
 @using Birk.Client.Bestilling.Services.Interfaces;
 @using Birk.Client.Bestilling.Utils.Constants;
-@using Birk.Client.Bestilling.Utils.Helpers;
 @using System.Text.RegularExpressions;
 @inject IKodeverkService KodeverkService
 @inject IBarnService BarnService
@@ -17,7 +16,7 @@
 {
     <div class="buf-page">
 
-        <InfoPanel BarnOgPerson=@_barnOgPerson />
+        <TopPanel BarnOgPerson=@_barnOgPerson />
 
         <div class="main-panel">
             <div class="active @(_isHenvisningSelected ? "" : "minimized" )">
@@ -56,12 +55,11 @@
                     <GenericComponent GuiType=GuiType.Label Content="SøkBarnLabel" />
 
                     <SokBarnPanel BarnOgPerson=_barnOgPerson OnBarnUpdated=HandleBarnUpdated
-                          OnUkjentFnrClicked=@(() => _isUkjentFnrClicked = !_isUkjentFnrClicked) />
+                          OnUkjentFnrClicked=@(() => _showBarnInfoPanel = !_showBarnInfoPanel) />
 
-                    @if (_isUkjentFnrClicked)
-                    {
+                    <div class="@(_showBarnInfoPanel ? "panel-show" : "panel-hide")">
                         <BarnInfoPanel />
-                    }
+                    </div>
 
                 }
             </div>
@@ -98,7 +96,7 @@
     private bool _isHenvisningSelected;
     private bool _isKommunesAndBvtjenestesSet;
     private bool _selectBvtjenesteWhenNoKommune;
-    private bool _isUkjentFnrClicked;
+    private bool _showBarnInfoPanel;
 
     public async Task InitializeDropdownsAsync()
     {
