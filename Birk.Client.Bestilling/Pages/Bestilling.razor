@@ -27,6 +27,7 @@
                 @if (_isHenvisningSelected)
                 {
                     <GenericComponent GuiType=GuiType.Title Content="KommuneTitle" />
+
                     <GenericComponent GuiType=GuiType.Label Content="VelgKommuneLabel|RedStarTopSize8" />
                     <MudAutocomplete T="string" Class="buf-dropdown"
                              SearchFunc=SearchKommune
@@ -36,12 +37,6 @@
                              CoerceText=true CoerceValue=true @ref=_kommuneDropdown />
 
                     <GenericComponent GuiType=GuiType.Label Content="VelgBarnevernLabel|RedStarTopSize8" />
-                    @*<DropdownComponent GuiType=GuiType.Dropdown Items=Bvtjenestes
-            OnSelectionChanged=@OnBvtjenesteChanged
-            @ref="_bvtjenesteDropdown" />*@
-
-
-
                     <MudAutocomplete T="string" Class="buf-dropdown"
                              SearchFunc=SearchBvtjeneste
                              ValueChanged=OnBvtjenesteChanged
@@ -60,9 +55,14 @@
                     <GenericComponent GuiType=GuiType.Title Content="SøkBarnTitle" />
                     <GenericComponent GuiType=GuiType.Label Content="SøkBarnLabel" />
 
-                    <SokBarn BarnOgPerson=_barnOgPerson OnBarnUpdated=HandleBarnUpdated />
+                    <SokBarnPanel BarnOgPerson=_barnOgPerson OnBarnUpdated=HandleBarnUpdated
+                          OnUkjentFnrClicked=@(() => _isUkjentFnrClicked = !_isUkjentFnrClicked) />
 
-                    <BarnInfoPanel />
+                    @if (_isUkjentFnrClicked)
+                    {
+                        <BarnInfoPanel />
+                    }
+
                 }
             </div>
             <div class="footer" />
@@ -98,6 +98,7 @@
     private bool _isHenvisningSelected;
     private bool _isKommunesAndBvtjenestesSet;
     private bool _selectBvtjenesteWhenNoKommune;
+    private bool _isUkjentFnrClicked;
 
     public async Task InitializeDropdownsAsync()
     {
@@ -156,7 +157,7 @@
     {
         _selectedBvtjeneste = value;
 
-        // If we select a barneverntjeneste while no kommune selected, 
+        // If we select a barneverntjeneste while no kommune selected,
         // we set automatically the matching selected Kommune
         if (string.IsNullOrEmpty(_selectedKommune))
         {

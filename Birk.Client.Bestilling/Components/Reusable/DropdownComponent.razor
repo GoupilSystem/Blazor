@@ -1,5 +1,10 @@
 ﻿@inherits BaseComponent;
 
+@*Example of use:
+    <DropdownComponent GuiType=GuiType.Dropdown Items=Bvtjenestes
+            OnSelectionChanged=@OnBvtjenesteChanged
+            @ref="_bvtjenesteDropdown" />*@
+
 <MudAutocomplete Class=@CssClass T="string"
                  @bind-Value="SelectedBestilling" MaxItems="null" SearchFunc="@Search"
                  ResetValueOnEmptyText="@_resetValueOnEmptyText"
@@ -29,7 +34,7 @@
     }
 
     private string _selectedBestilling;
-    private bool _resetValueOnEmptyText = true;
+    private bool _resetValueOnEmptyText = false;
     private bool _coerceText = true;
     private bool _coerceValue = true;
 
