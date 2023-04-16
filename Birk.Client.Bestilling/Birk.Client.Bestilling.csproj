@@ -13,8 +13,4 @@
     <PackageReference Include="Serilog.Enrichers.CorrelationId" Version="3.0.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Utils\Helpers\" />
-  </ItemGroup>
-
 </Project>

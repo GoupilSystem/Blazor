@@ -14,4 +14,6 @@
     /*background option*/
     --buf-pale-grey: #F2F2F2;
     --buf-background-over: var(--buf-cream);
+    --buf-hover-grey: #d8d8d8;
+    --buf-active-green: #66d9cB;
 }

@@ -10,6 +10,14 @@
     line-height: 1.6rem;
 }
 
+    .buf-button:hover {
+        background-color: var(--buf-hover-grey);
+    }
+
+    .buf-button:active {
+        background-color: var(--buf-active-green);
+    }
+
     .buf-button.søkbarn {
         margin-left: 0.5rem;
         height: 4rem;
