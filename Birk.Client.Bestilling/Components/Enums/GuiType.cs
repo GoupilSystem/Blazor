@@ -7,6 +7,7 @@
         Title,
         Input,
         Button,
-        CheckBox
+        CheckBox,
+        TextArea
     }
 }

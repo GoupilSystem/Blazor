@@ -23,7 +23,7 @@
     public bool Checked { get; set; }
 
     private string _placeholder => Language.NO[$"{Placeholder}Placeholder"];
-    
+
     private RenderFragment DynamicFragment;
 
     private string _inputValue { get; set; }
@@ -40,7 +40,7 @@
         else if (GuiType == GuiType.Input)
         {
             builder.OpenElement(1, "input");
-            builder.AddMultipleAttributes(2, 
+            builder.AddMultipleAttributes(2,
                 new Dictionary<string, object>
                 {
                     { "class", CssClass },
@@ -59,12 +59,12 @@
         else if (GuiType == GuiType.Dropdown)
         {
             builder.OpenElement(1, "MudAutocomplete");
-            builder.AddMultipleAttributes(2, 
+            builder.AddMultipleAttributes(2,
                 new Dictionary<string, object>
                 {
                     { "class", CssClass },
                     { "placeholder", _placeholder }
-                    //{ "ref", Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck(DropdownElement) }
+                        //{ "ref", Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck(DropdownElement) }
                 });
         }
 
@@ -96,6 +96,22 @@
             builder.OpenElement(9, "span");
             builder.AddAttribute(10, "class", "checkmark");
             builder.CloseElement();
+        }
+
+        else if (GuiType == GuiType.TextArea)
+        {
+            builder.OpenElement(1, "textarea");
+            builder.AddMultipleAttributes(2,
+                new Dictionary<string, object>
+                {
+                    { "class", CssClass },
+                    { "placeholder", _placeholder },
+                    { "value", _inputValue },
+                    { "bind-value", _inputValue },
+                    { "oninput", EventCallback.Factory.Create(this, OnInputValueChanged) },
+                    { "bind-value:event", "onchange" },
+                    { "onchange", EventCallback.Factory.Create(this, OnBlurValueChanged) }
+                });
         }
 
         builder.CloseElement(); // close the container div
