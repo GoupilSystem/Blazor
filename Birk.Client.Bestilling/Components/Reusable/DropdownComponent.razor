@@ -1,11 +1,18 @@
 ﻿@inherits BaseComponent;
 
+@*Example of use:
+    <DropdownComponent GuiType=GuiType.Dropdown Items=Bvtjenestes
+            OnSelectionChanged=@OnBvtjenesteChanged
+            @ref="_bvtjenesteDropdown" />*@
+
 <MudAutocomplete Class=@CssClass T="string"
                  @bind-Value="SelectedBestilling" MaxItems="null" SearchFunc="@Search"
                  ResetValueOnEmptyText="@_resetValueOnEmptyText"
                  CoerceText="@_coerceText" CoerceValue="@_coerceValue" />
 
 @code {
+    [Parameter]
+    public string[] Items { get; set; }
 
     [Parameter]
     public Func<string, Task> OnSelectionChanged { get; set; }
@@ -16,7 +23,7 @@
         get => _selectedBestilling;
         set
         {
-           if (value == _selectedBestilling)
+            if (value == _selectedBestilling)
             {
                 return;
             }
@@ -52,5 +59,6 @@
         {
             SelectedBestilling = Items[selectedItemIndex ?? 0];
         }
+        //DropdownElement.FocusAsync();
     }
 }

@@ -1,5 +1,6 @@
-﻿@using Birk.Client.Bestilling.Components.Enums
-@using static Birk.Client.Bestilling.Components.Panels.SokBarn;
+﻿@using Birk.Client.Bestilling.Components.Enums;
+@using Birk.Client.Bestilling.Utils.Constants;
+@using Microsoft.AspNetCore.Components;
 
 @inherits BaseComponent;
 
@@ -15,9 +16,17 @@
     [Parameter]
     public string Placeholder { get; set; }
 
-    private string _inputValue { get; set; }
+    [Parameter]
+    public EventCallback<bool> OnCheck { get; set; }
 
+    [Parameter]
+    public bool Checked { get; set; }
+
+    private string _placeholder => Language.NO[$"{Placeholder}Placeholder"];
+    
     private RenderFragment DynamicFragment;
+
+    private string _inputValue { get; set; }
 
     private RenderFragment CreateComponent() => builder =>
     {
@@ -25,7 +34,7 @@
         {
             builder.OpenElement(1, "div");
             builder.AddAttribute(2, "class", CssClass);
-            builder.AddContent(3, (MarkupString)Items[0]);
+            builder.AddContent(3, (MarkupString)BuildingContent);
         }
 
         else if (GuiType == GuiType.Input)
@@ -35,7 +44,7 @@
                 new Dictionary<string, object>
                 {
                     { "class", CssClass },
-                    { "placeholder", Placeholder },
+                    { "placeholder", _placeholder },
                     // Event triggered on content of input being changed
                     { "value", _inputValue },
                     { "bind-value", _inputValue },
@@ -43,8 +52,7 @@
                     // Event triggered on quit input (ex. copy/paste _inputValue value and click directly on Søk button)
                     // Ref: https://stackoverflow.com/questions/65803149/blazor-onchange-event
                     { "bind-value:event", "onchange" },
-                    { "onchange", EventCallback.Factory.Create(this, OnBlurValueChanged) },
-
+                    { "onchange", EventCallback.Factory.Create(this, OnBlurValueChanged) }
                 });
         }
 
@@ -55,7 +63,8 @@
                 new Dictionary<string, object>
                 {
                     { "class", CssClass },
-                    { "placeholder", Placeholder }
+                    { "placeholder", _placeholder }
+                    //{ "ref", Microsoft.AspNetCore.Components.CompilerServices.RuntimeHelpers.TypeCheck(DropdownElement) }
                 });
         }
 
@@ -68,17 +77,35 @@
                     { "class", CssClass },
                     { "onclick", EventCallback.Factory.Create(this, OnClick) }
                 });
-            builder.AddContent(3, (MarkupString)Items[0]);
+            builder.AddContent(3, (MarkupString)BuildingContent);
         }
 
-        builder.CloseElement();
+        else if (GuiType == GuiType.CheckBox)
+        {
+            builder.OpenElement(1, "label");
+            builder.AddAttribute(2, "class", "container");
+            builder.AddContent(3, BuildingContent);
+
+            builder.OpenElement(4, "input");
+            builder.AddAttribute(5, "type", "checkbox");
+            builder.AddAttribute(6, "class", "buf-checkbox__input");
+            builder.AddAttribute(7, "checked", Checked);
+            builder.AddAttribute(8, "onchange", EventCallback.Factory.Create(this, HandleCheck));
+            builder.CloseElement();
+
+            builder.OpenElement(9, "span");
+            builder.AddAttribute(10, "class", "checkmark");
+            builder.CloseElement();
+        }
+
+        builder.CloseElement(); // close the container div
     };
 
     protected override void OnInitialized()
     {
-        DynamicFragment = CreateComponent();
+        base.OnInitialized();
 
-        StateHasChanged();
+        DynamicFragment = CreateComponent();
     }
 
     private void OnBlurValueChanged(ChangeEventArgs args)
@@ -91,6 +118,15 @@
     {
         _inputValue = args.Value?.ToString();
         ValueChanged.InvokeAsync(_inputValue);
+    }
+
+    private async Task HandleCheck(ChangeEventArgs args)
+    {
+        if (args.Value is bool checkedValue)
+        {
+            Checked = checkedValue;
+            await OnCheck.InvokeAsync(checkedValue);
+        }
     }
 
     private async Task HandleClick(MouseEventArgs e)

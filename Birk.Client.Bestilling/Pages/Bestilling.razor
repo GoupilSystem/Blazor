@@ -7,7 +7,6 @@
 @using Birk.Client.Bestilling.Services.Implementation;
 @using Birk.Client.Bestilling.Services.Interfaces;
 @using Birk.Client.Bestilling.Utils.Constants;
-@using Birk.Client.Bestilling.Utils.Helpers;
 @using System.Text.RegularExpressions;
 @inject IKodeverkService KodeverkService
 @inject IBarnService BarnService
@@ -17,37 +16,51 @@
 {
     <div class="buf-page">
 
-        <InfoPanel BarnOgPerson=@_barnOgPerson />
+        <TopPanel BarnOgPerson=@_barnOgPerson />
 
         <div class="main-panel">
             <div class="active @(_isHenvisningSelected ? "" : "minimized" )">
-                <GenericComponent GuiType=@GuiType.Title Items=@(new[] { Language.NO["BestillingstypeTitle"] }) CssExtra="bestillingstype" />
-                <DropdownComponent GuiType=@GuiType.Dropdown Items=BestillingsTypes OnSelectionChanged=@OnBestillingDropdownSelectionChanged />
+                <GenericComponent GuiType=GuiType.Title Content="BestillingstypeTitle" CssExtra="bestillingstype" />
+                <DropdownComponent GuiType=GuiType.Dropdown Items=BestillingsTypes OnSelectionChanged=OnBestillingChanged />
 
                 @if (_isHenvisningSelected)
                 {
-                    <GenericComponent GuiType=@GuiType.Title Items=@(new[] { Language.NO["KommuneTitle"] }) />
-                    <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["VelgKommuneLabel"] + Language.NO["RedStarTopSize8"] }) />
-                    <DropdownComponent GuiType=@GuiType.Dropdown Items=Kommunes 
-                        OnSelectionChanged=@OnKommuneDropdownSelectionChanged
-                        @ref="_kommuneDropdown" />
-                    <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["VelgBarnevernLabel"] + Language.NO["RedStarTopSize8"] }) />
-                    <DropdownComponent GuiType=@GuiType.Dropdown Items=Bvtjenestes
-                        OnSelectionChanged=@OnBvtjenesteDropdownSelectionChanged    
-                        @ref="_bvtjenesteDropdown" />
-                    
+                    <GenericComponent GuiType=GuiType.Title Content="KommuneTitle" />
+
+                    <GenericComponent GuiType=GuiType.Label Content="VelgKommuneLabel|RedStarTopSize8" />
+                    <MudAutocomplete T="string" Class="buf-dropdown"
+                             SearchFunc=SearchKommune
+                             ValueChanged=OnKommuneChanged
+                             Value=_selectedKommune MaxItems="null"
+                             ResetValueOnEmptyText=true
+                             CoerceText=true CoerceValue=true @ref=_kommuneDropdown />
+
+                    <GenericComponent GuiType=GuiType.Label Content="VelgBarnevernLabel|RedStarTopSize8" />
+                    <MudAutocomplete T="string" Class="buf-dropdown"
+                             SearchFunc=SearchBvtjeneste
+                             ValueChanged=OnBvtjenesteChanged
+                             Value=_selectedBvtjeneste MaxItems="null"
+                             ResetValueOnEmptyText=true
+                             CoerceText=true CoerceValue=true @ref=_bvtjenesteDropdown />
+
                     @for (int i = 0; i < 2; i++)
                     {
                         <ContactRow ContactType=@(i == 0 ? ContactType.Person : ContactType.Leder) />
                     }
 
-                    <GenericComponent GuiType=@GuiType.Title Items=@(new[] { Language.NO["HvemGjelderTitle"] }) />
-                    <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["HvemGjelderLabel"] }) />
+                    <GenericComponent GuiType=GuiType.Title Content="HvemGjelderTitle" />
+                    <GenericComponent GuiType=GuiType.Label Content="HvemGjelderLabel" />
 
-                    <GenericComponent GuiType=@GuiType.Title Items=@(new[] { Language.NO["SøkBarnTitle"] }) />
-                    <GenericComponent GuiType=@GuiType.Label Items=@(new[] { Language.NO["SøkBarnLabel"] }) />
+                    <GenericComponent GuiType=GuiType.Title Content="SøkBarnTitle" />
+                    <GenericComponent GuiType=GuiType.Label Content="SøkBarnLabel" />
 
-                    <SokBarn BarnOgPerson="_barnOgPerson" OnBarnUpdated="@HandleBarnUpdated" />
+                    <SokBarnPanel BarnOgPerson=_barnOgPerson OnBarnUpdated=HandleBarnUpdated
+                          OnUkjentFnrClicked=@(() => _showBarnInfoPanel = !_showBarnInfoPanel) />
+
+                    <div class="@(_showBarnInfoPanel ? "panel-show" : "panel-hide")">
+                        <BarnInfoPanel />
+                    </div>
+
                 }
             </div>
             <div class="footer" />
@@ -57,13 +70,21 @@
 }
 
 @code {
+
+    protected async override Task OnInitializedAsync()
+    {
+        await InitializeDropdownsAsync();
+
+        base.OnInitialized();
+    }
+
     // Public for tests
     public string[] BestillingsTypes { get; set; }
     public string[] Kommunes { get; set; }
     public string[] Bvtjenestes { get; set; }
 
-    private DropdownComponent _kommuneDropdown;
-    private DropdownComponent _bvtjenesteDropdown;
+    private MudAutocomplete<string> _kommuneDropdown;
+    private MudAutocomplete<string> _bvtjenesteDropdown;
 
     private BarnOgPersonDto _barnOgPerson = new();
 
@@ -75,13 +96,7 @@
     private bool _isHenvisningSelected;
     private bool _isKommunesAndBvtjenestesSet;
     private bool _selectBvtjenesteWhenNoKommune;
-
-    protected async override Task OnInitializedAsync()
-    {
-        await InitializeDropdownsAsync();
-
-        base.OnInitialized();
-    }
+    private bool _showBarnInfoPanel;
 
     public async Task InitializeDropdownsAsync()
     {
@@ -93,7 +108,7 @@
         Logger.LogInformation("Exiting {Method}", nameof(InitializeDropdownsAsync));
     }
 
-    private async Task OnBestillingDropdownSelectionChanged(string selectedBestilling)
+    private async Task OnBestillingChanged(string selectedBestilling)
     {
         _selectedBestilling = selectedBestilling;
         _isHenvisningSelected = BestillingsTypes.FirstOrDefault() == _selectedBestilling;
@@ -117,51 +132,69 @@
         StateHasChanged();
     }
 
-    private async Task OnKommuneDropdownSelectionChanged(string selectedKommune)
+    private async Task OnKommuneChanged(string value)
     {
-        // If OnKommuneDropdownSelectionChanged() is called from OnBarneverntjenesteDropdownSelectionChanged
-        // We don't have to re-update Barnverntjenestedropdown
-        if (_selectBvtjenesteWhenNoKommune)
+        _selectedKommune = value;
+
+        // If no kommune is selected, all bvtjenestes are available
+        if (string.IsNullOrEmpty(_selectedKommune))
         {
-            _selectBvtjenesteWhenNoKommune = false;
+            Bvtjenestes = KodeverkService.GetBvtjenestesByKommunenavn(_selectedKommune);
         }
-        // Otherwise OnKommuneDropdownSelectionChanged() is called from a item change in KommuneDropdown,
-        // we update the items in the Barneverntjeneste dropdown
         else
         {
-            _selectedKommune = selectedKommune;
             Bvtjenestes = KodeverkService.GetBvtjenestesByKommunenavn(_selectedKommune);
-            _bvtjenesteDropdown.Items = Bvtjenestes;
-
-            // Displays automaticaly the only possible item or nothing if more than one
-            _bvtjenesteDropdown.SelectedBestilling = Bvtjenestes[0];
-
-            
+            // Displays automatically the only possible item or nothing if more than one
+            _selectedBvtjeneste = Bvtjenestes.Length == 1 ? Bvtjenestes[0] : null;
+            _bvtjenesteDropdown.Value = _selectedBvtjeneste;
+            _bvtjenesteDropdown.Text = _selectedBvtjeneste;
         }
     }
 
-    private async Task OnBvtjenesteDropdownSelectionChanged(string selectedBarneverntjeneste)
+    private async Task OnBvtjenesteChanged(string value)
     {
-        //// If no selecte kommune, chosing an barneverntjeneste automatically sets kommune dropdown to the right item
+        _selectedBvtjeneste = value;
+
+        // If we select a barneverntjeneste while no kommune selected,
+        // we set automatically the matching selected Kommune
         if (string.IsNullOrEmpty(_selectedKommune))
         {
-            _selectBvtjenesteWhenNoKommune = true;
-
-            _selectedBvtjeneste = selectedBarneverntjeneste;
-            var matchingKommuneIndex = KodeverkService.GetKommuneIndexByBvtjeneste(selectedBarneverntjeneste);
+            var matchingKommuneIndex = KodeverkService.GetKommuneIndexByBvtjeneste(_selectedBvtjeneste);
 
             if (matchingKommuneIndex != -1)
             {
                 // Update the items in the Kommune dropdown
-                _kommuneDropdown.SetSelected(matchingKommuneIndex);
+                _selectedKommune = Kommunes[matchingKommuneIndex];
+                _kommuneDropdown.Value = _selectedKommune;
+                _kommuneDropdown.Text = _selectedKommune;
             }
         }
-        StateHasChanged();
+    }
+
+    private async Task<IEnumerable<string>> SearchKommune(string value)
+    {
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value) || _selectedKommune == value)
+        {
+            return Kommunes;
+        }
+
+        return Kommunes.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    private async Task<IEnumerable<string>> SearchBvtjeneste(string value)
+    {
+        // if text is null or empty, show complete list
+        if (string.IsNullOrEmpty(value) || _selectedBvtjeneste == value)
+        {
+            return Bvtjenestes;
+        }
+
+        return Bvtjenestes.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
     }
 
     private void HandleBarnUpdated(BarnOgPersonDto barnOgPerson)
     {
         _barnOgPerson = barnOgPerson;
-    } 
-
+    }
 }

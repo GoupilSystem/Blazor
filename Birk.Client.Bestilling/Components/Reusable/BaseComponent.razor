@@ -1,22 +1,23 @@
-﻿@using Birk.Client.Bestilling.Components.Enums
+﻿@using Birk.Client.Bestilling.Components.Enums;
+@using Birk.Client.Bestilling.Utils.Constants;
 
 @code {
     [Parameter]
     public GuiType GuiType { get; set; }
 
     [Parameter]
-    public string CssExtra { get; set; } = "";
+    public string CssExtra { get; set; }
 
     [Parameter]
-    public string[] Items { get; set; }
+    public string Content { get; set; }
 
     [Parameter]
     public string Icon { get; set; }
 
     public string CssClass => $"buf-{GuiType.ToString().ToLower()} {CssExtra}";
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-    }
+    // In our solution syntax, | is the symbol for splitting a chain of string
+    // Ex: 3 items "item1", "item2" and "item3" for a dropdown 
+    // will be stored as "item1|item2|item3" in Language
+    public string BuildingContent => Content = string.IsNullOrEmpty(Content) ? "" 
+        : string.Concat(Content.Split('|').Select(s => Language.NO[s]));
 }

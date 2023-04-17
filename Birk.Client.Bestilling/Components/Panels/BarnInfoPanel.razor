@@ -1,0 +1,76 @@
+﻿@using Birk.Client.Bestilling.Components.Enums;
+@using Birk.Client.Bestilling.Components.Reusable
+@using Birk.Client.Bestilling.Utils.Constants;
+
+<div>
+    <GenericComponent GuiType=GuiType.Title Content="BarnInfoTitle" />
+
+    <GenericComponent GuiType=GuiType.Label Content="Fornavn|RedStarTopSize8" />
+    <GenericComponent GuiType=GuiType.Input Placeholder="Fornavn" ValueChanged=HandleFornavnChanged @ref="_fornavnInput" />
+
+    <GenericComponent GuiType=GuiType.Label Content="Etternavn|RedStarTopSize8" />
+    <GenericComponent GuiType=GuiType.Input Placeholder="Etternavn" ValueChanged=HandleEtternavnChanged @ref="_etternavnInput" />
+    
+    <GenericComponent GuiType=GuiType.Label Content="Fødselsnummer" />
+    <div class="buf-row">
+        <GenericComponent GuiType=GuiType.Input Placeholder="Fødselsnummer" ValueChanged=HandleBirkIdChanged @ref="_fnrInput" />
+        <GenericComponent GuiType=GuiType.CheckBox Content=UsikkertFnr OnCheck=Check />
+    </div>
+
+    <GenericComponent GuiType=GuiType.Label Content="BarnBirkId" />
+    <GenericComponent GuiType=GuiType.Input Placeholder="BirkId" ValueChanged=HandleBirkIdChanged @ref="_birkIdInput" />
+
+    <GenericComponent GuiType=GuiType.Label Content="Sikkerhetsnivå" />
+    <div class="buf-row" id="sikkerhetsnivå-container">
+        <div>
+            <DropdownComponent GuiType=GuiType.Dropdown Items=_sikkerhetsnivåTypes OnSelectionChanged=OnSikkerhetsnivåChanged />
+        </div>
+        <div class="info-icon-container">
+            <i class="fas fa-info-circle info size12" @onclick="() => { ShowHelp = !ShowHelp; }" />
+            @if (ShowHelp)
+            {
+                <div class="help-text-container">
+                    <div class="help-text">
+                        @(new MarkupString(Language.NO["InfoText"]))
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private GenericComponent _fornavnInput;
+    private GenericComponent _etternavnInput;
+    private GenericComponent _fnrInput;
+    private GenericComponent _birkIdInput;
+
+    private string[] _sikkerhetsnivåTypes = Language.NO["SikkerhetnivåTypes"].Split("|");
+
+    private bool ShowHelp { get; set; }
+
+    private void HandleFornavnChanged(string value)
+    { 
+        // 17/04: coming code in the next US
+    }
+
+    private void HandleEtternavnChanged(string value)
+    { 
+        // 17/04: coming code in the next US
+    }
+
+    private void HandleBirkIdChanged(string value)
+    { 
+        // 17/04: coming code in the next US
+    }
+
+    private void Check(bool value)
+    { 
+        // 17/04: coming code in the next US
+    }
+
+    private async Task OnSikkerhetsnivåChanged(string selectedSikkerhetsnivåType)
+    {
+        // 17/04: coming code in the next US
+    }
+}

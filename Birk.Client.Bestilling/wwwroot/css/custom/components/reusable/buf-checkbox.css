@@ -1,0 +1,62 @@
+﻿.container {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    margin-left: 2rem;
+    font-family: var(--font-family);
+    font-size: var(--font-size-12px);
+    color: var(--buf-green);
+    font-weight: 600;
+    letter-spacing: 0em;
+}
+
+    .container input {
+        position: absolute;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+.checkmark {
+    position: absolute;
+    left: -1rem;  /*Margin/padding don't work properly for the checkbox, so we use position*/
+    height: 1.4rem;
+    width: 1.4rem;
+    background-color: #eee;
+    border-radius: 0;
+    border-color: var(--buf-green);
+    border-width: 0.2rem;
+}
+
+.container:hover input ~ .checkmark {
+    background-color: #ccc;
+}
+
+.container input:checked ~ .checkmark {
+    background-color: #cec;
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.container input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.container .checkmark:after {
+    left: 3px;
+    width: 5px;
+    height: 10px;
+    border: solid var(--buf-green);
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}

@@ -22,11 +22,11 @@ namespace Birk.Client.Bestilling.Utils.Constants
                 { "VelgKommuneLabel", "Velg ansvarlig kommune " },
                 { "VelgBarnevernLabel", "Velg barneverntjeneste/bydel " },
                 { "KontaktpersonLabel", "Kontaktperson " },
-                { "KontaktpersonPlaceholder", "navn på kontaktperson" },
+                { "KontaktpersonPlaceholder", "Skriv inn navn på kontaktperson" },
                 { "TelefonLabel", "Telefon/e-post " },
-                { "TelefonPlaceholder", "kontaktinfo" },
+                { "TelefonPlaceholder", "Skriv inn kontaktinfo" },
                 { "KontaktlederLabel", "Nærmeste leder til kontaktperson" },
-                { "KontaktlederPlaceholder", "navn på nærmeste leder" },
+                { "KontaktlederPlaceholder", "Skriv inn navn på nærmeste leder" },
 
                 // Panel: Hvem gjelder bestillingen?
                 { "HvemGjelderTitle", "Hvem gjelder bestillingen?" },
@@ -37,12 +37,27 @@ namespace Birk.Client.Bestilling.Utils.Constants
                 { "SøkBarnTitle", "Søk opp barnet i Birk" },
                 { "SøkBarnLabel", "Søk opp barn eller mor til ufødt barn i Birk. Bruk fødselsnummer for å søke." +
                     "<br><b>Dersom barnet ikke er registrert fører søket deg til manuell registrering.</b>"},
-                { "FødselsnummerPlaceholder", "fødselsnummer" },
                 { "SøkBarnButton", "Søk" },
                 { "FnrNotNumericValue", "OBS! Kun tall i dette feltet"},
                 { "FnrNot11DigitsWarning", "OBS! Fødselsnummer skal ha 11 siffer"},
                 { "PersonNotFoundWarning", "OBS! Ugyldig fødselsnummer"},
                 { "UkjentFnr", "Ukjent fødselsnummer"},
+
+                // Panel: Barnopplysning
+                { "BarnInfoTitle", "Informasjon om barnet" },
+                { "Fornavn", "Fornavn"},
+                { "FornavnPlaceholder", "Skriv inn fornavn"},
+                { "Etternavn", "Etternavn"},
+                { "EtternavnPlaceholder", "Skriv inn etternavn"},
+                { "Fødselsnummer", "Fødselsnummer" },
+                { "FødselsnummerPlaceholder", "Skriv inn fødselsnummer" },
+                { "BarnBirkId", "BirkId"},
+                { "BirkIdPlaceholder", "Ikke registrert i Birk"},
+                { "UsikkertFnr", "Usikkert fødselsnummer"},
+                { "Sikkerhetsnivå", "Sikkerhetsnivå" },
+                { "SikkerhetnivåTypes", "Ordinært sikkerhetsnivå|Skjult adresse|Sperret adresse, fortrolig|Sperret adresse, strengt fortrolig" },
+                { "InfoText", "Beskrivelse av hva du skal gjøre hvis det er skjerpet sikkerhetsnivå!" +
+                    "<ul class=\"bullet-list\"><li>Melde inn i ephorte</li><li>Melde sikkerhetsbehov og hvem som skal ha tilgang</li></ul>" },
 
                 // Icons as markup string
                 { "RedStarTopSize8", "<i class=\"fas fa-star top size8\" style=\"color: red;\"></i>" }, // Red cannot pass as a class
@@ -74,4 +89,4 @@ namespace Birk.Client.Bestilling.Utils.Constants
 
         public static ReadOnlyDictionary<string, string> NO => _NO.Value;
     }
-}
+}   

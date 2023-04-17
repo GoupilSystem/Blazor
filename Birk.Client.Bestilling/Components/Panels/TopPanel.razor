@@ -1,0 +1,22 @@
+﻿@using Birk.Client.Bestilling.Models.Dtos;
+@using Birk.Client.Bestilling.Utils.Constants;
+@using Birk.Client.Bestilling.Utils.Helpers;
+
+<div class="top-panel">
+    <div class="top-row">
+        <div>@Language.NO["BirkId"]@(BarnOgPerson != null ? BarnOgPerson.BirkId : "")</div>
+        <div>@Language.NO["Kjønn"]@(BarnOgPerson != null 
+            ? StringHelper.ConvertGender(BarnOgPerson.KjønnTypeFk) : "")</div>
+    </div>
+    <div class="top-row">
+        <div>@Language.NO["Fødselsdato"]@(BarnOgPerson != null 
+            ? StringHelper.ConvertFødt(BarnOgPerson.Født) : null)</div>
+        <div>@Language.NO["Alder"]@(BarnOgPerson != null ? BarnOgPerson.Født.HasValue 
+            ? StringHelper.CalculateAge(BarnOgPerson.Født.Value) : "" : "")</div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public BarnOgPersonDto BarnOgPerson { get; set; }
+}

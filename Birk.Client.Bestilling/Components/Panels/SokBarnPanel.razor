@@ -3,29 +3,22 @@
 @using Birk.Client.Bestilling.Models.Dtos;
 @using Birk.Client.Bestilling.Services.Interfaces;
 @using Birk.Client.Bestilling.Utils.Constants;
-@using Birk.Client.Bestilling.Utils.Helpers;
 @using System.Text.RegularExpressions;
 @inject IBarnService BarnService
 
 <div>
-
-    <div style="display: flex; flex-direction: row;">
-        <GenericComponent GuiType="@GuiType.Input" Placeholder='@(StringHelper.BuildPlaceholder(Language.NO["FødselsnummerPlaceholder"]))'
-                          ValueChanged="@HandleFnrChanged" CssExtra="søkbarn" @ref="_fnrInput" />
-        <GenericComponent GuiType=@GuiType.Button Items=@(new[] { Language.NO["SøkBarnButton"] }) OnClick=@HandleSøkBarnButtonClick CssExtra="søkbarn" />
-
+    <div class="buf-row">
+        <GenericComponent GuiType=GuiType.Input Placeholder="Fødselsnummer" ValueChanged=HandleFnrChanged CssExtra="søkbarn" @ref="_fnrInput" />
+        <GenericComponent GuiType=GuiType.Button Content="SøkBarnButton" OnClick=HandleSøkBarnButtonClick CssExtra="søkbarn" />
         @foreach (KeyValuePair<string, bool> warning in _warnings)
         {
             if (warning.Value)
             {
-                @*<GenericComponent GuiType="GuiType.Label" Items=@(new[] { Language.NO[warning.Key] }) Icon="fas fa-exclamation-circle" CssExtra="warning" />*@
-                <GenericComponent GuiType="GuiType.Label" Items=@(new[] { Language.NO["WarningSize8"] + Language.NO[warning.Key]}) CssExtra="warning" />
+                <GenericComponent GuiType=GuiType.Label Content=@($"WarningSize8|{warning.Key}") CssExtra="warning" />
             }
         }
     </div>
-
-    <GenericComponent GuiType=@GuiType.Button Items=@(new[] { Language.NO["UkjentFnr"] }) OnClick=@HandleUkjentFnrButtonClick CssExtra="ukjentfnr" />
-
+    <GenericComponent GuiType=GuiType.Button Content="UkjentFnr" OnClick=HandleUkjentFnrButtonClick CssExtra="ukjentfnr" />
 </div>
 
 
@@ -34,13 +27,16 @@
     public EventCallback<BarnOgPersonDto> OnBarnUpdated { get; set; }
 
     [Parameter]
+    public EventCallback OnUkjentFnrClicked { get; set; }
+
+    [Parameter]
     public BarnOgPersonDto BarnOgPerson { get; set; }
 
     private GenericComponent _fnrInput;
 
     private Dictionary<string, bool> _warnings = new();
 
-    public string Fnr = "HAHA";
+    private string _fnr = "";
 
     protected override void OnInitialized()
     {
@@ -56,22 +52,22 @@
 
     private void HandleFnrChanged(string fnr)
     {
-        Fnr = fnr;
+        _fnr = fnr;
 
         _warnings["FnrNot11DigitsWarning"] = false;
         _warnings["PersonNotFoundWarning"] = false;
-        _warnings["FnrNotNumericValue"] = !string.IsNullOrEmpty(Fnr) && !Regex.IsMatch(Fnr, "^[0-9]*$");
+        _warnings["FnrNotNumericValue"] = !string.IsNullOrEmpty(_fnr) && !Regex.IsMatch(_fnr, "^[0-9]*$");
     }
 
     private async Task HandleSøkBarnButtonClick()
     {
-        if (!string.IsNullOrEmpty(Fnr) && !_warnings["FnrNotNumericValue"])
+        if (!string.IsNullOrEmpty(_fnr) && !_warnings["FnrNotNumericValue"])
         {
-            _warnings["FnrNot11DigitsWarning"] = !Regex.IsMatch(Fnr, "^[0-9]{11}$");
+            _warnings["FnrNot11DigitsWarning"] = !Regex.IsMatch(_fnr, "^[0-9]{11}$");
 
             if (_warnings["FnrNot11DigitsWarning"]) { return; }
 
-            BarnOgPerson = await BarnService.GetBarnByFnr(Fnr);
+            BarnOgPerson = await BarnService.GetBarnByFnr(_fnr);
 
             _warnings["PersonNotFoundWarning"] = BarnOgPerson == null;
 
@@ -90,5 +86,7 @@
         _fnrInput.Reset();
 
         await HandleSøkBarnButtonClick();
+
+        OnUkjentFnrClicked.InvokeAsync();
     }
 }
