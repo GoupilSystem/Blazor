@@ -110,7 +110,8 @@
                     { "bind-value", _inputValue },
                     { "oninput", EventCallback.Factory.Create(this, OnInputValueChanged) },
                     { "bind-value:event", "onchange" },
-                    { "onchange", EventCallback.Factory.Create(this, OnBlurValueChanged) }
+                    { "onchange", EventCallback.Factory.Create(this, OnBlurValueChanged) },
+                    { "maxlength", 2000 }
                 });
         }
 

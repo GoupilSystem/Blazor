@@ -60,6 +60,7 @@ namespace Birk.Client.Bestilling.Utils.Constants
                     "<ul class=\"bullet-list\"><li>Melde inn i ephorte</li><li>Melde sikkerhetsbehov og hvem som skal ha tilgang</li></ul>" },
                 
                 // Merknad
+                { "MerknadLabel", "Annen informasjon"},
                 { "MerknadPlaceholder", "Skriv inn en merknad"},
 
                 // Icons as markup string

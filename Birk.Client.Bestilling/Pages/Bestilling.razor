@@ -61,7 +61,8 @@
                         <BarnInfoPanel />
                     </div>
 
-                    <GenericComponent GuiType=GuiType.TextArea Placeholder="Merknad" />
+                    <GenericComponent GuiType=GuiType.Title Content="MerknadLabel" />
+                    <GenericComponent GuiType=GuiType.TextArea Placeholder="Merknad" ValueChanged=HandleMerknadChanged CssExtra="merknad"/>
 
                 }
             </div>
@@ -198,5 +199,10 @@
     private void HandleBarnUpdated(BarnOgPersonDto barnOgPerson)
     {
         _barnOgPerson = barnOgPerson;
+    }
+
+    private void HandleMerknadChanged(string value)
+    {
+        // 18/04: coming code in the next US
     }
 }
