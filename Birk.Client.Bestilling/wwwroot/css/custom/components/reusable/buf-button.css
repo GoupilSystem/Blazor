@@ -30,3 +30,10 @@
         font-size: var(--font-size-14px);
         height: 2.5rem;
     }
+    .buf-button.registrer {
+        background: var(--buf-green);
+        border-radius: 2px;
+        color: white;
+        font-size: var(--font-size-14px);
+        height: 3rem;
+    }

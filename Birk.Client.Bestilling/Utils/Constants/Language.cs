@@ -63,6 +63,9 @@ namespace Birk.Client.Bestilling.Utils.Constants
                 { "MerknadLabel", "Annen informasjon"},
                 { "MerknadPlaceholder", "Skriv inn en merknad"},
 
+                // Fullfør registrering
+                { "Registrer", "Fullfør registrering"},
+
                 // Icons as markup string
                 { "RedStarTopSize8", "<i class=\"fas fa-star top size8\" style=\"color: red;\"></i>" }, // Red cannot pass as a class
                 { "WarningSize8", "<i class=\"fas fa-exclamation-circle size8\"></i>" },
