@@ -18,7 +18,7 @@
         background-color: var(--buf-active-green);
     }
 
-    .buf-button.søkbarn {
+    .buf-button.søk-barn {
         margin-left: 0.5rem;
         height: 4rem;
         font-size: var(--font-size-28px);

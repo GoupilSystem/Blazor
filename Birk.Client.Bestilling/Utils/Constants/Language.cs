@@ -51,7 +51,7 @@ namespace Birk.Client.Bestilling.Utils.Constants
                 { "EtternavnPlaceholder", "Skriv inn etternavn"},
                 { "Fødselsnummer", "Fødselsnummer" },
                 { "FødselsnummerPlaceholder", "Skriv inn fødselsnummer" },
-                { "BarnBirkId", "BirkId"},
+                { "BirkIdLabel", "BirkId"},
                 { "BirkIdPlaceholder", "Ikke registrert i Birk"},
                 { "UsikkertFnr", "Usikkert fødselsnummer"},
                 { "Sikkerhetsnivå", "Sikkerhetsnivå" },

@@ -8,8 +8,8 @@
 
 <div>
     <div class="buf-row">
-        <GenericComponent GuiType=GuiType.Input Placeholder="Fødselsnummer" ValueChanged=HandleFnrChanged CssExtra="søkbarn" @ref="_fnrInput" />
-        <GenericComponent GuiType=GuiType.Button Content="SøkBarnButton" OnClick=HandleSøkBarnButtonClick CssExtra="søkbarn" />
+        <GenericComponent GuiType=GuiType.Input Placeholder="Fødselsnummer" ValueChanged=HandleFnrChanged CssExtra="søk-barn" @ref=_fnrInput />
+        <GenericComponent GuiType=GuiType.Button Content="SøkBarnButton" OnClick=HandleSøkBarnButtonClick CssExtra="søk-barn" />
         @foreach (KeyValuePair<string, bool> warning in _warnings)
         {
             if (warning.Value)

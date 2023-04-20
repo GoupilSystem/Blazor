@@ -28,7 +28,7 @@
                     <GenericComponent GuiType=GuiType.Title Content="KommuneTitle" />
 
                     <GenericComponent GuiType=GuiType.Label Content="VelgKommuneLabel|RedStarTopSize8" />
-                    <MudAutocomplete T="string" Class="buf-dropdown"
+                    <MudAutocomplete T=string Class="buf-dropdown"
                              SearchFunc=SearchKommune
                              ValueChanged=OnKommuneChanged
                              Value=_selectedKommune MaxItems="null"
@@ -36,7 +36,7 @@
                              CoerceText=true CoerceValue=true @ref=_kommuneDropdown />
 
                     <GenericComponent GuiType=GuiType.Label Content="VelgBarnevernLabel|RedStarTopSize8" />
-                    <MudAutocomplete T="string" Class="buf-dropdown"
+                    <MudAutocomplete T=string Class="buf-dropdown"
                              SearchFunc=SearchBvtjeneste
                              ValueChanged=OnBvtjenesteChanged
                              Value=_selectedBvtjeneste MaxItems="null"
