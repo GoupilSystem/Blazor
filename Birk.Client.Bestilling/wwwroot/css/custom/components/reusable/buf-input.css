@@ -16,3 +16,9 @@
         font-size: var(--font-size-14px);
         font-weight: 600;
     }
+
+    .buf-input:disabled {
+        border: 1px solid var(--buf-dark-grey);
+        background-color: var(--buf-background-disabled);
+        color: var(--buf-font-grey);
+    }

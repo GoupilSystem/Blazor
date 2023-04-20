@@ -22,7 +22,7 @@
     [Parameter]
     public bool Checked { get; set; }
 
-    private string _placeholder => Language.NO[$"{Placeholder}Placeholder"];
+    private string _placeholder => !string.IsNullOrEmpty(Placeholder) ? Language.NO[$"{Placeholder}Placeholder"] : "";
 
     private RenderFragment DynamicFragment;
 
@@ -52,7 +52,8 @@
                     // Event triggered on quit input (ex. copy/paste _inputValue value and click directly on Søk button)
                     // Ref: https://stackoverflow.com/questions/65803149/blazor-onchange-event
                     { "bind-value:event", "onchange" },
-                    { "onchange", EventCallback.Factory.Create(this, OnBlurValueChanged) }
+                    { "onchange", EventCallback.Factory.Create(this, OnBlurValueChanged) },
+                    { "disabled", Disabled }
                 });
         }
 
