@@ -48,9 +48,6 @@
                         <ContactRow ContactType=@(i == 0 ? ContactType.Person : ContactType.Leder) />
                     }
 
-                    <GenericComponent GuiType=GuiType.Title Content="HvemGjelderTitle" />
-                    <GenericComponent GuiType=GuiType.Label Content="HvemGjelderLabel" />
-
                     <GenericComponent GuiType=GuiType.Title Content="SøkBarnTitle" />
                     <GenericComponent GuiType=GuiType.Label Content="SøkBarnLabel" />
 
@@ -58,7 +55,7 @@
                           OnUkjentFnrClicked=@(() => _showBarnInfoPanel = !_showBarnInfoPanel) />
 
                     <div class="@(_showBarnInfoPanel ? "panel-show" : "panel-hide")">
-                        <BarnInfoPanel />
+                        <BarnInfoPanel BarnOgPerson=_barnOgPerson />
                     </div>
 
                     <GenericComponent GuiType=GuiType.Title Content="MerknadLabel" />

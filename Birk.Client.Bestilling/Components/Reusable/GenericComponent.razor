@@ -14,10 +14,13 @@
     public EventCallback<MouseEventArgs> OnClick { get; set; }
 
     [Parameter]
+    public EventCallback<bool> OnCheck { get; set; }
+
+    [Parameter]
     public string Placeholder { get; set; }
 
     [Parameter]
-    public EventCallback<bool> OnCheck { get; set; }
+    public string InputValue { get; set; }    
 
     [Parameter]
     public bool Checked { get; set; }
@@ -39,6 +42,10 @@
 
         else if (GuiType == GuiType.Input)
         {
+            if (InputValue != null)
+            {
+                _inputValue = InputValue;
+            }
             builder.OpenElement(1, "input");
             builder.AddMultipleAttributes(2, GetMultipleAttributes("class", "placeholder", "value", 
                 "oninput", "bind-value:event", "onchange", "disabled"));
@@ -100,12 +107,12 @@
                     attributes.Add(attribute, _inputValue); break;
                 case "bind-value": 
                     attributes.Add(attribute, _inputValue); break;
-                case "oninput":
-                    attributes.Add(attribute, EventCallback.Factory.Create(this, OnInputValueChanged)); break;
                 case "bind-value:event":
                     attributes.Add(attribute, "onchange"); break;
                 case "onchange":
                     attributes.Add(attribute, EventCallback.Factory.Create(this, OnBlurValueChanged)); break;
+                case "oninput":
+                    attributes.Add(attribute, EventCallback.Factory.Create(this, OnInputValueChanged)); break;
                 case "disabled":
                     attributes.Add(attribute, Disabled); break;
                 case "onclick":

@@ -61,29 +61,32 @@
 
     private async Task HandleSøkBarnButtonClick()
     {
-        if (!string.IsNullOrEmpty(_fnr) && !_warnings["FnrNotNumericValue"])
+        if (_warnings["FnrNotNumericValue"])
         {
-            _warnings["FnrNot11DigitsWarning"] = !Regex.IsMatch(_fnr, "^[0-9]{11}$");
-
-            if (_warnings["FnrNot11DigitsWarning"]) { return; }
-
-            BarnOgPerson = await BarnService.GetBarnByFnr(_fnr);
-
-            _warnings["PersonNotFoundWarning"] = BarnOgPerson == null;
-
+            BarnOgPerson = new() { Fødselsnummer = _fnr };
             OnBarnUpdated.InvokeAsync(BarnOgPerson);
+            return;
         }
-        else
-        {
-            _warnings["PersonNotFoundWarning"] = false;
 
-            OnBarnUpdated.InvokeAsync(null);
+        _warnings["FnrNot11DigitsWarning"] = !Regex.IsMatch(_fnr, "^[0-9]{11}$");
+        if (_warnings["FnrNot11DigitsWarning"])
+        {
+            BarnOgPerson = new() { Fødselsnummer = _fnr };
+            OnBarnUpdated.InvokeAsync(BarnOgPerson);
+            return;
         }
+
+        var barnOgPerson = await BarnService.GetBarnByFnr(_fnr);
+
+        BarnOgPerson = barnOgPerson != null ? barnOgPerson : new() { Fødselsnummer = _fnr };
+        _warnings["PersonNotFoundWarning"] = barnOgPerson == null;
+
+        OnBarnUpdated.InvokeAsync(BarnOgPerson);
     }
 
     private async Task HandleUkjentFnrButtonClick()
     {
-        _fnrInput.Reset();
+        //Change for testing: 24.04: _fnrInput.Reset();
 
         await HandleSøkBarnButtonClick();
 

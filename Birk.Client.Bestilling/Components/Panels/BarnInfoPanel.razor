@@ -1,5 +1,6 @@
 ﻿@using Birk.Client.Bestilling.Components.Enums;
 @using Birk.Client.Bestilling.Components.Reusable
+@using Birk.Client.Bestilling.Models.Dtos;
 @using Birk.Client.Bestilling.Utils.Constants;
 @using System.Text.RegularExpressions;
 
@@ -13,10 +14,12 @@
     <GenericComponent GuiType=GuiType.Input Placeholder="Etternavn" ValueChanged=HandleEtternavnChanged @ref=_etternavnInput />
 
     <GenericComponent GuiType=GuiType.Label Content="Fødselsnummer" />
+
     <div class="buf-row">
-        <GenericComponent GuiType=GuiType.Input Placeholder="Fødselsnummer" ValueChanged=HandleFnrChanged @ref=_fnrInput />
-        <GenericComponent GuiType=GuiType.CheckBox Content=UsikkertFnr OnCheck=Check />
+        <GenericComponent GuiType=GuiType.Input InputValue=@BarnOgPerson?.Fødselsnummer Placeholder="Fødselsnummer" ValueChanged=HandleFnrChanged @ref=_fnrInput />
+        <GenericComponent GuiType=GuiType.CheckBox Content="UsikkertFnr" OnCheck=Check />
     </div>
+
     @foreach (KeyValuePair<string, bool> warning in _warnings)
     {
         if (warning.Value)
@@ -48,6 +51,9 @@
 </div>
 
 @code {
+    [Parameter]
+    public BarnOgPersonDto BarnOgPerson { get; set; }
+
     private GenericComponent _fornavnInput;
     private GenericComponent _etternavnInput;
     private GenericComponent _fnrInput;
