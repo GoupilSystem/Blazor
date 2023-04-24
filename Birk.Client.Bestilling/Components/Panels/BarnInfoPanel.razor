@@ -1,24 +1,35 @@
 ﻿@using Birk.Client.Bestilling.Components.Enums;
 @using Birk.Client.Bestilling.Components.Reusable
+@using Birk.Client.Bestilling.Models.Dtos;
 @using Birk.Client.Bestilling.Utils.Constants;
+@using System.Text.RegularExpressions;
 
 <div>
     <GenericComponent GuiType=GuiType.Title Content="BarnInfoTitle" />
 
     <GenericComponent GuiType=GuiType.Label Content="Fornavn|RedStarTopSize8" />
-    <GenericComponent GuiType=GuiType.Input Placeholder="Fornavn" ValueChanged=HandleFornavnChanged @ref="_fornavnInput" />
+    <GenericComponent GuiType=GuiType.Input Placeholder="Fornavn" ValueChanged=HandleFornavnChanged @ref=_fornavnInput />
 
     <GenericComponent GuiType=GuiType.Label Content="Etternavn|RedStarTopSize8" />
-    <GenericComponent GuiType=GuiType.Input Placeholder="Etternavn" ValueChanged=HandleEtternavnChanged @ref="_etternavnInput" />
-    
+    <GenericComponent GuiType=GuiType.Input Placeholder="Etternavn" ValueChanged=HandleEtternavnChanged @ref=_etternavnInput />
+
     <GenericComponent GuiType=GuiType.Label Content="Fødselsnummer" />
+
     <div class="buf-row">
-        <GenericComponent GuiType=GuiType.Input Placeholder="Fødselsnummer" ValueChanged=HandleBirkIdChanged @ref="_fnrInput" />
-        <GenericComponent GuiType=GuiType.CheckBox Content=UsikkertFnr OnCheck=Check />
+        <GenericComponent GuiType=GuiType.Input InputValue=@BarnOgPerson?.Fødselsnummer Placeholder="Fødselsnummer" ValueChanged=HandleFnrChanged @ref=_fnrInput />
+        <GenericComponent GuiType=GuiType.CheckBox Content="UsikkertFnr" OnCheck=Check />
     </div>
 
-    <GenericComponent GuiType=GuiType.Label Content="BarnBirkId" />
-    <GenericComponent GuiType=GuiType.Input Placeholder="BirkId" ValueChanged=HandleBirkIdChanged @ref="_birkIdInput" />
+    @foreach (KeyValuePair<string, bool> warning in _warnings)
+    {
+        if (warning.Value)
+        {
+            <GenericComponent GuiType=GuiType.Label Content=@($"WarningSize8|{warning.Key}") CssExtra="warning" />
+        }
+    }
+
+    <GenericComponent GuiType=GuiType.Label Content="BirkIdLabel" />
+    <GenericComponent GuiType=GuiType.Input Placeholder="BirkId" Disabled=true @ref=_birkIdInput />
 
     <GenericComponent GuiType=GuiType.Label Content="Sikkerhetsnivå" />
     <div class="buf-row" id="sikkerhetsnivå-container">
@@ -40,6 +51,9 @@
 </div>
 
 @code {
+    [Parameter]
+    public BarnOgPersonDto BarnOgPerson { get; set; }
+
     private GenericComponent _fornavnInput;
     private GenericComponent _etternavnInput;
     private GenericComponent _fnrInput;
@@ -49,23 +63,47 @@
 
     private bool ShowHelp { get; set; }
 
+    private Dictionary<string, bool> _warnings = new();
+
+    private string _fnr = "";
+
+    protected override void OnInitialized()
+    {
+        InitializeWarnings();
+    }
+
+    private void InitializeWarnings()
+    {
+        _warnings.Add("FnrNotNumericValue", false);
+        _warnings.Add("FnrNot11DigitsWarning", false);
+    }
+
     private void HandleFornavnChanged(string value)
-    { 
+    {
         // 17/04: coming code in the next US
     }
 
     private void HandleEtternavnChanged(string value)
-    { 
+    {
         // 17/04: coming code in the next US
     }
 
+    private void HandleFnrChanged(string fnr)
+    {
+        _fnr = fnr;
+
+        _warnings["FnrNot11DigitsWarning"] = false;
+        _warnings["PersonNotFoundWarning"] = false;
+        _warnings["FnrNotNumericValue"] = !string.IsNullOrEmpty(_fnr) && !Regex.IsMatch(_fnr, "^[0-9]*$");
+    }
+
     private void HandleBirkIdChanged(string value)
-    { 
+    {
         // 17/04: coming code in the next US
     }
 
     private void Check(bool value)
-    { 
+    {
         // 17/04: coming code in the next US
     }
 

@@ -25,7 +25,10 @@ namespace Birk.Client.Bestilling.Services.Implementation
             var response = await _httpService.HttpGet<List<BestillingTypeDto>>("bestillingtypes");
             if (response.IsSuccess)
             {
-                return response.Data.Select(bt => bt.Verdi).ToArray();
+                return response.Data
+                    .Where(bt => bt.GyldigTilDato == null || bt.GyldigTilDato >= DateTime.Now)
+                    .Select(bt => bt.Verdi)
+                    .ToArray();
             }
             return new[] { Language.NO["NoData"] };
         }
