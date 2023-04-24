@@ -55,7 +55,7 @@
                           OnUkjentFnrClicked=@(() => _showBarnInfoPanel = !_showBarnInfoPanel) />
 
                     <div class="@(_showBarnInfoPanel ? "panel-show" : "panel-hide")">
-                        <BarnInfoPanel BarnOgPerson=_barnOgPerson />
+                        <BarnInfoPanel BarnOgPerson=_barnOgPerson OnBarnUpdated=HandleBarnUpdated />
                     </div>
 
                     <GenericComponent GuiType=GuiType.Title Content="MerknadLabel" />
@@ -199,6 +199,13 @@
     private void HandleBarnUpdated(BarnOgPersonDto barnOgPerson)
     {
         _barnOgPerson = barnOgPerson;
+        // BarnOgPerson can be updated from SøkPanel or BarnInfoPanel
+        // If BarnOgPerson from SøkPanel with no name, it means no match was found in Birk system
+        // -> we open automatically BArnInfoPanel
+        if (!_showBarnInfoPanel && _barnOgPerson.Pk == 0)
+        {
+            _showBarnInfoPanel = true;
+        }
     }
 
     private void HandleMerknadChanged(string value)

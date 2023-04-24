@@ -2,6 +2,7 @@
 @using Birk.Client.Bestilling.Components.Reusable
 @using Birk.Client.Bestilling.Models.Dtos;
 @using Birk.Client.Bestilling.Utils.Constants;
+@using Birk.Client.Bestilling.Utils.Helpers;
 @using System.Text.RegularExpressions;
 
 <div>
@@ -52,6 +53,9 @@
 
 @code {
     [Parameter]
+    public EventCallback<BarnOgPersonDto> OnBarnUpdated { get; set; }
+
+    [Parameter]
     public BarnOgPersonDto BarnOgPerson { get; set; }
 
     private GenericComponent _fornavnInput;
@@ -92,9 +96,17 @@
     {
         _fnr = fnr;
 
-        _warnings["FnrNot11DigitsWarning"] = false;
-        _warnings["PersonNotFoundWarning"] = false;
         _warnings["FnrNotNumericValue"] = !string.IsNullOrEmpty(_fnr) && !Regex.IsMatch(_fnr, "^[0-9]*$");
+        if (!_warnings["FnrNotNumericValue"])
+        { 
+            _warnings["FnrNot11DigitsWarning"] = !Regex.IsMatch(_fnr, "^[0-9]{11}$");
+        }
+
+        BarnOgPerson.Fødselsnummer = !_warnings["FnrNotNumericValue"] && !_warnings["FnrNot11DigitsWarning"] ? _fnr : null;
+
+        BarnOgPerson.Født = StringHelper.ConvertFnrToFødt(BarnOgPerson.Fødselsnummer);
+
+        OnBarnUpdated.InvokeAsync(BarnOgPerson);
     }
 
     private void HandleBirkIdChanged(string value)
