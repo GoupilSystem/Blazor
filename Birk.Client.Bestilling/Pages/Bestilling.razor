@@ -199,10 +199,8 @@
     private void HandleBarnUpdated(BarnOgPersonDto barnOgPerson)
     {
         _barnOgPerson = barnOgPerson;
-        // BarnOgPerson can be updated from SøkPanel or BarnInfoPanel
-        // If BarnOgPerson from SøkPanel with no name, it means no match was found in Birk system
-        // -> we open automatically BArnInfoPanel
-        if (!_showBarnInfoPanel && _barnOgPerson.Pk == 0)
+
+        if (!_showBarnInfoPanel)
         {
             _showBarnInfoPanel = true;
         }
