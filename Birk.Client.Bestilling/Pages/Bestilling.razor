@@ -55,7 +55,7 @@
                           OnUkjentFnrClicked=@(() => _showBarnInfoPanel = !_showBarnInfoPanel) />
 
                     <div class="@(_showBarnInfoPanel ? "panel-show" : "panel-hide")">
-                        <BarnInfoPanel BarnOgPerson=_barnOgPerson />
+                        <BarnInfoPanel BarnOgPerson=_barnOgPerson OnBarnUpdated=HandleBarnUpdated />
                     </div>
 
                     <GenericComponent GuiType=GuiType.Title Content="MerknadLabel" />
@@ -199,6 +199,11 @@
     private void HandleBarnUpdated(BarnOgPersonDto barnOgPerson)
     {
         _barnOgPerson = barnOgPerson;
+
+        if (!_showBarnInfoPanel)
+        {
+            _showBarnInfoPanel = true;
+        }
     }
 
     private void HandleMerknadChanged(string value)

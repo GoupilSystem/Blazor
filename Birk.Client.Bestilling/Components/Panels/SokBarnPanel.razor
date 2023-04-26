@@ -79,15 +79,12 @@
         var barnOgPerson = await BarnService.GetBarnByFnr(_fnr);
 
         BarnOgPerson = barnOgPerson != null ? barnOgPerson : new() { Fødselsnummer = _fnr };
-        _warnings["PersonNotFoundWarning"] = barnOgPerson == null;
 
         OnBarnUpdated.InvokeAsync(BarnOgPerson);
     }
 
     private async Task HandleUkjentFnrButtonClick()
     {
-        //Change for testing: 24.04: _fnrInput.Reset();
-
         await HandleSøkBarnButtonClick();
 
         OnUkjentFnrClicked.InvokeAsync();

@@ -1,4 +1,6 @@
-﻿namespace Birk.Client.Bestilling.Utils.Helpers
+﻿using System.Globalization;
+
+namespace Birk.Client.Bestilling.Utils.Helpers
 {
     public static class StringHelper
     {
@@ -7,6 +9,20 @@
             if (født == null) return "";
 
             return $"{født.Value.Day}/{født.Value.Month}/{født.Value.Year}";
+        }
+
+        public static DateTime? ConvertFnrToFødt(string fnr)
+        {
+            if (string.IsNullOrEmpty(fnr)) return null;
+
+            string strFødt = fnr.Substring(0, 6);
+            
+            if (DateTime.TryParseExact(strFødt, "ddMMyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime født))
+            {
+                return født;
+            }
+
+            return null;
         }
 
         public static string CalculateAge(DateTime birthdate)

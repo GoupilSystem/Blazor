@@ -40,7 +40,7 @@ namespace Birk.Client.Bestilling.Utils.Constants
                 { "SøkBarnButton", "Søk" },
                 { "FnrNotNumericValue", "OBS! Kun tall i dette feltet"},
                 { "FnrNot11DigitsWarning", "OBS! Fødselsnummer skal ha 11 siffer"},
-                { "PersonNotFoundWarning", "OBS! Ugyldig fødselsnummer"},
+                { "PersonNotFoundWarning", "OBS! Fødselsnummer finnes ikke i Birk-systemet"},
                 { "UkjentFnr", "Ukjent fødselsnummer"},
 
                 // Panel: Barnopplysning
