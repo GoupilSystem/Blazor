@@ -9,15 +9,18 @@
     <GenericComponent GuiType=GuiType.Title Content="BarnInfoTitle" />
 
     <GenericComponent GuiType=GuiType.Label Content="Fornavn|RedStarTopSize8" />
-    <GenericComponent GuiType=GuiType.Input Placeholder="Fornavn" ValueChanged=HandleFornavnChanged @ref=_fornavnInput />
+    <GenericComponent GuiType=GuiType.Input InputValue=@BarnOgPerson?.Fornavn Placeholder="Fornavn"
+                      MaxLength=100 ValueChanged=HandleFornavnChanged @ref=_fornavnInput />
 
     <GenericComponent GuiType=GuiType.Label Content="Etternavn|RedStarTopSize8" />
-    <GenericComponent GuiType=GuiType.Input Placeholder="Etternavn" ValueChanged=HandleEtternavnChanged @ref=_etternavnInput />
+    <GenericComponent GuiType=GuiType.Input InputValue=@BarnOgPerson?.Etternavn Placeholder="Etternavn"
+                      MaxLength=100 ValueChanged=HandleEtternavnChanged @ref=_etternavnInput />
 
     <GenericComponent GuiType=GuiType.Label Content="Fødselsnummer" />
 
     <div class="buf-row">
-        <GenericComponent GuiType=GuiType.Input InputValue=@BarnOgPerson?.Fødselsnummer Placeholder="Fødselsnummer" ValueChanged=HandleFnrChanged @ref=_fnrInput />
+        <GenericComponent GuiType=GuiType.Input InputValue=@BarnOgPerson?.Fødselsnummer Placeholder="Fødselsnummer"
+                          MaxLength=11 ValueChanged=HandleFnrChanged @ref=_fnrInput />
         <GenericComponent GuiType=GuiType.CheckBox Content="UsikkertFnr" OnCheck=Check />
     </div>
 
@@ -30,7 +33,7 @@
     }
 
     <GenericComponent GuiType=GuiType.Label Content="BirkIdLabel" />
-    <GenericComponent GuiType=GuiType.Input Placeholder="BirkId" Disabled=true @ref=_birkIdInput />
+    <GenericComponent GuiType=GuiType.Input InputValue=@BarnOgPerson?.BirkId Placeholder="BirkId" Disabled=true @ref=_birkIdInput />
 
     <GenericComponent GuiType=GuiType.Label Content="Sikkerhetsnivå" />
     <div class="buf-row" id="sikkerhetsnivå-container">
@@ -98,7 +101,7 @@
 
         _warnings["FnrNotNumericValue"] = !string.IsNullOrEmpty(_fnr) && !Regex.IsMatch(_fnr, "^[0-9]*$");
         if (!_warnings["FnrNotNumericValue"])
-        { 
+        {
             _warnings["FnrNot11DigitsWarning"] = !Regex.IsMatch(_fnr, "^[0-9]{11}$");
         }
 

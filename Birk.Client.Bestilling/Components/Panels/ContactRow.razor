@@ -4,7 +4,7 @@
 
 <div>
     <GenericComponent GuiType=GuiType.Label Content=@($"{_contactLabel}{_starIcon}") />
-    <GenericComponent GuiType=GuiType.Input Placeholder=@_contactPlaceholder />
+    <GenericComponent GuiType=GuiType.Input Placeholder=@_contactPlaceholder MaxLength=200 />
 </div>
 
 @code {

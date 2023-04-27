@@ -8,7 +8,7 @@
 
 <div>
     <div class="buf-row">
-        <GenericComponent GuiType=GuiType.Input Placeholder="Fødselsnummer" ValueChanged=HandleFnrChanged CssExtra="søk-barn" @ref=_fnrInput />
+        <GenericComponent GuiType=GuiType.Input Placeholder="Fødselsnummer" MaxLength=11 ValueChanged=HandleFnrChanged CssExtra="søk-barn" @ref=_fnrInput />
         <GenericComponent GuiType=GuiType.Button Content="SøkBarnButton" OnClick=HandleSøkBarnButtonClick CssExtra="søk-barn" />
         @foreach (KeyValuePair<string, bool> warning in _warnings)
         {
@@ -85,8 +85,6 @@
 
     private async Task HandleUkjentFnrButtonClick()
     {
-        await HandleSøkBarnButtonClick();
-
         OnUkjentFnrClicked.InvokeAsync();
     }
 }
