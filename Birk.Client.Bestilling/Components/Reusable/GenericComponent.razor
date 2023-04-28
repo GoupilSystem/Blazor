@@ -20,7 +20,10 @@
     public string Placeholder { get; set; }
 
     [Parameter]
-    public string InputValue { get; set; }    
+    public string InputValue { get; set; }
+
+    [Parameter]
+    public int MaxLength { get; set; }
 
     [Parameter]
     public bool Checked { get; set; }
@@ -42,13 +45,10 @@
 
         else if (GuiType == GuiType.Input)
         {
-            if (InputValue != null)
-            {
-                _inputValue = InputValue;
-            }
+            _inputValue = InputValue;
             builder.OpenElement(1, "input");
             builder.AddMultipleAttributes(2, GetMultipleAttributes("class", "placeholder", "value", 
-                "oninput", "bind-value:event", "onchange", "disabled"));
+                "oninput", "bind-value:event", "onchange", "maxlength", "disabled"));
         }
 
         else if (GuiType == GuiType.Dropdown)
@@ -118,7 +118,7 @@
                 case "onclick":
                     attributes.Add(attribute, EventCallback.Factory.Create(this, OnClick)); break;
                 case "maxlength":
-                    attributes.Add(attribute, 2000); break;
+                    attributes.Add(attribute, MaxLength); break;
                 default:
                     break;
             }
