@@ -1,6 +1,8 @@
 ﻿using Birk.Client.Bestilling.Models.Dtos;
 using Birk.Client.Bestilling.Models.Responses;
+using Birk.Client.Bestilling.Models.ViewModels;
 using Birk.Client.Bestilling.Services.Interfaces;
+using Birk.Client.Bestilling.Utils.Mapper;
 
 namespace Birk.Client.Bestilling.Services.Implementation
 {
@@ -18,14 +20,14 @@ namespace Birk.Client.Bestilling.Services.Implementation
             _logger = logger;
         }
         
-        public async Task<BarnOgPersonDto> GetBarnByFnr(string fnr)
+        public async Task<BarnViewModel> GetBarnByFnr(string fnr)
         {
             _logger.LogInformation("Entering {Method}", nameof(GetBarnByFnr));
 
-            var response = await _httpService.HttpGet<GetBarnOgPersonByFnrResponse>($"BarnOgPersonByFnr/{fnr}");
+            var response = await _httpService.HttpGet<GetBarnByFnrResponse>($"BarnOgPersonByFnr/{fnr}");
             if (response.IsSuccess)
             {
-                return response.Data.barnOgPersonDto;
+                return BarnMapper.ToBarnViewModel(response.Data.barnOgPersonDto, true);
             }
             return null;
         }

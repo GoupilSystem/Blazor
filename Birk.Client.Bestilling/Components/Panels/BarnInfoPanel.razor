@@ -1,6 +1,7 @@
 ﻿@using Birk.Client.Bestilling.Components.Enums;
 @using Birk.Client.Bestilling.Components.Reusable
-@using Birk.Client.Bestilling.Models.Dtos;
+
+@using Birk.Client.Bestilling.Models.ViewModels;
 @using Birk.Client.Bestilling.Utils.Constants;
 @using Birk.Client.Bestilling.Utils.Helpers;
 @using System.Text.RegularExpressions;
@@ -9,18 +10,18 @@
     <GenericComponent GuiType=GuiType.Title Content="BarnInfoTitle" />
 
     <GenericComponent GuiType=GuiType.Label Content="Fornavn|RedStarTopSize8" />
-    <GenericComponent GuiType=GuiType.Input InputValue=@BarnOgPerson?.Fornavn Placeholder="Fornavn"
-                      MaxLength=100 ValueChanged=HandleFornavnChanged @ref=_fornavnInput />
+    <GenericComponent GuiType=GuiType.Input InputValue=@Barn.Fornavn Placeholder="Fornavn"
+                      MaxLength=100 ValueChanged=HandleFornavnChanged Disabled=@Barn.ExistsInBirk @ref=_fornavnInput />
 
     <GenericComponent GuiType=GuiType.Label Content="Etternavn|RedStarTopSize8" />
-    <GenericComponent GuiType=GuiType.Input InputValue=@BarnOgPerson?.Etternavn Placeholder="Etternavn"
-                      MaxLength=100 ValueChanged=HandleEtternavnChanged @ref=_etternavnInput />
+    <GenericComponent GuiType=GuiType.Input InputValue=@Barn.Etternavn Placeholder="Etternavn"
+                      MaxLength=100 ValueChanged=HandleEtternavnChanged Disabled=@Barn.ExistsInBirk @ref=_etternavnInput />
 
     <GenericComponent GuiType=GuiType.Label Content="Fødselsnummer" />
 
     <div class="buf-row">
-        <GenericComponent GuiType=GuiType.Input InputValue=@BarnOgPerson?.Fødselsnummer Placeholder="Fødselsnummer"
-                          MaxLength=11 ValueChanged=HandleFnrChanged @ref=_fnrInput />
+        <GenericComponent GuiType=GuiType.Input InputValue=@Barn.Fødselsnummer Placeholder="Fødselsnummer"
+                          MaxLength=11 ValueChanged=HandleFnrChanged Disabled=@Barn.ExistsInBirk @ref=_fnrInput />
         <GenericComponent GuiType=GuiType.CheckBox Content="UsikkertFnr" OnCheck=Check />
     </div>
 
@@ -33,7 +34,7 @@
     }
 
     <GenericComponent GuiType=GuiType.Label Content="BirkIdLabel" />
-    <GenericComponent GuiType=GuiType.Input InputValue=@BarnOgPerson?.BirkId Placeholder="BirkId" Disabled=true @ref=_birkIdInput />
+    <GenericComponent GuiType=GuiType.Input InputValue=@Barn.BirkId Placeholder="BirkId" Disabled=true @ref=_birkIdInput />
 
     <GenericComponent GuiType=GuiType.Label Content="Sikkerhetsnivå" />
     <div class="buf-row" id="sikkerhetsnivå-container">
@@ -56,10 +57,10 @@
 
 @code {
     [Parameter]
-    public EventCallback<BarnOgPersonDto> OnBarnUpdated { get; set; }
+    public EventCallback<BarnViewModel> OnBarnUpdated { get; set; }
 
     [Parameter]
-    public BarnOgPersonDto BarnOgPerson { get; set; }
+    public BarnViewModel Barn { get; set; }
 
     private GenericComponent _fornavnInput;
     private GenericComponent _etternavnInput;
@@ -105,11 +106,11 @@
             _warnings["FnrNot11DigitsWarning"] = !Regex.IsMatch(_fnr, "^[0-9]{11}$");
         }
 
-        BarnOgPerson.Fødselsnummer = !_warnings["FnrNotNumericValue"] && !_warnings["FnrNot11DigitsWarning"] ? _fnr : null;
+        Barn.Fødselsnummer = !_warnings["FnrNotNumericValue"] && !_warnings["FnrNot11DigitsWarning"] ? _fnr : null;
 
-        BarnOgPerson.Født = StringHelper.ConvertFnrToFødt(BarnOgPerson.Fødselsnummer);
+        Barn.Født = StringHelper.ConvertFnrToFødt(Barn.Fødselsnummer);
 
-        OnBarnUpdated.InvokeAsync(BarnOgPerson);
+        OnBarnUpdated.InvokeAsync(Barn);
     }
 
     private void HandleBirkIdChanged(string value)

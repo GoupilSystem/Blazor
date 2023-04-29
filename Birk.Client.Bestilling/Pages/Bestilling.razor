@@ -4,6 +4,7 @@
 @using Birk.Client.Bestilling.Components.Panels
 @using Birk.Client.Bestilling.Components.Reusable
 @using Birk.Client.Bestilling.Models.Dtos;
+@using Birk.Client.Bestilling.Models.ViewModels;
 @using Birk.Client.Bestilling.Services.Implementation;
 @using Birk.Client.Bestilling.Services.Interfaces;
 @using Birk.Client.Bestilling.Utils.Constants;
@@ -16,7 +17,7 @@
 {
     <div class="buf-page">
 
-        <TopPanel BarnOgPerson=@_barnOgPerson />
+        <TopPanel Barn=@_barn />
 
         <div class="main-panel">
             <div class="active @(_isHenvisningSelected ? "" : "minimized" )">
@@ -51,11 +52,11 @@
                     <GenericComponent GuiType=GuiType.Title Content="SøkBarnTitle" />
                     <GenericComponent GuiType=GuiType.Label Content="SøkBarnLabel" />
 
-                    <SokBarnPanel BarnOgPerson=_barnOgPerson OnBarnUpdated=HandleBarnUpdated
+                    <SokBarnPanel Barn=_barn OnBarnUpdated=HandleBarnUpdated
                           OnUkjentFnrClicked=@(() => _showBarnInfoPanel = !_showBarnInfoPanel) />
 
                     <div class="@(_showBarnInfoPanel ? "panel-show" : "panel-hide")">
-                        <BarnInfoPanel BarnOgPerson=_barnOgPerson OnBarnUpdated=HandleBarnUpdated />
+                        <BarnInfoPanel Barn=_barn OnBarnUpdated=HandleBarnUpdated />
                     </div>
 
                     <GenericComponent GuiType=GuiType.Title Content="MerknadLabel" />
@@ -89,7 +90,7 @@
     private MudAutocomplete<string> _kommuneDropdown;
     private MudAutocomplete<string> _bvtjenesteDropdown;
 
-    private BarnOgPersonDto _barnOgPerson = new();
+    private BarnViewModel _barn = new();
 
     private string _selectedBestilling = null;
     private string _selectedKommune = null;
@@ -196,9 +197,9 @@
         return Bvtjenestes.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
     }
 
-    private void HandleBarnUpdated(BarnOgPersonDto barnOgPerson)
+    private void HandleBarnUpdated(BarnViewModel barn)
     {
-        _barnOgPerson = barnOgPerson;
+        _barn = barn;
 
         if (!_showBarnInfoPanel)
         {
