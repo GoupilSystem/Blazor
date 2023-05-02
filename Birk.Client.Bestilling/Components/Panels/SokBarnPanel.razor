@@ -1,6 +1,6 @@
 ﻿@using Birk.Client.Bestilling.Components.Enums;
 @using Birk.Client.Bestilling.Components.Reusable
-@using Birk.Client.Bestilling.Models.Dtos;
+@using Birk.Client.Bestilling.Models.ViewModels;
 @using Birk.Client.Bestilling.Services.Interfaces;
 @using Birk.Client.Bestilling.Utils.Constants;
 @using System.Text.RegularExpressions;
@@ -24,13 +24,13 @@
 
 @code {
     [Parameter]
-    public EventCallback<BarnOgPersonDto> OnBarnUpdated { get; set; }
+    public EventCallback<BarnViewModel> OnBarnUpdated { get; set; }
 
     [Parameter]
     public EventCallback OnUkjentFnrClicked { get; set; }
 
     [Parameter]
-    public BarnOgPersonDto BarnOgPerson { get; set; }
+    public BarnViewModel Barn { get; set; }
 
     private GenericComponent _fnrInput;
 
@@ -63,24 +63,26 @@
     {
         if (_warnings["FnrNotNumericValue"])
         {
-            BarnOgPerson = new() { Fødselsnummer = _fnr };
-            OnBarnUpdated.InvokeAsync(BarnOgPerson);
+            Barn = new() { Fødselsnummer = _fnr };
+            OnBarnUpdated.InvokeAsync(Barn);
             return;
         }
 
         _warnings["FnrNot11DigitsWarning"] = !Regex.IsMatch(_fnr, "^[0-9]{11}$");
         if (_warnings["FnrNot11DigitsWarning"])
         {
-            BarnOgPerson = new() { Fødselsnummer = _fnr };
-            OnBarnUpdated.InvokeAsync(BarnOgPerson);
+            Barn = new() { Fødselsnummer = _fnr };
+            OnBarnUpdated.InvokeAsync(Barn);
             return;
         }
 
-        var barnOgPerson = await BarnService.GetBarnByFnr(_fnr);
+        var barn = await BarnService.GetBarnByFnr(_fnr);
+        Barn = barn != null ? barn : new() { Fødselsnummer = _fnr };
 
-        BarnOgPerson = barnOgPerson != null ? barnOgPerson : new() { Fødselsnummer = _fnr };
+        _warnings["PersonNotFoundWarning"] = barn == null;
 
-        OnBarnUpdated.InvokeAsync(BarnOgPerson);
+
+        OnBarnUpdated.InvokeAsync(Barn);
     }
 
     private async Task HandleUkjentFnrButtonClick()
