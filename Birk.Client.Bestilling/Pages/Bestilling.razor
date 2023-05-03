@@ -52,18 +52,20 @@
                     <GenericComponent GuiType=GuiType.Title Content="SøkBarnTitle" />
                     <GenericComponent GuiType=GuiType.Label Content="SøkBarnLabel" />
 
-                    <SokBarnPanel Barn=_barn OnBarnUpdated=HandleBarnUpdated
-                          OnUkjentFnrClicked=@(() => _showBarnInfoPanel = !_showBarnInfoPanel) />
+                    <div class="@(_showBarnInfoPanel ? "panel-hide" : "panel-show")">
+                        <SokBarnPanel Barn=_barn OnBarnUpdated=HandleBarnUpdated
+                              OnUkjentFnrClicked=@(() => _showBarnInfoPanel = !_showBarnInfoPanel) />
+                    </div>
 
                     <div class="@(_showBarnInfoPanel ? "panel-show" : "panel-hide")">
                         <BarnInfoPanel Barn=_barn OnBarnUpdated=HandleBarnUpdated />
                     </div>
 
                     <GenericComponent GuiType=GuiType.Title Content="MerknadLabel" />
-                    <GenericComponent GuiType=GuiType.TextArea Placeholder="Merknad" MaxLength=2000 ValueChanged =HandleMerknadChanged CssExtra="merknad" />
+                    <GenericComponent GuiType=GuiType.TextArea Placeholder="Merknad" MaxLength=2000 ValueChanged=HandleMerknadChanged CssExtra="merknad" />
 
                     <div class="registrer-panel">
-                        <GenericComponent GuiType=GuiType.Button Content="Registrer" OnClick=HandleRegistrerButtonClick CssExtra ="registrer" />
+                        <GenericComponent GuiType=GuiType.Button Content="Registrer" OnClick=HandleRegistrerButtonClick CssExtra="registrer" />
                     </div>
                 }
             </div>

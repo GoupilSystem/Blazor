@@ -9,7 +9,7 @@
 <div>
     <div class="buf-row">
         <GenericComponent GuiType=GuiType.Input Placeholder="Fødselsnummer" MaxLength=11 ValueChanged=HandleFnrChanged CssExtra="søk-barn" @ref=_fnrInput />
-        <GenericComponent GuiType=GuiType.Button Content="SøkBarnButton" OnClick=HandleSøkBarnButtonClick CssExtra="søk-barn" />
+        <GenericComponent GuiType=GuiType.Button Content="SøkBarnButton" OnClick=HandleSøkBarnButtonClick Disabled=@_isFnrGyldig CssExtra="søk-barn" />
         @foreach (KeyValuePair<string, bool> warning in _warnings)
         {
             if (warning.Value)
@@ -18,7 +18,6 @@
             }
         }
     </div>
-    <GenericComponent GuiType=GuiType.Button Content="UkjentFnr" OnClick=HandleUkjentFnrButtonClick CssExtra="ukjentfnr" />
 </div>
 
 
@@ -37,6 +36,7 @@
     private Dictionary<string, bool> _warnings = new();
 
     private string _fnr = "";
+    private bool _isFnrGyldig => _warnings.Any(w => w.Value == true);
 
     protected override void OnInitialized()
     {
@@ -57,6 +57,8 @@
         _warnings["FnrNot11DigitsWarning"] = false;
         _warnings["PersonNotFoundWarning"] = false;
         _warnings["FnrNotNumericValue"] = !string.IsNullOrEmpty(_fnr) && !Regex.IsMatch(_fnr, "^[0-9]*$");
+
+        StateHasChanged();
     }
 
     private async Task HandleSøkBarnButtonClick()
@@ -83,10 +85,5 @@
 
 
         OnBarnUpdated.InvokeAsync(Barn);
-    }
-
-    private async Task HandleUkjentFnrButtonClick()
-    {
-        OnUkjentFnrClicked.InvokeAsync();
     }
 }
