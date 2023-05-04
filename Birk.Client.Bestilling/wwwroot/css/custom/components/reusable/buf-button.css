@@ -11,6 +11,7 @@
 }
 
     .buf-button:disabled {
+        cursor: not-allowed;
         border: 1px solid var(--buf-dark-grey);
         background-color: var(--buf-background-disabled);
         color: var(--buf-font-grey);

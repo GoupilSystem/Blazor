@@ -3,6 +3,7 @@
 @using Birk.Client.Bestilling.Components.Enums;
 @using Birk.Client.Bestilling.Components.Panels
 @using Birk.Client.Bestilling.Components.Reusable
+@using Birk.Client.Bestilling.Enums;
 @using Birk.Client.Bestilling.Models.Dtos;
 @using Birk.Client.Bestilling.Models.ViewModels;
 @using Birk.Client.Bestilling.Services.Implementation;
@@ -51,7 +52,7 @@
 
                     <SokBarnPanel Barn=_barn OnBarnUpdated=HandleBarnUpdated />
 
-                    <div class="@(_showBarnInfoPanel ? "panel-show" : "panel-hide")">
+                    <div class=@(_barn.SøkStatus == SøkStatus.IkkeSøkt ? "panel-hide" : "panel-show")>
                         <BarnInfoPanel Barn=_barn OnBarnUpdated=HandleBarnUpdated />
                     </div>
 
@@ -96,7 +97,6 @@
     private bool _isHenvisningSelected;
     private bool _isKommunesAndBvtjenestesSet;
     private bool _selectBvtjenesteWhenNoKommune;
-    private bool _showBarnInfoPanel;
 
     public async Task InitializeDropdownsAsync()
     {
@@ -196,8 +196,6 @@
     private void HandleBarnUpdated(BarnViewModel barn)
     {
         _barn = barn;
-
-        _showBarnInfoPanel = _barn.ExistsInBirk;
     }
 
     private void HandleMerknadChanged(string value)

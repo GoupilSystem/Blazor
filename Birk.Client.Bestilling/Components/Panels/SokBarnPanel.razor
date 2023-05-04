@@ -1,5 +1,6 @@
 ﻿@using Birk.Client.Bestilling.Components.Enums;
 @using Birk.Client.Bestilling.Components.Reusable
+@using Birk.Client.Bestilling.Enums;
 @using Birk.Client.Bestilling.Models.ViewModels;
 @using Birk.Client.Bestilling.Services.Interfaces;
 @using Birk.Client.Bestilling.Utils.Constants;
@@ -10,7 +11,9 @@
 <div>
     @if (_showNewSøkButton)
     {
-        <GenericComponent GuiType=GuiType.Button Content="NewSøkBarnButton" OnClick=HandleNewSøkBarnButtonClick CssExtra="søk-barn" />
+        <div style="padding-top:3rem">
+            <GenericComponent GuiType=GuiType.Button Content="NewSøkBarnButton" OnClick=HandleNewSøkBarnButtonClick CssExtra="søk-barn" />
+        </div>
     }
     else
     {
@@ -95,9 +98,14 @@
         if (barn != null)
         {
             Barn = barn;
+            Barn.SøkStatus = SøkStatus.Finnes;
         }
-
-        _warnings["PersonNotFoundWarning"] = barn == null;
+        else
+        {
+            Barn.SøkStatus = SøkStatus.FinnesIkke;
+            _warnings["PersonNotFoundWarning"] = true;
+        }
+        
         _showNewSøkButton = true;
 
         OnBarnUpdated.InvokeAsync(Barn);

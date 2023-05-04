@@ -1,6 +1,7 @@
 ﻿@using Birk.Client.Bestilling.Components.Enums;
 @using Birk.Client.Bestilling.Components.Reusable
 
+@using Birk.Client.Bestilling.Enums;
 @using Birk.Client.Bestilling.Models.ViewModels;
 @using Birk.Client.Bestilling.Utils.Constants;
 @using Birk.Client.Bestilling.Utils.Helpers;
@@ -11,11 +12,11 @@
 
     <GenericComponent GuiType=GuiType.Label Content="Fornavn|RedStarTopSize8" />
     <GenericComponent GuiType=GuiType.Input InputValue=@Barn.Fornavn Placeholder="Fornavn"
-                      MaxLength=100 ValueChanged=HandleFornavnChanged Disabled=@Barn.ExistsInBirk @ref=_fornavnInput />
+                      MaxLength=100 ValueChanged=HandleFornavnChanged Disabled=@(Barn.SøkStatus == SøkStatus.Finnes) @ref=_fornavnInput />
 
     <GenericComponent GuiType=GuiType.Label Content="Etternavn|RedStarTopSize8" />
     <GenericComponent GuiType=GuiType.Input InputValue=@Barn.Etternavn Placeholder="Etternavn"
-                      MaxLength=100 ValueChanged=HandleEtternavnChanged Disabled=@Barn.ExistsInBirk @ref=_etternavnInput />
+                      MaxLength=100 ValueChanged=HandleEtternavnChanged Disabled=@(Barn.SøkStatus == SøkStatus.Finnes) @ref=_etternavnInput />
 
     <GenericComponent GuiType=GuiType.Label Content="Fødselsnummer" />
 
