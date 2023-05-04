@@ -21,7 +21,7 @@
 
     <div class="buf-row">
         <GenericComponent GuiType=GuiType.Input InputValue=@Barn.Fødselsnummer Placeholder="Fødselsnummer"
-                          MaxLength=11 ValueChanged=HandleFnrChanged Disabled=@Barn.ExistsInBirk @ref=_fnrInput />
+                          MaxLength=11 ValueChanged=HandleFnrChanged Disabled=true @ref=_fnrInput />
         <GenericComponent GuiType=GuiType.CheckBox Content="UsikkertFnr" OnCheck=Check />
     </div>
 

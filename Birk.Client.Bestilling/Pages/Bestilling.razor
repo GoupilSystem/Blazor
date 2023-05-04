@@ -49,13 +49,7 @@
                         <ContactRow ContactType=@(i == 0 ? ContactType.Person : ContactType.Leder) />
                     }
 
-                    <GenericComponent GuiType=GuiType.Title Content="SøkBarnTitle" />
-                    <GenericComponent GuiType=GuiType.Label Content="SøkBarnLabel" />
-
-                    <div class="@(_showBarnInfoPanel ? "panel-hide" : "panel-show")">
-                        <SokBarnPanel Barn=_barn OnBarnUpdated=HandleBarnUpdated
-                              OnUkjentFnrClicked=@(() => _showBarnInfoPanel = !_showBarnInfoPanel) />
-                    </div>
+                    <SokBarnPanel Barn=_barn OnBarnUpdated=HandleBarnUpdated />
 
                     <div class="@(_showBarnInfoPanel ? "panel-show" : "panel-hide")">
                         <BarnInfoPanel Barn=_barn OnBarnUpdated=HandleBarnUpdated />
@@ -203,10 +197,7 @@
     {
         _barn = barn;
 
-        if (!_showBarnInfoPanel)
-        {
-            _showBarnInfoPanel = true;
-        }
+        _showBarnInfoPanel = _barn.ExistsInBirk;
     }
 
     private void HandleMerknadChanged(string value)

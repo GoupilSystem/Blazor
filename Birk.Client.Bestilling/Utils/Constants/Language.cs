@@ -38,8 +38,10 @@ namespace Birk.Client.Bestilling.Utils.Constants
                 { "SøkBarnLabel", "Søk opp barn eller mor til ufødt barn i Birk. Bruk fødselsnummer for å søke." +
                     "<br><b>Dersom barnet ikke er registrert fører søket deg til manuell registrering.</b>"},
                 { "SøkBarnButton", "Søk" },
+                { "NewSøkBarnButton", "Ny søk" },
                 { "FnrNotNumericValue", "OBS! Kun tall i dette feltet"},
                 { "FnrNot11DigitsWarning", "OBS! Fødselsnummer skal ha 11 siffer"},
+                { "FnrNotValid", "OBS! Fødselsnummer er ugyldig"},
                 { "PersonNotFoundWarning", "OBS! Det er ingen barn med dette fødselsnummeret i Birk-systemet"},
                 { "UkjentFnr", "Ukjent fødselsnummer"},
 

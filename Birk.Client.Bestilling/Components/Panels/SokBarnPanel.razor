@@ -4,29 +4,37 @@
 @using Birk.Client.Bestilling.Services.Interfaces;
 @using Birk.Client.Bestilling.Utils.Constants;
 @using System.Text.RegularExpressions;
+@using Birk.Client.Bestilling.Utils.Helpers;
 @inject IBarnService BarnService
 
 <div>
-    <div class="buf-row">
-        <GenericComponent GuiType=GuiType.Input Placeholder="Fødselsnummer" MaxLength=11 ValueChanged=HandleFnrChanged CssExtra="søk-barn" @ref=_fnrInput />
-        <GenericComponent GuiType=GuiType.Button Content="SøkBarnButton" OnClick=HandleSøkBarnButtonClick Disabled=@_isFnrGyldig CssExtra="søk-barn" />
-        @foreach (KeyValuePair<string, bool> warning in _warnings)
-        {
-            if (warning.Value)
+    @if (_showNewSøkButton)
+    {
+        <GenericComponent GuiType=GuiType.Button Content="NewSøkBarnButton" OnClick=HandleNewSøkBarnButtonClick CssExtra="søk-barn" />
+    }
+    else
+    {
+        <GenericComponent GuiType=GuiType.Title Content="SøkBarnTitle" />
+        <GenericComponent GuiType=GuiType.Label Content="SøkBarnLabel" />
+        <div class="buf-row">
+            <GenericComponent GuiType=GuiType.Input Placeholder="Fødselsnummer" MaxLength=11 ValueChanged=HandleFnrChanged CssExtra="søk-barn" @ref=_fnrInput />
+            <GenericComponent GuiType=GuiType.Button Content="SøkBarnButton" OnClick=HandleSøkBarnButtonClick Disabled=@_isFnrGyldig CssExtra="søk-barn" />
+            @foreach (KeyValuePair<string, bool> warning in _warnings)
             {
-                <GenericComponent GuiType=GuiType.Label Content=@($"WarningSize8|{warning.Key}") CssExtra="warning" />
+                if (warning.Value)
+                {
+                    <GenericComponent GuiType=GuiType.Label Content=@($"WarningSize8|{warning.Key}") CssExtra="warning" />
+                }
             }
-        }
-    </div>
+        </div>
+    }
+    
 </div>
 
 
 @code {
     [Parameter]
     public EventCallback<BarnViewModel> OnBarnUpdated { get; set; }
-
-    [Parameter]
-    public EventCallback OnUkjentFnrClicked { get; set; }
 
     [Parameter]
     public BarnViewModel Barn { get; set; }
@@ -37,6 +45,7 @@
 
     private string _fnr = "";
     private bool _isFnrGyldig => _warnings.Any(w => w.Value == true);
+    private bool _showNewSøkButton = false;
 
     protected override void OnInitialized()
     {
@@ -47,42 +56,59 @@
     {
         _warnings.Add("FnrNotNumericValue", false);
         _warnings.Add("FnrNot11DigitsWarning", false);
+        _warnings.Add("FnrNotValid", false);
         _warnings.Add("PersonNotFoundWarning", false);
     }
 
     private void HandleFnrChanged(string fnr)
     {
-        _fnr = fnr;
-
+        bool isFnrInputNotValid = false;
+        _warnings["FnrNotNumericValue"] = false;
         _warnings["FnrNot11DigitsWarning"] = false;
-        _warnings["PersonNotFoundWarning"] = false;
-        _warnings["FnrNotNumericValue"] = !string.IsNullOrEmpty(_fnr) && !Regex.IsMatch(_fnr, "^[0-9]*$");
+        _warnings["FnrNotValid"] = false;
 
-        StateHasChanged();
+        if (string.IsNullOrEmpty(fnr) || !Regex.IsMatch(fnr, "^[0-9]*$"))
+        {
+            _warnings["FnrNotNumericValue"] = true;
+            isFnrInputNotValid = true;
+        }
+        else if (!Regex.IsMatch(fnr, "^[0-9]{11}$"))
+        {
+            _warnings["FnrNot11DigitsWarning"] = true;
+            isFnrInputNotValid = true;
+        }
+        else if (!Regex.IsMatch(fnr, @"^(0[1-9]|[12][0-9]|3[01])(0[1-9]|1[0-2])(\d{2})(\d{5})$"))
+        {
+            _warnings["FnrNotValid"] = true;
+            isFnrInputNotValid = true;
+        }
+
+        Barn.Fødselsnummer = isFnrInputNotValid ? "" : fnr;
+        Barn.Født = isFnrInputNotValid ? null : StringHelper.ConvertFnrToFødt(Barn.Fødselsnummer);
+
+        OnBarnUpdated.InvokeAsync(Barn);
     }
 
     private async Task HandleSøkBarnButtonClick()
     {
-        if (_warnings["FnrNotNumericValue"])
+        var barn = await BarnService.GetBarnByFnr(Barn.Fødselsnummer);
+        if (barn != null)
         {
-            Barn = new() { Fødselsnummer = _fnr };
-            OnBarnUpdated.InvokeAsync(Barn);
-            return;
+            Barn = barn;
         }
-
-        _warnings["FnrNot11DigitsWarning"] = !Regex.IsMatch(_fnr, "^[0-9]{11}$");
-        if (_warnings["FnrNot11DigitsWarning"])
-        {
-            Barn = new() { Fødselsnummer = _fnr };
-            OnBarnUpdated.InvokeAsync(Barn);
-            return;
-        }
-
-        var barn = await BarnService.GetBarnByFnr(_fnr);
-        Barn = barn != null ? barn : new() { Fødselsnummer = _fnr };
 
         _warnings["PersonNotFoundWarning"] = barn == null;
+        _showNewSøkButton = true;
 
+        OnBarnUpdated.InvokeAsync(Barn);
+    }
+
+    private async Task HandleNewSøkBarnButtonClick()
+    {
+        Barn = new BarnViewModel();
+
+        _warnings["PersonNotFoundWarning"] = false;
+        _showNewSøkButton = false;
 
         OnBarnUpdated.InvokeAsync(Barn);
     }
