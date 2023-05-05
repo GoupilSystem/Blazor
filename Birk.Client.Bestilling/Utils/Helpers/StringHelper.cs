@@ -53,7 +53,7 @@ namespace Birk.Client.Bestilling.Utils.Helpers
             return age;
         }
 
-        public static string ConvertGender(int numericGender)
+        public static string ConvertGender(int? numericGender)
         {
             string gender = "";
             switch (numericGender)
