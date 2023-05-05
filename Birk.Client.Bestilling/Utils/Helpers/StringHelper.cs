@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Data.SqlTypes;
+using System.Globalization;
 
 namespace Birk.Client.Bestilling.Utils.Helpers
 {
@@ -71,5 +72,7 @@ namespace Birk.Client.Bestilling.Utils.Helpers
             }
             return gender;
         }
+
+        
     }
 }

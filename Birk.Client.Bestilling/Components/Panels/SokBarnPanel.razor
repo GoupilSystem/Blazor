@@ -6,11 +6,13 @@
 @using Birk.Client.Bestilling.Utils.Constants;
 @using System.Text.RegularExpressions;
 @using Birk.Client.Bestilling.Utils.Helpers;
+@using Birk.Client.Bestilling.Utils.Validator;
 @inject IBarnService BarnService
 
 <div>
     @if (_showNewSøkButton)
     {
+        @*Cyril 04.05: midlertidig css for workflow testing, Heidi har ikke laget GUI ennå*@        
         <div style="padding-top:3rem">
             <GenericComponent GuiType=GuiType.Button Content="NewSøkBarnButton" OnClick=HandleNewSøkBarnButtonClick CssExtra="søk-barn" />
         </div>
@@ -70,17 +72,17 @@
         _warnings["FnrNot11DigitsWarning"] = false;
         _warnings["FnrNotValid"] = false;
 
-        if (string.IsNullOrEmpty(fnr) || !Regex.IsMatch(fnr, "^[0-9]*$"))
+        if (!FødselsnummerValidator.IsNumeric(fnr))
         {
             _warnings["FnrNotNumericValue"] = true;
             isFnrInputNotValid = true;
         }
-        else if (!Regex.IsMatch(fnr, "^[0-9]{11}$"))
+        else if (!FødselsnummerValidator.Is11Digits(fnr))
         {
             _warnings["FnrNot11DigitsWarning"] = true;
             isFnrInputNotValid = true;
         }
-        else if (!Regex.IsMatch(fnr, @"^(0[1-9]|[12][0-9]|3[01])(0[1-9]|1[0-2])(\d{2})(\d{5})$"))
+        else if (!FødselsnummerValidator.IsValid(fnr))
         {
             _warnings["FnrNotValid"] = true;
             isFnrInputNotValid = true;
