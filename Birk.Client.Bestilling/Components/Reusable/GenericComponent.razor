@@ -60,7 +60,7 @@
         else if (GuiType == GuiType.Button)
         {
             builder.OpenElement(1, "button");
-            builder.AddMultipleAttributes(2, GetMultipleAttributes("class", "onclick"));
+            builder.AddMultipleAttributes(2, GetMultipleAttributes("class", "onclick", "disabled"));
             builder.AddContent(3, (MarkupString)BuildingContent);
         }
 

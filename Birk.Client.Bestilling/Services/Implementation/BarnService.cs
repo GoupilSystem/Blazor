@@ -19,17 +19,14 @@ namespace Birk.Client.Bestilling.Services.Implementation
             _httpService = httpService;
             _logger = logger;
         }
-        
+
         public async Task<BarnViewModel> GetBarnByFnr(string fnr)
         {
             _logger.LogInformation("Entering {Method}", nameof(GetBarnByFnr));
 
             var response = await _httpService.HttpGet<GetBarnByFnrResponse>($"BarnOgPersonByFnr/{fnr}");
-            if (response.IsSuccess)
-            {
-                return BarnMapper.ToBarnViewModel(response.Data.barnOgPersonDto, true);
-            }
-            return null;
+
+            return response.IsSuccess ? BarnMapper.ToBarnViewModel(response.Data.barnOgPersonDto) : null;
         }
     }
 }

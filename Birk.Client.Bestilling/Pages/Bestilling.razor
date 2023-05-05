@@ -3,6 +3,7 @@
 @using Birk.Client.Bestilling.Components.Enums;
 @using Birk.Client.Bestilling.Components.Panels
 @using Birk.Client.Bestilling.Components.Reusable
+@using Birk.Client.Bestilling.Enums;
 @using Birk.Client.Bestilling.Models.Dtos;
 @using Birk.Client.Bestilling.Models.ViewModels;
 @using Birk.Client.Bestilling.Services.Implementation;
@@ -49,21 +50,17 @@
                         <ContactRow ContactType=@(i == 0 ? ContactType.Person : ContactType.Leder) />
                     }
 
-                    <GenericComponent GuiType=GuiType.Title Content="SøkBarnTitle" />
-                    <GenericComponent GuiType=GuiType.Label Content="SøkBarnLabel" />
+                    <SokBarnPanel Barn=_barn OnBarnUpdated=HandleBarnUpdated />
 
-                    <SokBarnPanel Barn=_barn OnBarnUpdated=HandleBarnUpdated
-                          OnUkjentFnrClicked=@(() => _showBarnInfoPanel = !_showBarnInfoPanel) />
-
-                    <div class="@(_showBarnInfoPanel ? "panel-show" : "panel-hide")">
+                    <div class=@(_barn.SøkStatus == SøkStatus.IkkeSøkt ? "panel-hide" : "panel-show")>
                         <BarnInfoPanel Barn=_barn OnBarnUpdated=HandleBarnUpdated />
                     </div>
 
                     <GenericComponent GuiType=GuiType.Title Content="MerknadLabel" />
-                    <GenericComponent GuiType=GuiType.TextArea Placeholder="Merknad" MaxLength=2000 ValueChanged =HandleMerknadChanged CssExtra="merknad" />
+                    <GenericComponent GuiType=GuiType.TextArea Placeholder="Merknad" MaxLength=2000 ValueChanged=HandleMerknadChanged CssExtra="merknad" />
 
                     <div class="registrer-panel">
-                        <GenericComponent GuiType=GuiType.Button Content="Registrer" OnClick=HandleRegistrerButtonClick CssExtra ="registrer" />
+                        <GenericComponent GuiType=GuiType.Button Content="Registrer" OnClick=HandleRegistrerButtonClick CssExtra="registrer" />
                     </div>
                 }
             </div>
@@ -100,7 +97,6 @@
     private bool _isHenvisningSelected;
     private bool _isKommunesAndBvtjenestesSet;
     private bool _selectBvtjenesteWhenNoKommune;
-    private bool _showBarnInfoPanel;
 
     public async Task InitializeDropdownsAsync()
     {
@@ -200,11 +196,6 @@
     private void HandleBarnUpdated(BarnViewModel barn)
     {
         _barn = barn;
-
-        if (!_showBarnInfoPanel)
-        {
-            _showBarnInfoPanel = true;
-        }
     }
 
     private void HandleMerknadChanged(string value)
