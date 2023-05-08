@@ -19,7 +19,7 @@ namespace Birk.Client.Bestilling.Utils.Mapper
                 EndretDato = dto.EndretDato,
                 Fornavn = dto.Fornavn,
                 Etternavn = dto.Etternavn,
-                KjønnTypeFk = dto.KjønnTypeFk,
+                Kjønn = dto.KjønnTypeFk,
                 Født = dto.Født,
                 Fødselsnummer = dto.Fødselsnummer,
                 Personnummer = dto.Personnummer

@@ -90,6 +90,7 @@
 
         Barn.Fødselsnummer = isFnrInputNotValid ? "" : fnr;
         Barn.Født = isFnrInputNotValid ? null : StringHelper.ConvertFnrToFødt(Barn.Fødselsnummer);
+        Barn.Kjønn = isFnrInputNotValid ? null : int.Parse(fnr.Substring(8, 1)) % 2 == 0 ? 2 : 1;
 
         OnBarnUpdated.InvokeAsync(Barn);
     }
