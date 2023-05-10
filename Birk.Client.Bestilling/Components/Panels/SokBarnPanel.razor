@@ -54,15 +54,13 @@
 
     protected override void OnInitialized()
     {
-        InitializeWarnings();
+        InitializeFnrInput();
     }
 
-    private void InitializeWarnings()
+    private void InitializeFnrInput()
     {
-        _warnings.Add("FnrNotNumericValue", false);
-        _warnings.Add("FnrNot11DigitsWarning", false);
-        _warnings.Add("FnrNotValid", false);
-        _warnings.Add("PersonNotFoundWarning", false);
+        _warnings["PersonNotFoundWarning"] = false;
+        HandleFnrChanged("");
     }
 
     private void HandleFnrChanged(string fnr)
@@ -118,7 +116,8 @@
     {
         Barn = new BarnViewModel();
 
-        _warnings["PersonNotFoundWarning"] = false;
+        InitializeFnrInput();
+
         _showNewSøkButton = false;
 
         OnBarnUpdated.InvokeAsync(Barn);
