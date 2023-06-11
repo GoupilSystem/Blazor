@@ -7,7 +7,6 @@ ServicesConfiguration.Configure(builder.Services, builder.Configuration);
 // Serilog
 var logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
-    .Enrich.WithCorrelationIdHeader("Custom-correlation-ID")
     .CreateLogger();
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);
